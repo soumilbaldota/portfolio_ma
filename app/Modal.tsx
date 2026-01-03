@@ -43,15 +43,26 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-        });
+      if (isDragging && modalRef.current) {
+        // Use transform for better performance instead of position
+        const x = e.clientX - dragOffset.x;
+        const y = e.clientY - dragOffset.y;
+        modalRef.current.style.transform = `translate(${x}px, ${y}px)`;
       }
     };
 
     const handleMouseUp = () => {
+      if (isDragging && modalRef.current) {
+        // Commit the transform to position state
+        const transform = modalRef.current.style.transform;
+        const match = transform.match(/translate\((-?\d+(?:\.\d+)?)px,\s*(-?\d+(?:\.\d+)?)px\)/);
+        if (match) {
+          setPosition({
+            x: parseFloat(match[1]),
+            y: parseFloat(match[2]),
+          });
+        }
+      }
       setIsDragging(false);
     };
 
@@ -79,13 +90,18 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
                   position: 'absolute',
                   left: `${position.x}px`,
                   top: `${position.y}px`,
+                  willChange: isDragging ? 'transform' : 'auto',
                 }
-              : {}
+              : {
+                  willChange: isDragging ? 'transform' : 'auto',
+                }
           }
           onClick={(e) => e.stopPropagation()}
         >
           <ModalHeader onClose={onClose} onMouseDown={handleMouseDown} isDragging={isDragging} />
-          {children}
+          <div style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
+            {children}
+          </div>
         </div>
 
       </div>
