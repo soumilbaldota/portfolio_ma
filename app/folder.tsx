@@ -56,7 +56,11 @@ export function FolderIconWithImage({
           <div className="text-xl font-mono text-center">{name}</div>
           {/* Minimized indicator - tiny dot below the folder name */}
           {showMinimizedIndicator && (
-            <div className="w-2 h-2 rounded-full bg-yellow-500 mt-1" />
+            <div 
+              className="w-2 h-2 rounded-full bg-yellow-500 mt-1" 
+              role="status"
+              aria-label="Window is minimized"
+            />
           )}
         </div>
         {/* Decorative folder elements */}

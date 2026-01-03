@@ -110,17 +110,17 @@ export function Modal({
     onMaximize();
   };
 
+  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-zinc-800/30 border-0 border-black ${
+    isMaximized ? 'w-screen h-screen' : 'w-200 h-100'
+  }`;
+
   return createPortal(
     <div className='fixed inset-0 z-50' onClick={onClose}>
       <div className={!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}>
 
         <div
           ref={modalRef}
-          className={`m-0 p-0 rounded-sm backdrop-blur-2xl bg-zinc-800/30 border-0 border-black ${
-            isMaximized 
-              ? 'w-screen h-screen' 
-              : 'w-200 h-100'
-          }`}
+          className={modalClassName}
           style={
             !isMaximized && position !== null
               ? {
