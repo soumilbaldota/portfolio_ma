@@ -4,19 +4,19 @@ function Sidebar() {
     return (
         <div className="bg-surface-primary/20 backdrop-blur-2xl flex flex-col">
             <div className=" p-2 font-mono bg-surface-primary/30 flex items-center hover:bg-accent-primary">
-                <Bot className='mr-2'/> Robotics
+                <Bot className='mr-2 text-foreground'/> Robotics
             </div>
             <div className="p-2 font-mono bg-surface-primary/30 flex items-center hover:bg-accent-primary">
-                <BrainCircuit className='mr-2'/>  ML
+                <BrainCircuit className='mr-2 text-foreground'/>  ML
             </div>
             <div className="p-2 font-mono bg-surface-primary/30 flex items-center hover:bg-accent-primary">
-                <Globe className='mr-2'/>  FullStack
+                <Globe className='mr-2 text-foreground'/>  FullStack
             </div>
             <div className="p-2 font-mono bg-surface-primary/30 flex items-center hover:bg-accent-primary">
-                <Bird className='mr-2'/>  Kernel Hacking
+                <Bird className='mr-2 text-foreground'/>  Kernel Hacking
             </div>
             <div className="p-2 font-mono bg-surface-primary/30 flex items-center hover:bg-accent-primary">
-                <Cylinder className='mr-2'/>  DB
+                <Cylinder className='mr-2 text-foreground'/>  DB
             </div>
         </div>
     );

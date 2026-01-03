@@ -59,7 +59,7 @@ function ContactAction({ Icon, label, link }: ContactMethod) {
                 <div className="w-10 h-10 rounded-full m-2 bg-accent-primary flex items-center justify-center" onClick={()=>{
                     if (link) window.open(link, '_blank');
                 }}>
-                    <Icon />
+                    <Icon className="text-white" />
                 </div>
             </div>
             <div className="font-mono text-center">{label}</div>
