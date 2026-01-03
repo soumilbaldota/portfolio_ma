@@ -25,7 +25,7 @@ function ModalHeader({ onClose, onMouseDown, isDragging }: { onClose: () => void
   );
 }
 export function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
@@ -67,17 +67,21 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
   }, [isDragging, dragOffset]);
 
   return createPortal(
-    <div className='fixed inset-0 flex justify-center items-center z-50' onClick={onClose}>
-      <div>
+    <div className='fixed inset-0 z-50' onClick={onClose}>
+      <div className={position === null ? 'flex justify-center items-center h-full' : ''}>
 
         <div
           ref={modalRef}
-          className="m-0 p-0 rounded-sm w-200 h-100 backdrop-blur-2xl bg-zinc-800/30 border-0 border-black absolute"
-          style={{
-            left: position.x !== 0 ? `${position.x}px` : '50%',
-            top: position.y !== 0 ? `${position.y}px` : '50%',
-            transform: position.x === 0 && position.y === 0 ? 'translate(-50%, -50%)' : 'none',
-          }}
+          className="m-0 p-0 rounded-sm w-200 h-100 backdrop-blur-2xl bg-zinc-800/30 border-0 border-black"
+          style={
+            position !== null
+              ? {
+                  position: 'absolute',
+                  left: `${position.x}px`,
+                  top: `${position.y}px`,
+                }
+              : {}
+          }
           onClick={(e) => e.stopPropagation()}
         >
           <ModalHeader onClose={onClose} onMouseDown={handleMouseDown} isDragging={isDragging} />
