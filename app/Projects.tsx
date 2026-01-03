@@ -13,7 +13,7 @@ type Project = {
   description?: string;
 };
 
-// Sample projects data with embedded YouTube videos
+// Sample projects data with embedded YouTube videos (TODO: Replace with actual video URLs)
 const PROJECTS_DATA: Project[] = [
   // Web Development Projects
   { id: '1', name: 'E-commerce Platform', category: 'Web Development', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
@@ -65,7 +65,7 @@ function VideoThumbnail({ project, onClick }: { project: Project; onClick: () =>
           <Play className="w-8 h-8 text-white" fill="white" />
         </div>
       </div>
-      <div className="text-xs font-mono text-center mt-1 max-w-20 truncate">
+      <div className="text-xs font-mono text-center mt-1 max-w-20 truncate" title={project.name}>
         {project.name}
       </div>
     </div>
@@ -90,9 +90,23 @@ function QuickLookPreview({ project, onClose, onOpenCarousel }: {
         {/* Header */}
         <div className="h-10 bg-zinc-800/95 flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-red-500 cursor-pointer" onClick={onClose} />
-            <div className="h-3 w-3 rounded-full bg-yellow-500" />
-            <div className="h-3 w-3 rounded-full bg-green-500 cursor-pointer" onClick={onOpenCarousel} />
+            <div 
+              className="h-3 w-3 rounded-full bg-red-500 cursor-pointer" 
+              onClick={onClose}
+              role="button"
+              aria-label="Close preview"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && onClose()}
+            />
+            <div className="h-3 w-3 rounded-full bg-yellow-500" role="presentation" />
+            <div 
+              className="h-3 w-3 rounded-full bg-green-500 cursor-pointer" 
+              onClick={onOpenCarousel}
+              role="button"
+              aria-label="Open in carousel view"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && onOpenCarousel()}
+            />
           </div>
           <div className="font-mono text-sm text-zinc-300">{project.name}</div>
           <div className="w-12"></div>
@@ -149,9 +163,16 @@ function VideoCarousel({ projects, initialIndex, onClose }: {
         {/* Header */}
         <div className="h-10 bg-zinc-800/95 flex items-center justify-between px-4">
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded-full bg-red-500 cursor-pointer" onClick={onClose} />
-            <div className="h-3 w-3 rounded-full bg-yellow-500" />
-            <div className="h-3 w-3 rounded-full bg-green-500" />
+            <div 
+              className="h-3 w-3 rounded-full bg-red-500 cursor-pointer" 
+              onClick={onClose}
+              role="button"
+              aria-label="Close carousel"
+              tabIndex={0}
+              onKeyDown={(e) => e.key === 'Enter' && onClose()}
+            />
+            <div className="h-3 w-3 rounded-full bg-yellow-500" role="presentation" />
+            <div className="h-3 w-3 rounded-full bg-green-500" role="presentation" />
           </div>
           <div className="font-mono text-sm text-zinc-300">
             {currentProject.name} ({currentIndex + 1} of {projects.length})
