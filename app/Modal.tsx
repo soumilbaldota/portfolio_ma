@@ -27,13 +27,23 @@ function ModalHeader({ onClose, onMouseDown, isDragging }: { onClose: () => void
 export function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (modalRef.current) {
       const rect = modalRef.current.getBoundingClientRect();
-      setDragOffset({
+      
+      // If modal hasn't been positioned yet (centered), convert to absolute positioning
+      if (position === null) {
+        setPosition({
+          x: rect.left,
+          y: rect.top,
+        });
+      }
+      
+      // Store where the drag started relative to the modal
+      setDragStart({
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
@@ -43,25 +53,30 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && modalRef.current) {
-        // Use transform for better performance instead of position
-        const x = e.clientX - dragOffset.x;
-        const y = e.clientY - dragOffset.y;
-        modalRef.current.style.transform = `translate(${x}px, ${y}px)`;
+      if (isDragging && modalRef.current && position !== null) {
+        // Calculate new position based on mouse position and drag offset
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        
+        // Use transform for smooth dragging without re-renders
+        const deltaX = newX - position.x;
+        const deltaY = newY - position.y;
+        modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
       }
     };
 
-    const handleMouseUp = () => {
-      if (isDragging && modalRef.current) {
-        // Commit the transform to position state
-        const transform = modalRef.current.style.transform;
-        const match = transform.match(/translate\((-?\d+(?:\.\d+)?)px,\s*(-?\d+(?:\.\d+)?)px\)/);
-        if (match) {
-          setPosition({
-            x: parseFloat(match[1]),
-            y: parseFloat(match[2]),
-          });
-        }
+    const handleMouseUp = (e: MouseEvent) => {
+      if (isDragging && modalRef.current && position !== null) {
+        // Calculate final position
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        
+        // Reset transform and update position state
+        modalRef.current.style.transform = '';
+        setPosition({
+          x: newX,
+          y: newY,
+        });
       }
       setIsDragging(false);
     };
@@ -75,7 +90,7 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragStart, position]);
 
   return createPortal(
     <div className='fixed inset-0 z-50' onClick={onClose}>
