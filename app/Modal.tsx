@@ -52,8 +52,6 @@ function ModalHeader({
   onMouseDown,
   isDragging,
   isMaximized,
-  height,
-  width,
 }: {
   onClose: () => void;
   onMinimize: (e: React.MouseEvent) => void;
@@ -61,12 +59,10 @@ function ModalHeader({
   onMouseDown: (e: React.MouseEvent) => void;
   isDragging: boolean;
   isMaximized: boolean;
-  height: number;
-  width: number;
 }) {
   return (
     <div
-      className={`h-8 ${isMaximized ? 'w-full' : `w-${width}`} bg-surface-primary/95 rounded-t-sm flex items-center pl-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`h-8 ${isMaximized ? 'w-full' : `w-200`} bg-surface-primary/95 rounded-t-sm flex items-center pl-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
       <div className="group flex">
@@ -83,15 +79,12 @@ export function Modal({
   onMinimize,
   onMaximize,
   isMaximized,
-  height = 100,
-  width = 200,
 }: {
   children: React.ReactNode;
   onClose: () => void;
   onMinimize: () => void;
   onMaximize: () => void;
   isMaximized: boolean;
-  height: number;
 }) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -180,7 +173,7 @@ export function Modal({
     onMaximize();
   };
 
-  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${isMaximized ? 'w-screen h-screen' : `w-${width} h-${height}`
+  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${isMaximized ? 'w-screen h-screen' : `w-200 h-100`
     }`;
 
   return createPortal(
@@ -211,8 +204,6 @@ export function Modal({
             onMouseDown={handleMouseDown}
             isDragging={isDragging}
             isMaximized={isMaximized}
-            height={height}
-            width={width}
           />
           <div className="h-[calc(100%-2rem)]" style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
             {children}
