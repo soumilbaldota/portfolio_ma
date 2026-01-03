@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder } from 'lucide-react';
+import { Modal } from './Modal';
 
 // Project data structure
 type Project = {
@@ -42,22 +43,15 @@ const PROJECTS_DATA: Project[] = [
   { id: '16', name: 'Distributed Database', category: 'DB', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
 ];
 
-// Video thumbnail component - simpler macOS-style
+// Video thumbnail component - simple and clean
 function VideoThumbnail({ project, onClick }: { project: Project; onClick: () => void }) {
   return (
     <div 
-      className="flex flex-col items-center cursor-pointer group relative"
+      className="flex flex-col items-center cursor-pointer group"
       onClick={onClick}
     >
-      {/* macOS-style window thumbnail */}
-      <div className="relative w-32 h-24 rounded-lg overflow-hidden bg-zinc-800 border border-zinc-700 hover:border-zinc-500 transition-colors">
-        {/* Traffic light buttons */}
-        <div className="absolute top-1 left-2 flex gap-1 z-10">
-          <div className="w-2 h-2 rounded-full bg-red-500" />
-          <div className="w-2 h-2 rounded-full bg-yellow-500" />
-          <div className="w-2 h-2 rounded-full bg-green-500" />
-        </div>
-        
+      {/* Simple thumbnail with play overlay */}
+      <div className="relative w-32 h-24 rounded-md overflow-hidden bg-zinc-800 border border-zinc-700 hover:border-zinc-500 transition-colors">
         {/* Thumbnail image */}
         <Image
           src={project.thumbnail}
@@ -81,73 +75,46 @@ function VideoThumbnail({ project, onClick }: { project: Project; onClick: () =>
   );
 }
 
-// QuickLook-style preview modal
-function QuickLookPreview({ project, onClose, onOpenCarousel }: { 
+// Video player content for modal
+function VideoPlayer({ project, onOpenCarousel }: { 
   project: Project; 
-  onClose: () => void;
   onOpenCarousel: () => void;
 }) {
   return (
-    <div 
-      className="fixed inset-0 flex justify-center items-center z-50 bg-black/60"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-zinc-900/95 rounded-lg overflow-hidden w-4/5 max-w-3xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="h-10 bg-zinc-800/95 flex items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div 
-              className="h-3 w-3 rounded-full bg-red-500 cursor-pointer" 
-              onClick={onClose}
-              role="button"
-              aria-label="Close preview"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && onClose()}
-            />
-            <div className="h-3 w-3 rounded-full bg-yellow-500" role="presentation" />
-            <div 
-              className="h-3 w-3 rounded-full bg-green-500 cursor-pointer" 
-              onClick={onOpenCarousel}
-              role="button"
-              aria-label="Open in carousel view"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && onOpenCarousel()}
-            />
+    <div className="w-full h-full flex flex-col">
+      {/* Video */}
+      <div className="relative flex-1 bg-black">
+        <iframe
+          src={project.videoUrl}
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+      
+      {/* Info bar */}
+      <div className="bg-zinc-800/80 p-3 text-sm font-mono text-zinc-300">
+        <div className="flex justify-between items-center">
+          <div>
+            <div className="font-bold">{project.name}</div>
+            <div className="text-xs text-zinc-400">Category: {project.category}</div>
           </div>
-          <div className="font-mono text-sm text-zinc-300">{project.name}</div>
-          <div className="w-12"></div>
-        </div>
-        
-        {/* Video Preview */}
-        <div className="relative aspect-video bg-black">
-          <iframe
-            src={project.videoUrl}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        
-        {/* Info bar */}
-        <div className="bg-zinc-800/80 p-3 text-sm font-mono text-zinc-300">
-          <div>Category: {project.category}</div>
-          <div className="text-xs text-zinc-400 mt-1">
-            Click green button to open in carousel view
-          </div>
+          <button
+            onClick={onOpenCarousel}
+            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded text-white text-xs"
+          >
+            Open Carousel
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-// Video carousel component
-function VideoCarousel({ projects, initialIndex, onClose }: {
+// Video carousel content for modal
+function VideoCarousel({ projects, initialIndex }: {
   projects: Project[];
   initialIndex: number;
-  onClose: () => void;
 }) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const currentProject = projects[currentIndex];
@@ -161,66 +128,38 @@ function VideoCarousel({ projects, initialIndex, onClose }: {
   };
   
   return (
-    <div 
-      className="fixed inset-0 flex justify-center items-center z-50 bg-black/80"
-      onClick={onClose}
-    >
-      <div 
-        className="bg-zinc-900/95 rounded-lg overflow-hidden w-11/12 max-w-5xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="h-10 bg-zinc-800/95 flex items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <div 
-              className="h-3 w-3 rounded-full bg-red-500 cursor-pointer" 
-              onClick={onClose}
-              role="button"
-              aria-label="Close carousel"
-              tabIndex={0}
-              onKeyDown={(e) => e.key === 'Enter' && onClose()}
-            />
-            <div className="h-3 w-3 rounded-full bg-yellow-500" role="presentation" />
-            <div className="h-3 w-3 rounded-full bg-green-500" role="presentation" />
-          </div>
-          <div className="font-mono text-sm text-zinc-300">
-            {currentProject.name} ({currentIndex + 1} of {projects.length})
-          </div>
-          <div className="w-12"></div>
+    <div className="w-full h-full flex flex-col">
+      {/* Video */}
+      <div className="relative flex-1 bg-black">
+        <iframe
+          key={currentProject.id}
+          src={currentProject.videoUrl}
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+      </div>
+      
+      {/* Controls */}
+      <div className="bg-zinc-800/80 p-4 flex items-center justify-between">
+        <button
+          onClick={handlePrevious}
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-mono"
+        >
+          Previous
+        </button>
+        
+        <div className="text-sm font-mono text-zinc-300 text-center">
+          <div className="font-bold">{currentProject.name}</div>
+          <div className="text-xs text-zinc-400">{currentProject.category} • {currentIndex + 1} of {projects.length}</div>
         </div>
         
-        {/* Video */}
-        <div className="relative aspect-video bg-black">
-          <iframe
-            key={currentProject.id}
-            src={currentProject.videoUrl}
-            className="w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-        
-        {/* Controls */}
-        <div className="bg-zinc-800/80 p-4 flex items-center justify-between">
-          <button
-            onClick={handlePrevious}
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-mono"
-          >
-            Previous
-          </button>
-          
-          <div className="text-sm font-mono text-zinc-300 text-center">
-            <div>{currentProject.name}</div>
-            <div className="text-xs text-zinc-400">{currentProject.category}</div>
-          </div>
-          
-          <button
-            onClick={handleNext}
-            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-mono"
-          >
-            Next
-          </button>
-        </div>
+        <button
+          onClick={handleNext}
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-mono"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
@@ -276,7 +215,7 @@ function FileArea({ projects, onThumbnailClick }: {
 
 // Main Projects component
 export function Projects() {
-  const [quickLookProject, setQuickLookProject] = useState<Project | null>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [carouselOpen, setCarouselOpen] = useState(false);
   const [carouselStartIndex, setCarouselStartIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
@@ -285,50 +224,54 @@ export function Projects() {
   const filteredProjects = PROJECTS_DATA.filter(p => p.category === selectedCategory);
   
   const handleThumbnailClick = (project: Project) => {
-    setQuickLookProject(project);
+    setSelectedProject(project);
   };
   
   const handleOpenCarousel = () => {
-    if (quickLookProject) {
-      const index = PROJECTS_DATA.findIndex(p => p.id === quickLookProject.id);
+    if (selectedProject) {
+      const index = PROJECTS_DATA.findIndex(p => p.id === selectedProject.id);
       setCarouselStartIndex(index);
-      setQuickLookProject(null);
+      setSelectedProject(null);
       setCarouselOpen(true);
     }
   };
   
   return (
-    <div className="w-full h-full max-w-200 max-h-92">
-      <div className="bg-zinc-950 w-full h-px" />
-      
-      <div className="grid grid-cols-[1fr_3fr] h-full w-full">
-        <Sidebar 
-          selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
-        />
-        <FileArea 
-          projects={filteredProjects}
-          onThumbnailClick={handleThumbnailClick}
-        />
+    <>
+      <div className="w-full h-full max-w-200 max-h-92">
+        <div className="bg-zinc-950 w-full h-px" />
+        
+        <div className="grid grid-cols-[1fr_3fr] h-full w-full">
+          <Sidebar 
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
+          <FileArea 
+            projects={filteredProjects}
+            onThumbnailClick={handleThumbnailClick}
+          />
+        </div>
       </div>
       
-      {/* QuickLook Preview */}
-      {quickLookProject && (
-        <QuickLookPreview
-          project={quickLookProject}
-          onClose={() => setQuickLookProject(null)}
-          onOpenCarousel={handleOpenCarousel}
-        />
+      {/* Video Preview Modal */}
+      {selectedProject && (
+        <Modal onClose={() => setSelectedProject(null)}>
+          <VideoPlayer 
+            project={selectedProject}
+            onOpenCarousel={handleOpenCarousel}
+          />
+        </Modal>
       )}
       
-      {/* Video Carousel */}
+      {/* Video Carousel Modal */}
       {carouselOpen && (
-        <VideoCarousel
-          projects={PROJECTS_DATA}
-          initialIndex={carouselStartIndex}
-          onClose={() => setCarouselOpen(false)}
-        />
+        <Modal onClose={() => setCarouselOpen(false)}>
+          <VideoCarousel
+            projects={PROJECTS_DATA}
+            initialIndex={carouselStartIndex}
+          />
+        </Modal>
       )}
-    </div>
+    </>
   );
 }
