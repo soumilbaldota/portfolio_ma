@@ -468,12 +468,14 @@ export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   
-  // Filter projects by selected category and search query
+  // Filter projects by search query (across all categories) or by selected category
   const filteredProjects = PROJECTS_DATA.filter(p => {
-    const matchesCategory = p.category === selectedCategory;
-    const matchesSearch = searchQuery === '' || 
-      p.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    // If there's a search query, search across all categories
+    if (searchQuery !== '') {
+      return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    // Otherwise, filter by selected category only
+    return p.category === selectedCategory;
   });
   
   const handleThumbnailClick = (project: Project) => {
