@@ -7,8 +7,21 @@ import { Projects } from './Projects';
 
 export default function Home() {
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
+  const [activeModal, setActiveModal] = useState<"about" | "work" | "projects" | "contact" | null>(null);
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   const openPortal = (type: "about" | "work" | "projects" | "contact") => {
+    // If clicking on a minimized modal, restore it
+    if (activeModal === type && isMinimized) {
+      setIsMinimized(false);
+      return;
+    }
+
+    setActiveModal(type);
+    setIsMinimized(false);
+    setIsMaximized(false);
+
     switch (type) {
       case "about":
         setModalContent(<div className='rounded-sm w-200 h-92 border-0 border-black'>About Me Content Here</div>);
@@ -25,8 +38,20 @@ export default function Home() {
     }
   };
 
+  const closeModal = () => {
+    setModalContent(null);
+    setActiveModal(null);
+    setIsMinimized(false);
+    setIsMaximized(false);
+  };
 
-  const closeModal = () => setModalContent(null);
+  const minimizeModal = () => {
+    setIsMinimized(true);
+  };
+
+  const maximizeModal = () => {
+    setIsMaximized(!isMaximized);
+  };
 
   return (
     <div className="flex justify-center items-center h-screen overflow-hidden">
@@ -35,24 +60,37 @@ export default function Home() {
           name="About Me"
           image="/soumil.png"
           onClick={() => openPortal("about")}
+          showMinimizedIndicator={activeModal === "about" && isMinimized}
         />
         <FolderIconWithImage
           name="Work"
           image="/work.png"
           onClick={() => openPortal("work")}
+          showMinimizedIndicator={activeModal === "work" && isMinimized}
         />
         <FolderIconWithImage
           name="Projects"
           image="/projects.png"
           onClick={() => openPortal("projects")}
+          showMinimizedIndicator={activeModal === "projects" && isMinimized}
         />
         <FolderIconWithImage
           name="Contact Me"
           image="/contact.png"
           onClick={() => openPortal("contact")}
+          showMinimizedIndicator={activeModal === "contact" && isMinimized}
         />
       </div>
-      {modalContent && <Modal onClose={closeModal}>{modalContent}</Modal>}
+      {modalContent && !isMinimized && (
+        <Modal 
+          onClose={closeModal} 
+          onMinimize={minimizeModal} 
+          onMaximize={maximizeModal}
+          isMaximized={isMaximized}
+        >
+          {modalContent}
+        </Modal>
+      )}
     </div>
   );
 }

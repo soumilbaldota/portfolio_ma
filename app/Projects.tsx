@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import Image from 'next/image';
-import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder } from 'lucide-react';
+import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Modal } from './Modal';
 
 // Project data structure
@@ -81,32 +81,21 @@ function VideoPlayer({ project, onOpenCarousel }: {
   onOpenCarousel: () => void;
 }) {
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Video */}
-      <div className="relative flex-1 bg-black">
-        <iframe
-          src={project.videoUrl}
-          className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
+    <div className="w-full h-full bg-black relative group">
+      <iframe
+        src={project.videoUrl}
+        className="w-full h-full"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
       
-      {/* Info bar */}
-      <div className="bg-zinc-800/80 p-3 text-sm font-mono text-zinc-300">
-        <div className="flex justify-between items-center">
-          <div>
-            <div className="font-bold">{project.name}</div>
-            <div className="text-xs text-zinc-400">Category: {project.category}</div>
-          </div>
-          <button
-            onClick={onOpenCarousel}
-            className="px-3 py-1 bg-blue-500 hover:bg-blue-600 rounded text-white text-xs"
-          >
-            Open Carousel
-          </button>
-        </div>
-      </div>
+      {/* Open Carousel button - appears on hover */}
+      <button
+        onClick={onOpenCarousel}
+        className="absolute bottom-4 right-4 px-4 py-2 bg-black/70 hover:bg-black/90 backdrop-blur-sm rounded-full text-white text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity z-10"
+      >
+        Open Carousel →
+      </button>
     </div>
   );
 }
@@ -128,38 +117,39 @@ function VideoCarousel({ projects, initialIndex }: {
   };
   
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full relative bg-black">
       {/* Video */}
-      <div className="relative flex-1 bg-black">
-        <iframe
-          key={currentProject.id}
-          src={currentProject.videoUrl}
-          className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
+      <iframe
+        key={currentProject.id}
+        src={currentProject.videoUrl}
+        className="w-full h-full"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
       
-      {/* Controls */}
-      <div className="bg-zinc-800/80 p-4 flex items-center justify-between">
-        <button
-          onClick={handlePrevious}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-mono"
-        >
-          Previous
-        </button>
-        
-        <div className="text-sm font-mono text-zinc-300 text-center">
-          <div className="font-bold">{currentProject.name}</div>
-          <div className="text-xs text-zinc-400">{currentProject.category} • {currentIndex + 1} of {projects.length}</div>
+      {/* Previous Button - Left side */}
+      <button
+        onClick={handlePrevious}
+        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
+        aria-label="Previous video"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      
+      {/* Next Button - Right side */}
+      <button
+        onClick={handleNext}
+        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
+        aria-label="Next video"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+      
+      {/* Project info overlay - Bottom center */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full z-10">
+        <div className="text-xs font-mono text-white text-center">
+          {currentProject.name} • {currentIndex + 1} of {projects.length}
         </div>
-        
-        <button
-          onClick={handleNext}
-          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-mono"
-        >
-          Next
-        </button>
       </div>
     </div>
   );
