@@ -51,7 +51,7 @@ export function Modal({
 }) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -60,7 +60,17 @@ export function Modal({
     
     if (modalRef.current) {
       const rect = modalRef.current.getBoundingClientRect();
-      setDragOffset({
+      
+      // If modal hasn't been positioned yet (centered), convert to absolute positioning
+      if (position === null) {
+        setPosition({
+          x: rect.left,
+          y: rect.top,
+        });
+      }
+      
+      // Store where the drag started relative to the modal
+      setDragStart({
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
@@ -70,15 +80,31 @@ export function Modal({
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && !isMaximized) {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-        });
+      if (isDragging && modalRef.current && position !== null && !isMaximized) {
+        // Calculate new position based on mouse position and drag offset
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        
+        // Use transform for smooth dragging without re-renders
+        const deltaX = newX - position.x;
+        const deltaY = newY - position.y;
+        modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
       }
     };
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e: MouseEvent) => {
+      if (isDragging && modalRef.current && position !== null && !isMaximized) {
+        // Calculate final position
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
+        
+        // Reset transform and update position state
+        modalRef.current.style.transform = '';
+        setPosition({
+          x: newX,
+          y: newY,
+        });
+      }
       setIsDragging(false);
     };
 
@@ -91,7 +117,7 @@ export function Modal({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, dragOffset, isMaximized]);
+  }, [isDragging, dragStart, position, isMaximized]);
 
   // Reset position when maximizing
   useEffect(() => {
@@ -127,8 +153,11 @@ export function Modal({
                   position: 'absolute',
                   left: `${position.x}px`,
                   top: `${position.y}px`,
+                  willChange: isDragging ? 'transform' : 'auto',
                 }
-              : {}
+              : {
+                  willChange: isDragging ? 'transform' : 'auto',
+                }
           }
           onClick={(e) => e.stopPropagation()}
         >
@@ -139,7 +168,9 @@ export function Modal({
             onMouseDown={handleMouseDown} 
             isDragging={isDragging} 
           />
-          {children}
+          <div style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
+            {children}
+          </div>
         </div>
 
       </div>
