@@ -109,7 +109,7 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
 }
 
 // Video thumbnail component - simple and clean
-function VideoThumbnail({ project, onClick, onDoubleClick, size = 'medium' }: { 
+function VideoThumbnail({ project, onClick, onDoubleClick, size = 'small' }: { 
   project: Project; 
   onClick: () => void;
   onDoubleClick: () => void;
@@ -131,7 +131,7 @@ function VideoThumbnail({ project, onClick, onDoubleClick, size = 'medium' }: {
     >
       {/* Simple thumbnail with play overlay */}
       <div 
-        className="relative rounded-md overflow-hidden bg-zinc-800 border border-zinc-700 hover:border-zinc-500 transition-colors"
+        className="relative rounded-sm overflow-hidden bg-zinc-800 transition-colors"
         style={{ width: `${sizeConfig.w}px`, height: `${sizeConfig.h}px` }}
       >
         {/* Thumbnail image */}
@@ -144,7 +144,7 @@ function VideoThumbnail({ project, onClick, onDoubleClick, size = 'medium' }: {
         />
         
         {/* Play button overlay */}
-        <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
+        <div className="absolute inset-0 rounded-sm flex items-center justify-center bg-black/30 group-hover:bg-black/50 transition-colors">
           <Play className={`${sizeConfig.playSize} text-white drop-shadow-lg`} fill="white" />
         </div>
       </div>
@@ -249,18 +249,31 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   ];
   
   return (
-    <div className="bg-zinc-800/20 backdrop-blur-2xl flex flex-col">
-      {categories.map(({ name, icon: Icon }) => (
-        <div
-          key={name}
-          className={`p-2 font-mono bg-zinc-800/30 flex items-center cursor-pointer transition-colors ${
-            selectedCategory === name ? 'bg-blue-500' : 'hover:bg-blue-500'
-          }`}
-          onClick={() => onSelectCategory(name)}
-        >
-          <Icon className="mr-2" /> {name}
-        </div>
-      ))}
+    <div className=" bg-[#1e1e1e]/80 backdrop-blur-xl h-screen p-3 flex flex-col gap-0.5 border-r border-black/20">
+      <div className="px-2 pb-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Favorites</div>
+      {categories.map(({ name, icon: Icon }) => {
+        const isActive = selectedCategory === name;
+        return (
+          <div
+            key={name}
+            className={`px-2 py-1.25 rounded-md flex items-center cursor-default transition-colors group ${
+              isActive 
+                ? 'bg-zinc-700/60' 
+                : 'hover:bg-zinc-700/40'
+            }`}
+            onClick={() => onSelectCategory(name)}
+          >
+            <Icon 
+              size={18} 
+              strokeWidth={1.5}
+              className={`mr-3 ${isActive ? 'text-blue-500' : 'text-blue-500/90'}`} 
+            /> 
+            <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-zinc-300'}`}>
+              {name}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -342,7 +355,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   // Grid view for small/medium/big icons
-  const iconSize = (viewMode === 'gallery' ? 'medium' : viewMode) as 'small' | 'medium' | 'big';
+  const iconSize = (viewMode === 'gallery' ? 'small' : viewMode) as 'small' | 'medium' | 'big';
   
   return (
     <div className="flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
@@ -364,7 +377,7 @@ export function Projects() {
   const [carouselOpen, setCarouselOpen] = useState(false);
   const [carouselStartIndex, setCarouselStartIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
-  const [viewMode, setViewMode] = useState<ViewMode>('medium');
+  const [viewMode, setViewMode] = useState<ViewMode>('small');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   
   // Filter projects by selected category
@@ -393,13 +406,11 @@ export function Projects() {
     <>
       <div className="w-full h-full flex flex-col">
         {/* Top bar with view button - matches sidebar styling */}
-        <div className="bg-zinc-800/20 backdrop-blur-2xl border-b border-zinc-700 px-4 py-1 flex justify-end items-center">
+        <div className="bg-surface-primary/95 backdrop-blur-2xl px-4 py-1 z-10 flex justify-end items-center">
           <ViewButton currentView={viewMode} onViewChange={setViewMode} />
         </div>
-        
-        <div className="bg-zinc-950 w-full h-px" />
-        
-        <div className="grid grid-cols-[1fr_3fr] flex-1 w-full overflow-hidden">
+                
+        <div className="grid grid-cols-[1fr_5fr] flex-1 w-full overflow-hidden">
           <Sidebar 
             selectedCategory={selectedCategory}
             onSelectCategory={(category) => {
