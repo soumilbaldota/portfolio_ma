@@ -87,7 +87,7 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
       </button>
       
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 bg-zinc-800 border border-zinc-700 rounded shadow-lg z-50 min-w-40">
+        <div className="absolute top-full right-0 mt-1 bg-zinc-800 border border-zinc-700 rounded shadow-lg z-50 min-w-[10rem]">
           {viewOptions.map((option) => (
             <button
               key={option.value}
@@ -116,7 +116,7 @@ function VideoThumbnail({ project, onClick, onDoubleClick, size = 'medium' }: {
   size?: 'small' | 'medium' | 'big';
 }) {
   const sizes = {
-    small: { w: 96, h: 72, imgW: 96, imgH: 72, playSize: 'w-6 h-6', textSize: 'text-[10px]', maxW: 'max-w-24' },
+    small: { w: 96, h: 72, imgW: 96, imgH: 72, playSize: 'w-6 h-6', textSize: 'text-xs', maxW: 'max-w-24' },
     medium: { w: 128, h: 96, imgW: 128, imgH: 96, playSize: 'w-10 h-10', textSize: 'text-xs', maxW: 'max-w-32' },
     big: { w: 192, h: 144, imgW: 192, imgH: 144, playSize: 'w-14 h-14', textSize: 'text-sm', maxW: 'max-w-48' },
   };
@@ -342,13 +342,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   // Grid view for small/medium/big icons
-  const iconSizeMap: Record<ViewMode, 'small' | 'medium' | 'big'> = {
-    small: 'small',
-    medium: 'medium',
-    big: 'big',
-    gallery: 'medium', // fallback, shouldn't be used
-  };
-  const iconSize = iconSizeMap[viewMode];
+  const iconSize = (viewMode === 'gallery' ? 'medium' : viewMode) as 'small' | 'medium' | 'big';
   
   return (
     <div className="flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
