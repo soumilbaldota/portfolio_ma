@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Modal } from './Modal';
@@ -75,80 +75,88 @@ function VideoThumbnail({ project, onClick }: { project: Project; onClick: () =>
   );
 }
 
-// Video player content for modal
-function VideoPlayer({ project, onOpenCarousel }: { 
-  project: Project; 
-  onOpenCarousel: () => void;
-}) {
-  return (
-    <div className="w-full h-full bg-black relative group">
-      <iframe
-        src={project.videoUrl}
-        className="w-full h-full"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      />
-      
-      {/* Open Carousel button - appears on hover */}
-      <button
-        onClick={onOpenCarousel}
-        className="absolute bottom-4 right-4 px-4 py-2 bg-black/70 hover:bg-black/90 backdrop-blur-sm rounded-full text-white text-xs font-mono opacity-0 group-hover:opacity-100 transition-opacity z-10"
-      >
-        Open Carousel →
-      </button>
-    </div>
-  );
-}
-
 // Video carousel content for modal
-function VideoCarousel({ projects, initialIndex }: {
+function VideoCarousel({ projects, initialIndex, selectedCategory, onCategoryChange }: {
   projects: Project[];
   initialIndex: number;
+  selectedCategory: string;
+  onCategoryChange: (category: string) => void;
 }) {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  const currentProject = projects[currentIndex];
+  // Filter projects by category
+  const filteredProjects = projects.filter(p => p.category === selectedCategory);
+  
+  // Ensure currentIndex is within bounds
+  const [currentIndex, setCurrentIndex] = useState(() => 
+    Math.min(initialIndex, Math.max(0, filteredProjects.length - 1))
+  );
+  
+  // Update currentIndex when category changes to ensure it's within bounds
+  useEffect(() => {
+    if (currentIndex >= filteredProjects.length) {
+      setCurrentIndex(Math.max(0, filteredProjects.length - 1));
+    }
+  }, [filteredProjects.length, currentIndex]);
+  
+  const currentProject = filteredProjects[currentIndex];
+  
+  // Guard against empty filtered projects
+  if (!currentProject) {
+    return <div className="w-full h-full flex items-center justify-center bg-black text-white">No projects in this category</div>;
+  }
   
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : projects.length - 1));
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : filteredProjects.length - 1));
   };
   
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev < projects.length - 1 ? prev + 1 : 0));
+    setCurrentIndex((prev) => (prev < filteredProjects.length - 1 ? prev + 1 : 0));
   };
   
   return (
-    <div className="w-full h-full relative bg-black">
-      {/* Video */}
-      <iframe
-        key={currentProject.id}
-        src={currentProject.videoUrl}
-        className="w-full h-full"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
+    <div className="w-full h-full flex">
+      {/* Left sidebar with category selection */}
+      <Sidebar 
+        selectedCategory={selectedCategory}
+        onSelectCategory={(category) => {
+          onCategoryChange(category);
+          setCurrentIndex(0); // Reset to first project when changing category
+        }}
       />
       
-      {/* Previous Button - Left side */}
-      <button
-        onClick={handlePrevious}
-        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
-        aria-label="Previous video"
-      >
-        <ChevronLeft className="w-6 h-6" />
-      </button>
-      
-      {/* Next Button - Right side */}
-      <button
-        onClick={handleNext}
-        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
-        aria-label="Next video"
-      >
-        <ChevronRight className="w-6 h-6" />
-      </button>
-      
-      {/* Project info overlay - Bottom center */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full z-10">
-        <div className="text-xs font-mono text-white text-center">
-          {currentProject.name} • {currentIndex + 1} of {projects.length}
+      {/* Video carousel */}
+      <div className="flex-1 relative bg-black">
+        {/* Video */}
+        <iframe
+          key={currentProject.id}
+          src={currentProject.videoUrl}
+          className="w-full h-full"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        />
+        
+        {/* Previous Button - Left side */}
+        <button
+          onClick={handlePrevious}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
+          aria-label="Previous video"
+        >
+          <ChevronLeft className="w-6 h-6" />
+        </button>
+        
+        {/* Next Button - Right side */}
+        <button
+          onClick={handleNext}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
+          aria-label="Next video"
+        >
+          <ChevronRight className="w-6 h-6" />
+        </button>
+        
+        {/* Project info overlay - Bottom center */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full z-10">
+          <div className="text-xs font-mono text-white text-center">
+            {currentProject.name} • {currentIndex + 1} of {filteredProjects.length}
+          </div>
         </div>
       </div>
     </div>
@@ -205,7 +213,6 @@ function FileArea({ projects, onThumbnailClick }: {
 
 // Main Projects component
 export function Projects() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [carouselOpen, setCarouselOpen] = useState(false);
   const [carouselStartIndex, setCarouselStartIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
@@ -214,21 +221,21 @@ export function Projects() {
   const filteredProjects = PROJECTS_DATA.filter(p => p.category === selectedCategory);
   
   const handleThumbnailClick = (project: Project) => {
-    setSelectedProject(project);
+    // Open carousel by default when clicking a thumbnail
+    const categoryProjects = PROJECTS_DATA.filter(p => p.category === project.category);
+    const index = categoryProjects.findIndex(p => p.id === project.id);
+    setCarouselStartIndex(index);
+    setSelectedCategory(project.category);
+    setCarouselOpen(true);
   };
   
-  const handleOpenCarousel = () => {
-    if (selectedProject) {
-      const index = PROJECTS_DATA.findIndex(p => p.id === selectedProject.id);
-      setCarouselStartIndex(index);
-      setSelectedProject(null);
-      setCarouselOpen(true);
-    }
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
   };
   
   return (
     <>
-      <div className="w-full h-full max-w-200 max-h-92">
+      <div className="w-full h-full">
         <div className="bg-zinc-950 w-full h-px" />
         
         <div className="grid grid-cols-[1fr_3fr] h-full w-full">
@@ -243,22 +250,19 @@ export function Projects() {
         </div>
       </div>
       
-      {/* Video Preview Modal */}
-      {selectedProject && (
-        <Modal onClose={() => setSelectedProject(null)}>
-          <VideoPlayer 
-            project={selectedProject}
-            onOpenCarousel={handleOpenCarousel}
-          />
-        </Modal>
-      )}
-      
       {/* Video Carousel Modal */}
       {carouselOpen && (
-        <Modal onClose={() => setCarouselOpen(false)}>
+        <Modal 
+          onClose={() => setCarouselOpen(false)}
+          onMinimize={() => {}}
+          onMaximize={() => {}}
+          isMaximized={false}
+        >
           <VideoCarousel
             projects={PROJECTS_DATA}
             initialIndex={carouselStartIndex}
+            selectedCategory={selectedCategory}
+            onCategoryChange={handleCategoryChange}
           />
         </Modal>
       )}

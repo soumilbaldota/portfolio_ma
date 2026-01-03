@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import { useState, useRef, useEffect } from "react";
 
-function TrafficLight({ color, onClick }: { color: string; onClick?: () => void }) {
+function TrafficLight({ color, onClick }: { color: string; onClick?: (e: React.MouseEvent) => void }) {
   return (
     <div
       className={`h-3 w-3 rounded-full ${color} m-1 flex items-center justify-center cursor-pointer group`}
@@ -20,8 +20,8 @@ function ModalHeader({
   isDragging 
 }: { 
   onClose: () => void; 
-  onMinimize: () => void;
-  onMaximize: () => void;
+  onMinimize: (e: React.MouseEvent) => void;
+  onMaximize: (e: React.MouseEvent) => void;
   onMouseDown: (e: React.MouseEvent) => void; 
   isDragging: boolean 
 }) {
@@ -30,7 +30,7 @@ function ModalHeader({
       className={`h-8 w-200 bg-surface-primary/95 rounded-t-sm flex items-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
-      <TrafficLight color="bg-red-500" onClick={onClose} />
+      <TrafficLight color="bg-red-500" onClick={(e) => { e.stopPropagation(); onClose(); }} />
       <TrafficLight color="bg-yellow-500" onClick={onMinimize} />
       <TrafficLight color="bg-green-500" onClick={onMaximize} />
     </div>
@@ -168,7 +168,7 @@ export function Modal({
             onMouseDown={handleMouseDown} 
             isDragging={isDragging} 
           />
-          <div style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
+          <div className="h-[calc(100%-2rem)]" style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
             {children}
           </div>
         </div>
