@@ -74,11 +74,11 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 hover:bg-zinc-700 rounded transition-colors"
+        className="p-1 hover:bg-zinc-700 rounded transition-colors"
         aria-label="Change view"
       >
         {/* 4-square grid icon */}
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-zinc-300">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-zinc-300">
           <rect x="4" y="4" width="7" height="7" fill="currentColor" />
           <rect x="13" y="4" width="7" height="7" fill="currentColor" />
           <rect x="4" y="13" width="7" height="7" fill="currentColor" />
@@ -392,8 +392,8 @@ export function Projects() {
   return (
     <>
       <div className="w-full h-full flex flex-col">
-        {/* Top bar with view button */}
-        <div className="bg-zinc-900/50 border-b border-zinc-700 px-4 py-2 flex justify-end items-center">
+        {/* Top bar with view button - matches sidebar styling */}
+        <div className="bg-zinc-800/20 backdrop-blur-2xl border-b border-zinc-700 px-4 py-1 flex justify-end items-center">
           <ViewButton currentView={viewMode} onViewChange={setViewMode} />
         </div>
         
