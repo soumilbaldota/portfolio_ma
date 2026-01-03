@@ -34,8 +34,8 @@ function ProfileAvatar({ className }: { className?: string }) {
 
 function SidebarProfile() {
     return (
-        <div className="bg-zinc-800/20 backdrop-blur-2xl flex justify-center">
-            <div className="h-15 w-12/12 bg-zinc-800/80 rounded-sm border-0 border-zinc-950 flex items-center hover:bg-blue-500">
+        <div className="bg-surface-primary/20 backdrop-blur-2xl flex justify-center">
+            <div className="h-15 w-12/12 bg-surface-primary/80 rounded-sm flex items-center hover:bg-accent-primary">
                 <ProfileAvatar />
                 <div className="font-mono">Soumil Baldota</div>
             </div>
@@ -56,10 +56,10 @@ function ContactAction({ Icon, label, link }: ContactMethod) {
     return (
         <div className="flex flex-col items-center justify-center m-2.5">
             <div className="w-full flex justify-center cursor-pointer">
-                <div className="w-10 h-10 rounded-full m-2 bg-blue-500 flex items-center justify-center" onClick={()=>{
+                <div className="w-10 h-10 rounded-full m-2 bg-accent-primary flex items-center justify-center" onClick={()=>{
                     if (link) window.open(link, '_blank');
                 }}>
-                    <Icon />
+                    <Icon className="text-white" />
                 </div>
             </div>
             <div className="font-mono text-center">{label}</div>
@@ -70,13 +70,13 @@ function ContactAction({ Icon, label, link }: ContactMethod) {
 export function Contacts() {
     return (
         <div className="w-full h-full">
-            <div className="bg-zinc-950 w-full h-px" />
+            <div className="bg-divider w-full h-px" />
 
             <div className="grid grid-cols-[1fr_3fr] h-full w-full">
                 <SidebarProfile />
 
-                <div id="right-section" className="bg-zinc-800/90 w-full h-full flex items-start">
-                    <div id="line" className="bg-zinc-950 h-full w-px" />
+                <div id="right-section" className="bg-surface-primary/90 w-full h-full flex items-start">
+                    <div id="line" className="bg-divider h-full w-px" />
 
                     <div className="w-full h-full flex flex-col items-center justify-center">
                         <HeaderProfile />
@@ -87,7 +87,7 @@ export function Contacts() {
                             ))}
                         </div>
                         <div id='details-section' className='flex flex-col w-full items-center justify-center'>
-                            <div className='bg-zinc-500 w-4/5 h-px mb-2'></div>
+                            <div className='bg-divider w-4/5 h-px mb-2'></div>
                             <div className='grid grid-cols-1 '>
                                     <div className='flex flex-start'>
                                         <span className='font-mono mr-5'>Email</span>
