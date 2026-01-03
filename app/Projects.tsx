@@ -289,7 +289,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                 onDoubleClick={() => onThumbnailDoubleClick(project)}
               >
                 <div className="flex items-center gap-3">
-                  <div className="relative w-24 h-18 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
+                  <div className="relative w-24 h-16 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
                     <Image
                       src={project.thumbnail}
                       alt={project.name}
@@ -342,7 +342,13 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   // Grid view for small/medium/big icons
-  const iconSize = viewMode === 'small' ? 'small' : viewMode === 'medium' ? 'medium' : 'big';
+  const iconSizeMap: Record<ViewMode, 'small' | 'medium' | 'big'> = {
+    small: 'small',
+    medium: 'medium',
+    big: 'big',
+    gallery: 'medium', // fallback, shouldn't be used
+  };
+  const iconSize = iconSizeMap[viewMode];
   
   return (
     <div className="flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
@@ -372,8 +378,11 @@ export function Projects() {
   
   const handleThumbnailClick = (project: Project) => {
     // Single click in gallery view - just select for preview
+    // In other views - open the video modal
     if (viewMode === 'gallery') {
       setSelectedProject(project);
+    } else {
+      handleThumbnailDoubleClick(project);
     }
   };
   
