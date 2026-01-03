@@ -28,11 +28,13 @@ export function FolderIconWithImage({
   name = "",
   image = "",
   onClick = () => {},
+  showMinimizedIndicator = false,
 }: {
   scale?: number;
   name?: string;
   image?: string;
   onClick?: () => void;
+  showMinimizedIndicator?: boolean;
 }) {
   return (
     <div className="hover:bg-zinc-700 rounded-2xl cursor-pointer" onClick={onClick}>
@@ -52,6 +54,10 @@ export function FolderIconWithImage({
             )}
           </div>
           <div className="text-xl font-mono text-center">{name}</div>
+          {/* Minimized indicator - tiny dot below the folder name */}
+          {showMinimizedIndicator && (
+            <div className="w-2 h-2 rounded-full bg-yellow-500 mt-1" />
+          )}
         </div>
         {/* Decorative folder elements */}
         <div className="absolute bg-sky-700 h-10 w-15 -top-3 z-0 rounded-sm" />

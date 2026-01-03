@@ -12,25 +12,52 @@ function TrafficLight({ color, onClick }: { color: string; onClick?: () => void 
   );
 }
 
-function ModalHeader({ onClose, onMouseDown, isDragging }: { onClose: () => void; onMouseDown: (e: React.MouseEvent) => void; isDragging: boolean }) {
+function ModalHeader({ 
+  onClose, 
+  onMinimize,
+  onMaximize,
+  onMouseDown, 
+  isDragging 
+}: { 
+  onClose: () => void; 
+  onMinimize: () => void;
+  onMaximize: () => void;
+  onMouseDown: (e: React.MouseEvent) => void; 
+  isDragging: boolean 
+}) {
   return (
     <div 
       className={`h-8 w-200 bg-zinc-800/95 rounded-t-sm flex items-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
       <TrafficLight color="bg-red-500" onClick={onClose} />
-      <TrafficLight color="bg-yellow-500" />
-      <TrafficLight color="bg-green-500" />
+      <TrafficLight color="bg-yellow-500" onClick={onMinimize} />
+      <TrafficLight color="bg-green-500" onClick={onMaximize} />
     </div>
   );
 }
-export function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
+export function Modal({ 
+  children, 
+  onClose, 
+  onMinimize, 
+  onMaximize, 
+  isMaximized 
+}: { 
+  children: React.ReactNode; 
+  onClose: () => void;
+  onMinimize: () => void;
+  onMaximize: () => void;
+  isMaximized: boolean;
+}) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    // Prevent dragging when maximized
+    if (isMaximized) return;
+    
     if (modalRef.current) {
       const rect = modalRef.current.getBoundingClientRect();
       setDragOffset({
@@ -43,7 +70,7 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
+      if (isDragging && !isMaximized) {
         setPosition({
           x: e.clientX - dragOffset.x,
           y: e.clientY - dragOffset.y,
@@ -64,17 +91,38 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, isMaximized]);
+
+  // Reset position when maximizing
+  useEffect(() => {
+    if (isMaximized) {
+      setPosition(null);
+    }
+  }, [isMaximized]);
+
+  const handleMinimize = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onMinimize();
+  };
+
+  const handleMaximize = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onMaximize();
+  };
 
   return createPortal(
     <div className='fixed inset-0 z-50' onClick={onClose}>
-      <div className={position === null ? 'flex justify-center items-center h-full' : ''}>
+      <div className={!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}>
 
         <div
           ref={modalRef}
-          className="m-0 p-0 rounded-sm w-200 h-100 backdrop-blur-2xl bg-zinc-800/30 border-0 border-black"
+          className={`m-0 p-0 rounded-sm backdrop-blur-2xl bg-zinc-800/30 border-0 border-black ${
+            isMaximized 
+              ? 'w-screen h-screen' 
+              : 'w-200 h-100'
+          }`}
           style={
-            position !== null
+            !isMaximized && position !== null
               ? {
                   position: 'absolute',
                   left: `${position.x}px`,
@@ -84,7 +132,13 @@ export function Modal({ children, onClose }: { children: React.ReactNode; onClos
           }
           onClick={(e) => e.stopPropagation()}
         >
-          <ModalHeader onClose={onClose} onMouseDown={handleMouseDown} isDragging={isDragging} />
+          <ModalHeader 
+            onClose={onClose} 
+            onMinimize={handleMinimize}
+            onMaximize={handleMaximize}
+            onMouseDown={handleMouseDown} 
+            isDragging={isDragging} 
+          />
           {children}
         </div>
 
