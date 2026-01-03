@@ -7,7 +7,7 @@ function TrafficLight({ color, onClick }: { color: string; onClick?: () => void 
       className={`h-3 w-3 rounded-full ${color} m-1 flex items-center justify-center cursor-pointer group`}
       onClick={onClick}
     >
-      <div className="bg-white w-1 h-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+      <div className="bg-foreground/10 w-1 h-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
     </div>
   );
 }
@@ -27,7 +27,7 @@ function ModalHeader({
 }) {
   return (
     <div 
-      className={`h-8 w-200 bg-zinc-800/95 rounded-t-sm flex items-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`h-8 w-200 bg-surface-primary/95 rounded-t-sm flex items-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
       <TrafficLight color="bg-red-500" onClick={onClose} />
@@ -36,7 +36,6 @@ function ModalHeader({
     </div>
   );
 }
-
 export function Modal({ 
   children, 
   onClose, 
@@ -137,7 +136,7 @@ export function Modal({
     onMaximize();
   };
 
-  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-zinc-800/30 border-0 border-black ${
+  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${
     isMaximized ? 'w-screen h-screen' : 'w-200 h-100'
   }`;
 

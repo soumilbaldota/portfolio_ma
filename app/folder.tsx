@@ -37,10 +37,10 @@ export function FolderIconWithImage({
   showMinimizedIndicator?: boolean;
 }) {
   return (
-    <div className="hover:bg-zinc-700 rounded-2xl cursor-pointer" onClick={onClick}>
+    <div className="hover:bg-surface-tertiary rounded-2xl cursor-pointer" onClick={onClick}>
       <div className="relative m-5 mt-8" style={{ transform: `scale(${scale})` }}>
         <div className="flex flex-col items-center">
-          <div className="bg-sky-600 rounded-sm h-22 w-35 relative z-10 drop-shadow-2xl mb-2 flex justify-center items-center">
+          <div className="bg-accent-secondary rounded-sm h-22 w-35 relative z-10 drop-shadow-2xl mb-2 flex justify-center items-center">
             {image && (
               <div className="rounded-full overflow-hidden w-15 h-15">
                 <Image
@@ -64,11 +64,11 @@ export function FolderIconWithImage({
           )}
         </div>
         {/* Decorative folder elements */}
-        <div className="absolute bg-sky-700 h-10 w-15 -top-3 z-0 rounded-sm" />
-        <div className="absolute bg-sky-700 h-10 w-15 -top-0.5 left-11 z-0 rounded-sm rotate-25" />
-        <div className="absolute bg-sky-700 h-10 w-35 -top-1 z-0 rounded-sm" />
-        <div className="absolute bg-sky-500 h-px w-35 top-20 z-12 drop-shadow-2xl" />
-        <div className="absolute bg-sky-500 h-px w-35 top-21 z-12 drop-shadow-2xl" />
+        <div className="absolute bg-accent-tertiary h-10 w-15 -top-3 z-0 rounded-sm" />
+        <div className="absolute bg-accent-tertiary h-10 w-15 -top-0.5 left-11 z-0 rounded-sm rotate-25" />
+        <div className="absolute bg-accent-tertiary h-10 w-35 -top-1 z-0 rounded-sm" />
+        <div className="absolute bg-accent-primary h-px w-35 top-20 z-12 drop-shadow-2xl" />
+        <div className="absolute bg-accent-primary h-px w-35 top-21 z-12 drop-shadow-2xl" />
       </div>
     </div>
   );
