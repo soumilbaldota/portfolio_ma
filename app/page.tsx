@@ -24,16 +24,16 @@ export default function Home() {
 
     switch (type) {
       case "about":
-        setModalContent(<div className='rounded-sm w-200 h-92'>About Me Content Here</div>);
+        setModalContent(<div className='rounded-sm w-full h-full'>About Me Content Here</div>);
         break;
       case "work":
-        setModalContent(<div className='rounded-sm w-200 h-92'>Work Content Here</div>);
+        setModalContent(<div className='rounded-sm w-full h-full'>Work Content Here</div>);
         break;
       case "projects":
-        setModalContent(<div className='rounded-sm w-200 h-92 border-0 border-black'><Projects /></div>);
+        setModalContent(<div className='rounded-sm w-full h-full border-0 border-black'><Projects /></div>);
         break;
       case "contact":
-        setModalContent(<div className='rounded-sm w-200 h-92'><Contacts /></div>);
+        setModalContent(<div className='rounded-sm w-full h-full'><Contacts /></div>);
         break;
     }
   };
