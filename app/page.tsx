@@ -6,7 +6,6 @@ import { Contacts } from './Contact';
 import { Projects } from './Projects';
 
 export default function Home() {
-  const [modalArea, setModalArea] = useState([200, 100]);
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
   const [activeModal, setActiveModal] = useState<"about" | "work" | "projects" | "contact" | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
@@ -25,19 +24,15 @@ export default function Home() {
 
     switch (type) {
       case "about":
-        setModalArea([200, 100]);
         setModalContent(<div className='rounded-sm w-full h-full'>About Me Content Here</div>);
         break;
       case "work":
-        setModalArea([200, 100]);
         setModalContent(<div className='rounded-sm w-full h-full'>Work Content Here</div>);
         break;
       case "projects":
-        setModalArea([300, 150]);
         setModalContent(<div className='rounded-sm w-full h-full'><Projects /></div>);
         break;
       case "contact":
-        setModalArea([200, 100]);
         setModalContent(<div className='rounded-sm w-full h-full'><Contacts /></div>);
         break;
     }
@@ -92,8 +87,6 @@ export default function Home() {
           onMinimize={minimizeModal} 
           onMaximize={maximizeModal}
           isMaximized={isMaximized}
-          height={modalArea[1]}
-          width={modalArea[0]}
         >
           {modalContent}
         </Modal>
