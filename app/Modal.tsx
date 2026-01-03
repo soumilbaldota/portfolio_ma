@@ -30,7 +30,7 @@ function ModalHeader({
       className={`h-8 w-200 bg-surface-primary/95 rounded-t-sm flex items-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
-      <TrafficLight color="bg-red-500" onClick={() => onClose()} />
+      <TrafficLight color="bg-red-500" onClick={(e) => { e.stopPropagation(); onClose(); }} />
       <TrafficLight color="bg-yellow-500" onClick={onMinimize} />
       <TrafficLight color="bg-green-500" onClick={onMaximize} />
     </div>

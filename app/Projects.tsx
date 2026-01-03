@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Modal } from './Modal';
@@ -82,11 +82,27 @@ function VideoCarousel({ projects, initialIndex, selectedCategory, onCategoryCha
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
 }) {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
-  
   // Filter projects by category
   const filteredProjects = projects.filter(p => p.category === selectedCategory);
+  
+  // Ensure currentIndex is within bounds
+  const [currentIndex, setCurrentIndex] = useState(() => 
+    Math.min(initialIndex, Math.max(0, filteredProjects.length - 1))
+  );
+  
+  // Update currentIndex when category changes to ensure it's within bounds
+  useEffect(() => {
+    if (currentIndex >= filteredProjects.length) {
+      setCurrentIndex(Math.max(0, filteredProjects.length - 1));
+    }
+  }, [filteredProjects.length, currentIndex]);
+  
   const currentProject = filteredProjects[currentIndex];
+  
+  // Guard against empty filtered projects
+  if (!currentProject) {
+    return <div className="w-full h-full flex items-center justify-center bg-black text-white">No projects in this category</div>;
+  }
   
   const handlePrevious = () => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : filteredProjects.length - 1));
