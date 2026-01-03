@@ -3,6 +3,7 @@ import { FolderIconWithImage } from "./folder";
 import { useState } from "react";
 import { Modal } from "./Modal";
 import { Contacts } from './Contact';
+import { Project } from "./Project";
 
 export default function Home() {
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
@@ -16,7 +17,7 @@ export default function Home() {
         setModalContent(<div className='rounded-sm w-200 h-92 border-0 border-black'>Work Content Here</div>);
         break;
       case "projects":
-        setModalContent(<div className='rounded-sm w-200 h-92 border-0 border-black'>Projects Content Here</div>);
+        setModalContent(<div className='rounded-sm w-200 h-92 border-0 border-black'><Project/></div>);
         break;
       case "contact":
         setModalContent(<div className='rounded-sm w-200 h-92 border-0 border-black'><Contacts /></div>);
