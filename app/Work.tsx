@@ -1,21 +1,9 @@
 "use client";
-import React, { useState } from 'react';
-import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { ChevronDown, ChevronRight } from 'lucide-react';
-
-interface WorkExperience {
-  id: string;
-  company: string;
-  location: string;
-  logos: string[];
-  roles: {
-    title: string;
-    duration: string;
-    description: string;
-  }[];
-}
+import React, { useState } from "react";
+import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 const workExperiences: WorkExperience[] = [
   {
@@ -48,7 +36,7 @@ const workExperiences: WorkExperience[] = [
     logos: ['/logos/samsung.png', '/logos/prism.png'],
     roles: [
       {
-        title: 'Software Engineering Intern (Prism)',
+        title: 'Software Engineering Intern',
         duration: 'Nov 2022 – Jun 2023',
         description: `• Scraped 50k+ text samples across diverse domains and augmented using BERT, generating 120k+ high-quality training samples.
 • Developed a multi-modal benchmark model (LSTM, SVM, Regression) for document classification on low-powered mobile devices, achieving 95% validation accuracy.`
@@ -59,7 +47,7 @@ const workExperiences: WorkExperience[] = [
     id: 'cern',
     company: 'CERN, Google Summer of Code',
     location: 'Mountain View, CA',
-    logos: ['/logos/cernhsf.png', '/logos/gsoc.png'],
+    logos: ['/logos/hsf.png', '/logos/gsoc.png', '/logos/cern.png'],
     roles: [
       {
         title: 'Software Contributor',
@@ -71,125 +59,178 @@ const workExperiences: WorkExperience[] = [
   }
 ];
 
+
+interface WorkExperience {
+  id: string;
+  company: string;
+  location: string;
+  logos: string[];
+  roles: {
+    title: string;
+    duration: string;
+    description: string;
+  }[];
+}
+
 interface TimelineItemProps {
   experience: WorkExperience;
   isLast: boolean;
 }
 
-function TimelineItem({ experience, isLast }: TimelineItemProps) {
+const STACK_OFFSET = 6;
+
+const PHASE_DURATION = 150;
+
+type Phase = "idle" | "ejecting" | "inserting";
+
+export function LogoDeck({ logos }: { logos: string[] }) {
+  const [deck, setDeck] = useState(logos);
+  const [phase, setPhase] = useState<Phase>("idle");
+
+  const handleClick = () => {
+    if (deck.length <= 1 || phase !== "idle") return;
+
+    // Phase 1: eject last card
+    setPhase("ejecting");
+
+    // Phase boundary: rotate deck (z-index swap)
+    setTimeout(() => {
+      setDeck((prev) => {
+        const last = prev[prev.length - 1];
+        return [last, ...prev.slice(0, -1)];
+      });
+
+      // Phase 2: insert new first card
+      setPhase("inserting");
+    }, PHASE_DURATION);
+
+    // End
+    setTimeout(() => {
+      setPhase("idle");
+    }, PHASE_DURATION * 2);
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      className={`relative w-24 h-24 ${deck.length > 1 ? "cursor-pointer" : ""}`}
+    >
+      {deck.map((logo, index) => {
+        const isFirst = index === 0;
+        const isLast = index === deck.length - 1;
+
+        const baseX = index * STACK_OFFSET;
+        const baseY = -index * STACK_OFFSET;
+
+        let x = baseX;
+        let y = baseY;
+
+        if (phase === "ejecting" && isLast) {
+          // Only last card moves out
+          x += 18;
+          y -= 18;
+        }
+
+        if (phase === "inserting" && isFirst) {
+          // Only new first card moves in
+          x = STACK_OFFSET;
+          y = -STACK_OFFSET;
+        }
+
+        return (
+          <div
+            key={logo}
+            className="absolute inset-0 transition-transform ease-out"
+            style={{
+              transform: `translate(${x}px, ${y}px)`,
+              transitionDuration: `${PHASE_DURATION}ms`,
+              zIndex: deck.length - index,
+            }}
+          >
+            <div
+              className={`w-full h-full rounded-full bg-white p-2 flex items-center justify-center ${isFirst
+                  ? "shadow-lg ring-2 ring-blue-500/40"
+                  : "shadow-md ring-2 ring-blue-500/20"
+                }`}
+            >
+              <Image
+                src={logo}
+                alt="company logo"
+                width={80}
+                height={80}
+                className="object-contain rounded-full"
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+
+
+export function TimelineItem({ experience, isLast }: TimelineItemProps) {
   const [expandedRole, setExpandedRole] = useState<number | null>(null);
-  const [activeLogoIndex, setActiveLogoIndex] = useState<number>(0);
-
-  const toggleRole = (index: number) => {
-    setExpandedRole(expandedRole === index ? null : index);
-  };
-
-  const handleLogoClick = () => {
-    if (experience.logos.length > 1) {
-      setActiveLogoIndex((prev) => (prev + 1) % experience.logos.length);
-    }
-  };
-
-  const hasMultipleLogos = experience.logos.length > 1;
-  const backgroundLogoIndex = (activeLogoIndex + 1) % experience.logos.length;
   
-  const logoContainerClasses = `w-24 h-24 rounded-full bg-white p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-visible relative ${hasMultipleLogos ? 'cursor-pointer' : ''}`;
+  const toggleRole = (index: number) => {
+    setExpandedRole((prev) => (prev === index ? null : index));
+  };
+
 
   return (
     <div className="relative flex gap-6 pb-8">
-      {/* Timeline line */}
       {!isLast && (
-        <div className="absolute left-12 top-24 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-blue-700" />
+        <div className="absolute left-12 top-24 bottom-0 w-0.5 bg-linear-to-b from-blue-500 to-blue-700" />
       )}
-      
-      {/* Logo */}
-      <div className="flex-shrink-0 z-10">
-        <div 
-          className={logoContainerClasses}
-          onClick={handleLogoClick}
-        >
-          {!hasMultipleLogos ? (
-            <Image
-              src={experience.logos[0]}
-              alt={`${experience.company} logo`}
-              width={80}
-              height={80}
-              className="object-contain"
-            />
-          ) : (
-            <>
-              {/* Background logo (slightly peeking) */}
-              <div className="absolute inset-0 rounded-full bg-white p-2 flex items-center justify-center transform translate-x-2 translate-y-2 opacity-40 scale-90">
-                <Image
-                  src={experience.logos[backgroundLogoIndex]}
-                  alt={`${experience.company} logo ${backgroundLogoIndex + 1}`}
-                  width={80}
-                  height={80}
-                  className="object-contain"
-                />
-              </div>
-              {/* Foreground logo (active) */}
-              <div className="relative z-10 w-full h-full flex items-center justify-center">
-                <Image
-                  src={experience.logos[activeLogoIndex]}
-                  alt={`${experience.company} logo ${activeLogoIndex + 1}`}
-                  width={80}
-                  height={80}
-                  className="object-contain"
-                />
-              </div>
-            </>
-          )}
+      <div
+        className={`relative w-24 h-24 ${experience.logos.length > 1 ? "cursor-pointer" : ""
+          }`}
+      >
+        <div className="relative w-24 h-24">
+          <LogoDeck logos={experience.logos} />
         </div>
       </div>
+
+
 
       {/* Content */}
       <div className="flex-1 pt-2">
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-zinc-100">{experience.company}</h3>
+          <h3 className="text-xl font-bold text-zinc-100">
+            {experience.company}
+          </h3>
           <p className="text-sm text-zinc-400">{experience.location}</p>
         </div>
 
-        {/* Roles */}
         <div className="space-y-3">
           {experience.roles.map((role, index) => (
             <div
               key={index}
-              className="bg-zinc-800/50 backdrop-blur-sm rounded-lg border border-zinc-700/50 overflow-hidden transition-all"
+              className="bg-zinc-800/50 backdrop-blur-sm rounded-lg border border-zinc-700/50 overflow-hidden"
             >
               <button
                 onClick={() => toggleRole(index)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-zinc-700/30 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between hover:bg-zinc-700/30"
               >
-                <div className="flex-1 text-left">
-                  <h4 className="font-semibold text-zinc-200">{role.title}</h4>
-                  <p className="text-sm text-zinc-400">{role.duration}</p>
+                <div className="text-left">
+                  <h4 className="font-semibold text-zinc-200">
+                    {role.title}
+                  </h4>
+                  <p className="text-sm text-zinc-400">
+                    {role.duration}
+                  </p>
                 </div>
-                <div className="flex-shrink-0 ml-4">
-                  {expandedRole === index ? (
-                    <ChevronDown className="w-5 h-5 text-blue-400" />
-                  ) : (
-                    <ChevronRight className="w-5 h-5 text-blue-400" />
-                  )}
-                </div>
+                {expandedRole === index ? (
+                  <ChevronDown className="w-5 h-5 text-blue-400" />
+                ) : (
+                  <ChevronRight className="w-5 h-5 text-blue-400" />
+                )}
               </button>
-              
+
               {expandedRole === index && (
                 <div className="px-4 pb-4 pt-2 border-t border-zinc-700/50">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    components={{
-                      p: ({ ...props }) => (
-                        <p className="text-sm text-zinc-300 leading-relaxed whitespace-pre-line" {...props} />
-                      ),
-                      ul: ({ ...props }) => (
-                        <ul className="list-none text-zinc-300 space-y-1" {...props} />
-                      ),
-                      li: ({ ...props }) => (
-                        <li className="text-sm text-zinc-300 leading-relaxed" {...props} />
-                      ),
-                    }}
-                  >
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {role.description}
                   </ReactMarkdown>
                 </div>
@@ -202,6 +243,7 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
   );
 }
 
+
 export function Work() {
   return (
     <div className="w-full h-full overflow-auto bg-surface-primary/90 p-8">
@@ -210,7 +252,7 @@ export function Work() {
           <h1 className="text-3xl font-bold text-zinc-100 mb-2">Work Experience</h1>
           <p className="text-zinc-400">Click on a role to see more details</p>
         </div>
-        
+
         <div className="space-y-4">
           {workExperiences.map((experience, index) => (
             <TimelineItem
