@@ -57,7 +57,7 @@ export default function Home() {
 
   return (
     <div className="flex justify-center items-center h-screen overflow-hidden">
-      <div className="max-w-100 min-w-300 min-h-50 max-h-50 rounded-xl flex flex-wrap items-center justify-center gap-4 overflow-auto backdrop-blur-lg bg-surface-primary p-4">
+      <div className="min-w-250 rounded-xl flex flex-wrap items-center justify-center gap-4 overflow-auto backdrop-blur-lg bg-surface-primary/80 p-4">
         <FolderIconWithImage
           name="About Me"
           image="/soumil.png"

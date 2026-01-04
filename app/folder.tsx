@@ -43,12 +43,7 @@ export function FolderIconWithImage({
   
   return (
     <div 
-      className="rounded-2xl cursor-pointer transition-colors" 
-      style={{
-        backgroundColor: 'transparent'
-      }}
-      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212, 212, 216, 0.5)'}
-      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+      className="rounded-2xl cursor-pointer transition-colors bg-transparent hover:bg-surface-secondary/80" 
       onClick={onClick}
     >
       <div className="relative m-5 mt-8" style={{ transform: `scale(${scale})` }}>

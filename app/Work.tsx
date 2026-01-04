@@ -227,7 +227,7 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
         <div 
           className="absolute left-12 top-24 bottom-0 w-0.5" 
           style={{ 
-            background: `linear-gradient(to bottom, ${accentColor}, ${accentColor}dd)` 
+            background: `linear-gradient(to bottom, ${accentColor}, ${accentColor}dd) ` 
           }}
         />
       )}
@@ -255,16 +255,11 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
           {experience.roles.map((role, index) => (
             <div
               key={index}
-              className="bg-zinc-800/50 backdrop-blur-sm rounded-lg border border-zinc-700/50 overflow-hidden"
+              className="backdrop-blur-lg bg-surface-secondary cursor-pointer rounded-lg border border-zinc-700/80 overflow-hidden"
             >
-              <button
+              <div
                 onClick={() => toggleRole(index)}
                 className="w-full px-4 py-3 flex items-center justify-between transition-colors"
-                style={{
-                  backgroundColor: 'transparent'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <div className="text-left">
                   <h4 className="font-semibold text-zinc-200">
@@ -305,7 +300,7 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
                     <ChevronRight className="w-5 h-5" style={{ color: accentColor }} />
                   )}
                 </div>
-              </button>
+              </div>
 
               {expandedRole === index && (
                 <div className="px-4 pb-4 pt-2 border-t border-zinc-700/50">
@@ -368,7 +363,7 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
 
 export function Work() {
   return (
-    <div className="w-full h-full overflow-auto bg-surface-primary/90 p-8">
+    <div className="w-full h-full overflow-auto bg-surface-primary/70 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-zinc-100 mb-2">Work Experience</h1>
