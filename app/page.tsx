@@ -6,14 +6,16 @@ import { Contacts } from './Contact';
 import { Projects } from './Projects';
 import { AboutMe } from './AboutMe';
 import { Work } from './Work';
+import { Settings } from './Settings';
+import { Settings as SettingsIcon } from 'lucide-react';
 
 export default function Home() {
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
-  const [activeModal, setActiveModal] = useState<"about" | "work" | "projects" | "contact" | null>(null);
+  const [activeModal, setActiveModal] = useState<"about" | "work" | "projects" | "contact" | "settings" | null>(null);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
 
-  const openPortal = (type: "about" | "work" | "projects" | "contact") => {
+  const openPortal = (type: "about" | "work" | "projects" | "contact" | "settings") => {
     // If clicking on a minimized modal, restore it
     if (activeModal === type && isMinimized) {
       setIsMinimized(false);
@@ -37,6 +39,9 @@ export default function Home() {
       case "contact":
         setModalContent(<div className='rounded-sm w-full h-full'><Contacts /></div>);
         break;
+      case "settings":
+        setModalContent(<div className='rounded-sm w-full h-full'><Settings /></div>);
+        break;
     }
   };
 
@@ -56,7 +61,16 @@ export default function Home() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen overflow-hidden">
+    <div className="flex justify-center items-center h-screen overflow-hidden relative">
+      {/* Settings button in top-right corner */}
+      <button
+        onClick={() => openPortal("settings")}
+        className="absolute top-4 right-4 p-2 rounded-lg bg-surface-primary/80 backdrop-blur-lg border border-border transition-all hover:bg-surface-secondary z-10"
+        aria-label="Settings"
+      >
+        <SettingsIcon size={24} className="text-text-primary" />
+      </button>
+
       <div className="min-w-250 rounded-xl flex flex-wrap items-center justify-center gap-4 overflow-auto backdrop-blur-lg bg-surface-primary/80 p-4">
         <FolderIconWithImage
           name="About Me"

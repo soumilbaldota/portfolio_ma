@@ -21,6 +21,28 @@
   --text-emphasis: #09090b;
 }
 
+/* Dark mode styles - applied via class instead of media query */
+.dark-mode {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --surface-primary: #27272a;
+  --surface-secondary: #3f3f46;
+  --surface-tertiary: #52525b;
+  --accent-primary: #3b82f6;
+  --accent-secondary: #0ea5e9;
+  --accent-tertiary: #06b6d4;
+  --border-color: #18181b;
+  --divider-color: #3f3f46;
+  --hover-overlay: rgba(59, 130, 246, 0.5);
+  --traffic-light-bg: rgba(255, 255, 255, 0.1);
+  
+  /* Text colors for dark mode */
+  --text-primary: #ededed;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --text-emphasis: #fafafa;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -40,8 +62,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Keep media query for initial preference detection */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.dark-mode) {
     --background: #0a0a0a;
     --foreground: #ededed;
     --surface-primary: #27272a;
