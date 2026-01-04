@@ -68,7 +68,7 @@ export default function Home() {
         className="absolute top-4 right-4 p-2 rounded-lg bg-surface-primary/80 backdrop-blur-lg border border-border transition-all hover:bg-surface-secondary z-10"
         aria-label="Settings"
       >
-        <SettingsIcon size={24} className="text-text-primary" />
+        <SettingsIcon size={20} className="text-text-primary" />
       </button>
 
       <div className="min-w-250 rounded-xl flex flex-wrap items-center justify-center gap-4 overflow-auto backdrop-blur-lg bg-surface-primary/80 p-4">
