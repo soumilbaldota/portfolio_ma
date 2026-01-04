@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Modal } from "./Modal";
 import { Contacts } from './Contact';
 import { Projects } from './Projects';
+import { AboutMe } from './AboutMe';
 
 export default function Home() {
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
@@ -24,7 +25,7 @@ export default function Home() {
 
     switch (type) {
       case "about":
-        setModalContent(<div className='rounded-sm w-full h-full'>About Me Content Here</div>);
+        setModalContent(<div className='rounded-sm w-full h-full'><AboutMe /></div>);
         break;
       case "work":
         setModalContent(<div className='rounded-sm w-full h-full'>Work Content Here</div>);
