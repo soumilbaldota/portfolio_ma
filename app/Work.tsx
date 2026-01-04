@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -95,7 +95,7 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
         <div className="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-hidden">
           <div className="flex items-center justify-center gap-1">
             {experience.logos.map((logo, index) => (
-              <div key={index} className="flex items-center">
+              <React.Fragment key={logo}>
                 {index > 0 && (
                   <span className="text-blue-400 font-bold text-xs mx-1">+</span>
                 )}
@@ -106,7 +106,7 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
                   height={experience.logos.length > 1 ? 32 : 80}
                   className="object-contain"
                 />
-              </div>
+              </React.Fragment>
             ))}
           </div>
         </div>
