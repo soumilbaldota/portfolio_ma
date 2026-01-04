@@ -180,7 +180,7 @@ export function Modal({
     };
 
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove, { passive: true });
+      document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
 
       return () => {

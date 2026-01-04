@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, Search, X } from 'lucide-react';
+import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, Search, X, Grid3x3 } from 'lucide-react';
 import { Modal } from './Modal';
 import { ProjectBrowser, type ProjectDetails } from './ProjectBrowser';
 
@@ -723,7 +723,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   onSelectCategory: (category: string) => void;
 }) {
   const categories = [
-    { name: 'All', icon: Globe },
+    { name: 'All', icon: Grid3x3 },
     { name: 'Robotics', icon: Bot },
     { name: 'ML', icon: BrainCircuit },
     { name: 'FullStack', icon: Globe },
