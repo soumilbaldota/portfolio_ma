@@ -21,7 +21,7 @@ function SettingsSidebar({ selectedCategory, onSelectCategory }: {
         return (
           <div
             key={name}
-            className="px-2 py-1.25 rounded-md flex items-center cursor-default transition-colors group hover:bg-surface-tertiary"
+            className="px-2 py-1.25 rounded-md flex items-center cursor-pointer transition-colors group hover:bg-surface-tertiary"
             style={{
               backgroundColor: isActive ? accentColorLight : 'transparent'
             }}
@@ -45,7 +45,7 @@ function SettingsSidebar({ selectedCategory, onSelectCategory }: {
 
 // Appearance settings panel
 function AppearanceSettings() {
-  const { theme, setTheme, accentColorName, setAccentColorName, accentColor } = useAccentColor();
+  const { theme, setTheme, accentColorName, setAccentColorName, accentColor, accentColorLight } = useAccentColor();
   
   const accentColorOptions: { name: AccentColorOption; color: string; label: string }[] = [
     { name: 'blue', color: '#3b82f6', label: 'Blue' },
@@ -70,7 +70,7 @@ function AppearanceSettings() {
               className="flex-1 flex flex-col items-center gap-3 p-4 rounded-lg border-2 transition-all"
               style={{
                 borderColor: theme === 'light' ? accentColor : 'var(--border-color)',
-                backgroundColor: theme === 'light' ? 'rgba(59, 130, 246, 0.1)' : 'var(--surface-primary)',
+                backgroundColor: theme === 'light' ? accentColorLight : 'var(--surface-primary)',
               }}
             >
               <Sun 
@@ -86,7 +86,7 @@ function AppearanceSettings() {
               className="flex-1 flex flex-col items-center gap-3 p-4 rounded-lg border-2 transition-all"
               style={{
                 borderColor: theme === 'dark' ? accentColor : 'var(--border-color)',
-                backgroundColor: theme === 'dark' ? 'rgba(59, 130, 246, 0.1)' : 'var(--surface-primary)',
+                backgroundColor: theme === 'dark' ? accentColorLight : 'var(--surface-primary)',
               }}
             >
               <Moon 
