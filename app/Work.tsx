@@ -9,7 +9,7 @@ interface WorkExperience {
   id: string;
   company: string;
   location: string;
-  logo: string;
+  logos: string[];
   roles: {
     title: string;
     duration: string;
@@ -22,7 +22,7 @@ const workExperiences: WorkExperience[] = [
     id: 'maximl',
     company: 'Maximl Labs',
     location: 'Bangalore, India',
-    logo: '/logos/maximl.svg',
+    logos: ['/logos/maximl.png'],
     roles: [
       {
         title: 'Software Engineer',
@@ -45,7 +45,7 @@ const workExperiences: WorkExperience[] = [
     id: 'samsung',
     company: 'Samsung Research',
     location: 'Bangalore, India',
-    logo: '/logos/samsung.svg',
+    logos: ['/logos/samsung.png', '/logos/prism.png'],
     roles: [
       {
         title: 'Software Engineering Intern (Prism)',
@@ -59,7 +59,7 @@ const workExperiences: WorkExperience[] = [
     id: 'cern',
     company: 'CERN, Google Summer of Code',
     location: 'Mountain View, CA',
-    logo: '/logos/cern.svg',
+    logos: ['/logos/cernhsf.png', '/logos/gsoc.png'],
     roles: [
       {
         title: 'Software Contributor',
@@ -93,13 +93,22 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
       {/* Logo */}
       <div className="flex-shrink-0 z-10">
         <div className="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-hidden">
-          <Image
-            src={experience.logo}
-            alt={`${experience.company} logo`}
-            width={80}
-            height={80}
-            className="object-contain"
-          />
+          <div className="flex items-center justify-center gap-1">
+            {experience.logos.map((logo, index) => (
+              <div key={index} className="flex items-center">
+                {index > 0 && (
+                  <span className="text-blue-400 font-bold text-xs mx-1">+</span>
+                )}
+                <Image
+                  src={logo}
+                  alt={`${experience.company} logo ${index + 1}`}
+                  width={experience.logos.length > 1 ? 32 : 80}
+                  height={experience.logos.length > 1 ? 32 : 80}
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
