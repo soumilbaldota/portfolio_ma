@@ -106,13 +106,32 @@ export function Modal({
   const [isResizing, setIsResizing] = useState(false);
   const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
   const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, mouseX: 0, mouseY: 0 });
+  const [viewportSize, setViewportSize] = useState({ width: 800, height: 600 }); // Default fallback for SSR
   const modalRef = useRef<HTMLDivElement>(null);
   
-  // Size configurations (default pixel values)
+  // Update viewport size on mount and window resize
+  useEffect(() => {
+    const updateViewportSize = () => {
+      setViewportSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+    
+    // Set initial size
+    updateViewportSize();
+    
+    // Listen for window resize
+    window.addEventListener('resize', updateViewportSize);
+    
+    return () => window.removeEventListener('resize', updateViewportSize);
+  }, []);
+  
+  // Size configurations (viewport percentage based)
   const sizeConfig = {
-    small: { width: 600, height: 320 },
-    medium: { width: 800, height: 400 },
-    large: { width: 1000, height: 500 },
+    small: { width: viewportSize.width * 0.5, height: viewportSize.height * 0.5 },
+    medium: { width: viewportSize.width * 0.7, height: viewportSize.height * 0.7 },
+    large: { width: viewportSize.width * 0.9, height: viewportSize.height * 0.9 },
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
