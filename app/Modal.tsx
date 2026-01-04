@@ -211,7 +211,8 @@ export function Modal({
   };
 
   const { width, height } = sizeConfig[size];
-  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 transition-all duration-300 ${
+  const transitionClass = isDragging ? 'transition-none' : 'transition-all duration-300';
+  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${transitionClass} ${
     isMaximized || (startMaximized && !isAnimating)
       ? 'w-screen h-screen'
       : isAnimating

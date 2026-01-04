@@ -732,7 +732,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   ];
   
   return (
-    <div className=" bg-[#1e1e1e]/80 backdrop-blur-xl h-screen p-3 flex flex-col gap-0.5 border-r border-black/20">
+    <div className="bg-[#1e1e1e]/80 backdrop-blur-xl h-full p-3 flex flex-col gap-0.5 border-r border-black/20">
       <div className="px-2 pb-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Favorites</div>
       {categories.map(({ name, icon: Icon }) => {
         const isActive = selectedCategory === name;
@@ -771,7 +771,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
 }) {
   if (viewMode === 'gallery') {
     return (
-      <div className="flex h-full">
+      <div className="flex h-full overflow-hidden">
         {/* Left side - thumbnails list */}
         <div className="flex-1 overflow-auto p-4 bg-zinc-800/10">
           <div className="flex flex-col gap-4">
@@ -859,7 +859,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   return (
-    <div className="flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
+    <div className="h-full flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
       {projects.map((project) => (
         <VideoThumbnail
           key={project.id}
@@ -923,7 +923,7 @@ export function Projects() {
           <ViewButton currentView={viewMode} onViewChange={setViewMode} />
         </div>
                 
-        <div className="grid grid-cols-[1fr_5fr] flex-1 w-full overflow-hidden">
+        <div className="grid grid-cols-[1fr_5fr] flex-1 w-full h-full overflow-hidden">
           <Sidebar 
             selectedCategory={selectedCategory}
             onSelectCategory={(category) => {
