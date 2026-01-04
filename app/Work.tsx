@@ -90,6 +90,11 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
     }
   };
 
+  const hasMultipleLogos = experience.logos.length > 1;
+  const backgroundLogoIndex = (activeLogoIndex + 1) % experience.logos.length;
+  
+  const logoContainerClasses = `w-24 h-24 rounded-full bg-white p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-visible relative ${hasMultipleLogos ? 'cursor-pointer' : ''}`;
+
   return (
     <div className="relative flex gap-6 pb-8">
       {/* Timeline line */}
@@ -100,10 +105,10 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
       {/* Logo */}
       <div className="flex-shrink-0 z-10">
         <div 
-          className={`w-24 h-24 rounded-full bg-white p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-visible relative ${experience.logos.length > 1 ? 'cursor-pointer' : ''}`}
+          className={logoContainerClasses}
           onClick={handleLogoClick}
         >
-          {experience.logos.length === 1 ? (
+          {!hasMultipleLogos ? (
             <Image
               src={experience.logos[0]}
               alt={`${experience.company} logo`}
@@ -116,8 +121,8 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
               {/* Background logo (slightly peeking) */}
               <div className="absolute inset-0 rounded-full bg-white p-2 flex items-center justify-center transform translate-x-2 translate-y-2 opacity-40 scale-90">
                 <Image
-                  src={experience.logos[(activeLogoIndex + 1) % experience.logos.length]}
-                  alt={`${experience.company} logo ${(activeLogoIndex + 1) % experience.logos.length + 1}`}
+                  src={experience.logos[backgroundLogoIndex]}
+                  alt={`${experience.company} logo ${backgroundLogoIndex + 1}`}
                   width={80}
                   height={80}
                   className="object-contain"
