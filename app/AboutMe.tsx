@@ -48,19 +48,13 @@ function SidebarItem({ title, isActive, onClick }: SidebarItemProps) {
   const { accentColorLight } = useAccentColor();
   return (
     <div
-      className="px-3 py-1.5 rounded-md flex items-center cursor-pointer transition-colors"
+      className="px-3 py-1.5 rounded-md flex items-center cursor-pointer transition-colors hover:bg-surface-tertiary"
       style={{
         backgroundColor: isActive ? accentColorLight : 'transparent'
       }}
-      onMouseEnter={(e) => {
-        if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-      }}
-      onMouseLeave={(e) => {
-        if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
-      }}
       onClick={onClick}
     >
-      <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-zinc-300'}`}>
+      <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-text-primary'}`}>
         {title}
       </span>
     </div>
@@ -77,28 +71,23 @@ interface SidebarProps {
 function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: SidebarProps) {
   const { accentColorLight } = useAccentColor();
   return (
-    <div className={`bg-[#1e1e1e]/80 backdrop-blur-xl h-full flex flex-col border-r border-black/20 transition-all duration-300 ${
+    <div className={`bg-surface-primary/95 backdrop-blur-xl h-full flex flex-col border-r border-divider transition-all duration-300 ${
       isCollapsed ? 'w-12' : 'w-30'
     }`}>
       {/* Toggle button */}
-      <div className="p-3 flex items-center justify-between border-b border-black/20">
+      <div className="p-3 flex items-center justify-between border-b border-divider">
         {!isCollapsed && (
-          <div className="px-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">About Me</div>
+          <div className="px-2 text-[11px] font-bold text-text-muted uppercase tracking-wider">About Me</div>
         )}
         <button
           onClick={onToggleCollapse}
-          className="p-1 rounded transition-colors ml-auto"
-          style={{
-            backgroundColor: 'transparent'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+          className="p-1 rounded transition-colors hover:bg-surface-tertiary ml-auto"
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? (
-            <ChevronRight size={16} className="text-zinc-400" />
+            <ChevronRight size={16} className="text-text-muted" />
           ) : (
-            <ChevronDown size={16} className="text-zinc-400" />
+            <ChevronDown size={16} className="text-text-muted" />
           )}
         </button>
       </div>
@@ -123,35 +112,23 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
         <div className="flex flex-col items-center gap-2 p-2">
           <button
             onClick={() => onSelectTab('tldr')}
-            className="w-8 h-8 rounded flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded flex items-center justify-center transition-colors hover:bg-surface-tertiary"
             style={{
               backgroundColor: selectedTab === 'tldr' ? accentColorLight : 'transparent'
             }}
-            onMouseEnter={(e) => {
-              if (selectedTab !== 'tldr') e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              if (selectedTab !== 'tldr') e.currentTarget.style.backgroundColor = 'transparent';
-            }}
             title="TLDR"
           >
-            <span className="text-xs text-zinc-300">T</span>
+            <span className="text-xs text-text-primary">T</span>
           </button>
           <button
             onClick={() => onSelectTab('full')}
-            className="w-8 h-8 rounded flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded flex items-center justify-center transition-colors hover:bg-surface-tertiary"
             style={{
               backgroundColor: selectedTab === 'full' ? accentColorLight : 'transparent'
             }}
-            onMouseEnter={(e) => {
-              if (selectedTab !== 'full') e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              if (selectedTab !== 'full') e.currentTarget.style.backgroundColor = 'transparent';
-            }}
             title="Full Story"
           >
-            <span className="text-xs text-zinc-300">F</span>
+            <span className="text-xs text-text-primary">F</span>
           </button>
         </div>
       )}
@@ -182,45 +159,45 @@ export function AboutMe() {
             remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ ...props }) => (
-                <h1 className="text-3xl font-bold text-zinc-100 mb-6 mt-8 first:mt-0" {...props} />
+                <h1 className="text-3xl font-bold text-text-emphasis mb-6 mt-8 first:mt-0" {...props} />
               ),
               h2: ({ ...props }) => (
-                <h2 className="text-2xl font-bold text-zinc-200 mb-4 mt-6" {...props} />
+                <h2 className="text-2xl font-bold text-text-primary mb-4 mt-6" {...props} />
               ),
               h3: ({ ...props }) => (
-                <h3 className="text-xl font-semibold text-zinc-300 mb-3 mt-4" {...props} />
+                <h3 className="text-xl font-semibold text-text-primary mb-3 mt-4" {...props} />
               ),
               p: ({ ...props }) => (
-                <p className="text-base text-zinc-300 mb-4 leading-relaxed" {...props} />
+                <p className="text-base text-text-secondary mb-4 leading-relaxed" {...props} />
               ),
               ul: ({ ...props }) => (
-                <ul className="list-disc list-inside text-zinc-300 mb-4 space-y-2" {...props} />
+                <ul className="list-disc list-inside text-text-secondary mb-4 space-y-2" {...props} />
               ),
               ol: ({ ...props }) => (
-                <ol className="list-decimal list-inside text-zinc-300 mb-4 space-y-2" {...props} />
+                <ol className="list-decimal list-inside text-text-secondary mb-4 space-y-2" {...props} />
               ),
               li: ({ ...props }) => (
-                <li className="text-base text-zinc-300 leading-relaxed" {...props} />
+                <li className="text-base text-text-secondary leading-relaxed" {...props} />
               ),
               strong: ({ ...props }) => (
-                <strong className="font-semibold text-zinc-100" {...props} />
+                <strong className="font-semibold text-text-emphasis" {...props} />
               ),
               em: ({ ...props }) => (
-                <em className="italic text-zinc-300" {...props} />
+                <em className="italic text-text-secondary" {...props} />
               ),
               code: ({ ...props }) => (
                 <code 
-                  className="px-1.5 py-0.5 rounded text-sm font-mono" 
-                  style={{ backgroundColor: '#27272a', color: accentColor }}
+                  className="px-1.5 py-0.5 rounded text-sm font-mono bg-surface-tertiary" 
+                  style={{ color: accentColor }}
                   {...props} 
                 />
               ),
               pre: ({ ...props }) => (
-                <pre className="bg-zinc-800 text-zinc-300 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
+                <pre className="bg-surface-tertiary text-text-primary p-4 rounded-lg overflow-x-auto mb-4" {...props} />
               ),
               blockquote: ({ ...props }) => (
                 <blockquote 
-                  className="pl-4 italic text-zinc-400 my-4 border-l-4" 
+                  className="pl-4 italic text-text-muted my-4 border-l-4" 
                   style={{ borderColor: accentColor }}
                   {...props} 
                 />

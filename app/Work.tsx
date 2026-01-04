@@ -245,27 +245,27 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
       {/* Content */}
       <div className="flex-1 pt-2">
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-zinc-100">
+          <h3 className="text-xl font-bold text-text-emphasis">
             {experience.company}
           </h3>
-          <p className="text-sm text-zinc-400">{experience.location}</p>
+          <p className="text-sm text-text-muted">{experience.location}</p>
         </div>
 
         <div className="space-y-3">
           {experience.roles.map((role, index) => (
             <div
               key={index}
-              className="backdrop-blur-lg bg-surface-secondary cursor-pointer rounded-lg border border-zinc-700/80 overflow-hidden"
+              className="backdrop-blur-lg bg-surface-secondary cursor-pointer rounded-lg border border-border overflow-hidden"
             >
               <div
                 onClick={() => toggleRole(index)}
                 className="w-full px-4 py-3 flex items-center justify-between transition-colors"
               >
                 <div className="text-left">
-                  <h4 className="font-semibold text-zinc-200">
+                  <h4 className="font-semibold text-text-primary">
                     {role.title}
                   </h4>
-                  <p className="text-sm text-zinc-400">
+                  <p className="text-sm text-text-muted">
                     {role.duration}
                   </p>
                 </div>
@@ -288,7 +288,7 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
                         </div>
                       ))}
                       {role.techStack.length > 2 && (
-                        <span className="text-xs text-zinc-400 font-medium">
+                        <span className="text-xs text-text-muted font-medium">
                           +{role.techStack.length - 2}
                         </span>
                       )}
@@ -303,27 +303,18 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
               </div>
 
               {expandedRole === index && (
-                <div className="px-4 pb-4 pt-2 border-t border-zinc-700/50">
+                <div className="px-4 pb-4 pt-2 border-t border-divider">
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {role.description}
                   </ReactMarkdown>
                   {role.techStack && role.techStack.length > 0 && (
-                    <div className="mt-4 pt-4 border-t border-zinc-700/30">
-                      <p className="text-xs font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Technologies Used</p>
+                    <div className="mt-4 pt-4 border-t border-divider">
+                      <p className="text-xs font-semibold text-text-muted mb-3 uppercase tracking-wider">Technologies Used</p>
                       <div className="flex flex-wrap gap-3">
                         {role.techStack.map((tech) => (
                           <div
                             key={tech.name}
-                            className="flex items-center gap-2 bg-zinc-900/50 px-3 py-2 rounded-lg border transition-colors group"
-                            style={{
-                              borderColor: '#3f3f46'
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.borderColor = accentColor;
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.borderColor = '#3f3f46';
-                            }}
+                            className="flex items-center gap-2 bg-surface-primary/50 px-3 py-2 rounded-lg border border-border transition-colors group hover:border-accent-primary"
                             title={tech.name}
                           >
                             <Image
@@ -333,16 +324,7 @@ export function TimelineItem({ experience, isLast }: TimelineItemProps) {
                               height={20}
                               className="object-contain"
                             />
-                            <span 
-                              className="text-xs transition-colors"
-                              style={{ color: '#d4d4d8' }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.color = accentColor;
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.color = '#d4d4d8';
-                              }}
-                            >
+                            <span className="text-xs text-text-secondary group-hover:text-accent-primary transition-colors">
                               {tech.name}
                             </span>
                           </div>
@@ -366,8 +348,8 @@ export function Work() {
     <div className="w-full h-full overflow-auto bg-surface-primary/70 p-8">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-zinc-100 mb-2">Work Experience</h1>
-          <p className="text-zinc-400">Click on a role to see more details</p>
+          <h1 className="text-3xl font-bold text-text-emphasis mb-2">Work Experience</h1>
+          <p className="text-text-muted">Click on a role to see more details</p>
         </div>
 
         <div className="space-y-4">

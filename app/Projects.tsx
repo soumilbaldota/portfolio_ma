@@ -566,8 +566,8 @@ function SearchButton({ searchQuery, onSearchChange }: {
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search projects..."
           className={`
-            font-mono text-sm text-zinc-300 bg-zinc-800 border border-zinc-700 rounded-l px-3 py-1
-            focus:outline-none focus:border-blue-500 transition-all duration-300 ease-in-out
+            font-mono text-sm text-text-primary bg-surface-secondary border border-border rounded-l px-3 py-1
+            focus:outline-none focus:border-accent-primary transition-all duration-300 ease-in-out
             ${isExpanded ? 'w-48 opacity-100' : 'w-0 opacity-0 px-0 border-0'}
           `}
           style={{ 
@@ -579,15 +579,10 @@ function SearchButton({ searchQuery, onSearchChange }: {
         {isExpanded && searchQuery && (
           <button
             onClick={handleClose}
-            className="p-1 bg-zinc-800 border-y border-zinc-700 transition-colors"
-            style={{
-              backgroundColor: 'transparent'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(39, 39, 42, 1)'}
+            className="p-1 bg-surface-secondary border-y border-border transition-colors hover:bg-surface-tertiary"
             aria-label="Clear search"
           >
-            <X size={16} className="text-zinc-400" />
+            <X size={16} className="text-text-muted" />
           </button>
         )}
         
@@ -600,21 +595,12 @@ function SearchButton({ searchQuery, onSearchChange }: {
               setIsExpanded(true);
             }
           }}
-          className={`p-1 transition-colors ${
-            isExpanded ? 'bg-zinc-800 border border-zinc-700 border-l-0 rounded-r' : 'rounded'
+          className={`p-1 transition-colors hover:bg-surface-tertiary ${
+            isExpanded ? 'bg-surface-secondary border border-border border-l-0 rounded-r' : 'rounded'
           }`}
-          style={{
-            backgroundColor: isExpanded ? 'rgba(39, 39, 42, 1)' : 'transparent'
-          }}
-          onMouseEnter={(e) => {
-            if (!isExpanded) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-          }}
-          onMouseLeave={(e) => {
-            if (!isExpanded) e.currentTarget.style.backgroundColor = 'transparent';
-          }}
           aria-label="Search"
         >
-          <Search size={18} className="text-zinc-300" />
+          <Search size={18} className="text-text-primary" />
         </button>
       </div>
     </div>
@@ -650,16 +636,11 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-1 rounded transition-colors"
-        style={{
-          backgroundColor: 'transparent'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
-        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+        className="p-1 rounded transition-colors hover:bg-surface-tertiary"
         aria-label="Change view"
       >
         {/* 4-square grid icon */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-zinc-300">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-text-primary">
           <rect x="4" y="4" width="7" height="7" fill="currentColor" />
           <rect x="13" y="4" width="7" height="7" fill="currentColor" />
           <rect x="4" y="13" width="7" height="7" fill="currentColor" />
@@ -668,7 +649,7 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
       </button>
       
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 bg-zinc-800 border border-zinc-700 rounded shadow-lg z-50 min-w-[10rem]">
+        <div className="absolute top-full right-0 mt-1 bg-surface-secondary border border-border rounded shadow-lg z-50 min-w-[10rem]">
           {viewOptions.map((option) => (
             <button
               key={option.value}
@@ -676,23 +657,15 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
                 onViewChange(option.value);
                 setIsOpen(false);
               }}
-              className="w-full text-left px-4 py-2 text-sm font-mono transition-colors"
+              className="w-full text-left px-4 py-2 text-sm font-mono transition-colors hover:bg-surface-tertiary"
               style={{
                 backgroundColor: currentView === option.value ? accentColor : 'transparent',
-                color: currentView === option.value ? 'white' : '#d4d4d8'
-              }}
-              onMouseEnter={(e) => {
-                if (currentView !== option.value) {
-                  e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (currentView !== option.value) {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }
+                color: currentView === option.value ? 'white' : undefined
               }}
             >
-              {option.label}
+              <span className={currentView === option.value ? "text-white" : "text-text-secondary"}>
+                {option.label}
+              </span>
             </button>
           ))}
         </div>
@@ -724,7 +697,7 @@ function VideoThumbnail({ project, onClick, onDoubleClick, size = 'small' }: {
     >
       {/* Simple thumbnail with play overlay */}
       <div 
-        className="relative rounded-sm overflow-hidden bg-zinc-800 transition-colors"
+        className="relative rounded-sm overflow-hidden bg-surface-tertiary transition-colors"
         style={{ width: `${sizeConfig.w}px`, height: `${sizeConfig.h}px` }}
       >
         {/* Thumbnail image */}
@@ -743,7 +716,7 @@ function VideoThumbnail({ project, onClick, onDoubleClick, size = 'small' }: {
       </div>
       
       {/* Project name */}
-      <div className={`${sizeConfig.textSize} font-mono text-center mt-2 ${sizeConfig.maxW} truncate text-zinc-300`} title={project.name}>
+      <div className={`${sizeConfig.textSize} font-mono text-center mt-2 ${sizeConfig.maxW} truncate text-text-primary`} title={project.name}>
         {project.name}
       </div>
     </div>
@@ -766,22 +739,16 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   ];
   
   return (
-    <div className="bg-[#1e1e1e]/80 backdrop-blur-xl h-full p-3 flex flex-col gap-0.5 border-r border-black/20">
-      <div className="px-2 pb-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Favorites</div>
+    <div className="bg-surface-primary/95 backdrop-blur-xl h-full p-3 flex flex-col gap-0.5 border-r border-divider">
+      <div className="px-2 pb-2 text-[11px] font-bold text-text-muted uppercase tracking-wider">Favorites</div>
       {categories.map(({ name, icon: Icon }) => {
         const isActive = selectedCategory === name;
         return (
           <div
             key={name}
-            className="px-2 py-1.25 rounded-md flex items-center cursor-default transition-colors group"
+            className="px-2 py-1.25 rounded-md flex items-center cursor-default transition-colors group hover:bg-surface-tertiary"
             style={{
               backgroundColor: isActive ? accentColorLight : 'transparent'
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
             }}
             onClick={() => onSelectCategory(name)}
           >
@@ -791,7 +758,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
               style={{ color: accentColor }}
               className="mr-3"
             /> 
-            <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-zinc-300'}`}>
+            <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-text-primary'}`}>
               {name}
             </span>
           </div>
@@ -814,31 +781,21 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
     return (
       <div className="flex h-full overflow-hidden">
         {/* Left side - thumbnails list */}
-        <div className="flex-1 overflow-auto p-4 bg-zinc-800/10">
+        <div className="flex-1 overflow-auto p-4 bg-surface-secondary/30">
           <div className="flex flex-col gap-4">
             {projects.map((project) => (
               <div
                 key={project.id}
-                className="cursor-pointer group p-3 rounded transition-colors"
+                className="cursor-pointer group p-3 rounded transition-colors hover:bg-surface-tertiary"
                 style={{
                   backgroundColor: selectedProject?.id === project.id ? accentColorLight : 'transparent',
                   border: selectedProject?.id === project.id ? `1px solid ${accentColor}` : '1px solid transparent'
-                }}
-                onMouseEnter={(e) => {
-                  if (selectedProject?.id !== project.id) {
-                    e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (selectedProject?.id !== project.id) {
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }
                 }}
                 onClick={() => onThumbnailClick(project)}
                 onDoubleClick={() => onThumbnailDoubleClick(project)}
               >
                 <div className="flex items-start gap-4">
-                  <div className="relative w-28 h-20 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
+                  <div className="relative w-28 h-20 rounded overflow-hidden bg-surface-tertiary border border-border flex-shrink-0">
                     <Image
                       src={project.thumbnail}
                       alt={project.name}
@@ -851,8 +808,8 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-mono font-semibold text-zinc-200 mb-1">{project.name}</div>
-                    <div className="text-xs font-mono text-zinc-400 mb-2 line-clamp-2">{project.description}</div>
+                    <div className="text-sm font-mono font-semibold text-text-primary mb-1">{project.name}</div>
+                    <div className="text-xs font-mono text-text-muted mb-2 line-clamp-2">{project.description}</div>
                     <div className="flex flex-wrap gap-1">
                       {project.languages.slice(0, 3).map((lang) => (
                         <span
@@ -868,7 +825,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                         </span>
                       ))}
                       {project.languages.length > 3 && (
-                        <span className="px-2 py-0.5 bg-zinc-700/50 text-zinc-400 text-[10px] font-mono rounded">
+                        <span className="px-2 py-0.5 bg-surface-tertiary text-text-muted text-[10px] font-mono rounded">
                           +{project.languages.length - 3}
                         </span>
                       )}
@@ -881,10 +838,10 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
         </div>
         
         {/* Right side - preview pane */}
-        <div className="w-1/2 border-l border-zinc-700 bg-zinc-900/50 flex flex-col items-center justify-start p-8 overflow-auto">
+        <div className="w-1/2 border-l border-border bg-surface-primary/50 flex flex-col items-center justify-start p-8 overflow-auto">
           {selectedProject ? (
             <div className="w-full flex flex-col items-center">
-              <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden bg-zinc-800 border border-zinc-700">
+              <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden bg-surface-tertiary border border-border">
                 <Image
                   src={selectedProject.thumbnail}
                   alt={selectedProject.name}
@@ -897,13 +854,13 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                 </div>
               </div>
               <div className="mt-4 text-center">
-                <div className="text-lg font-mono text-zinc-200">{selectedProject.name}</div>
-                <div className="text-sm font-mono text-zinc-400 mt-1">{selectedProject.category}</div>
-                <div className="text-xs font-mono text-zinc-500 mt-2">Double-click to open video</div>
+                <div className="text-lg font-mono text-text-primary">{selectedProject.name}</div>
+                <div className="text-sm font-mono text-text-secondary mt-1">{selectedProject.category}</div>
+                <div className="text-xs font-mono text-text-muted mt-2">Double-click to open video</div>
               </div>
             </div>
           ) : (
-            <div className="text-zinc-500 font-mono text-sm flex-1 flex items-center justify-center">Select a project to preview</div>
+            <div className="text-text-muted font-mono text-sm flex-1 flex items-center justify-center">Select a project to preview</div>
           )}
         </div>
       </div>
@@ -917,7 +874,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   return (
-    <div className="h-full flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
+    <div className="h-full flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-surface-secondary/30">
       {projects.map((project) => (
         <VideoThumbnail
           key={project.id}
