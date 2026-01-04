@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { Modal } from './Modal';
 
 // Project data structure
@@ -45,6 +45,93 @@ const PROJECTS_DATA: Project[] = [
 
 // View mode types
 type ViewMode = 'small' | 'medium' | 'big' | 'gallery';
+
+// Search button with expandable input
+function SearchButton({ searchQuery, onSearchChange }: { 
+  searchQuery: string; 
+  onSearchChange: (query: string) => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        if (isExpanded && !searchQuery) {
+          setIsExpanded(false);
+        }
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isExpanded, searchQuery]);
+  
+  // Focus input when expanded
+  useEffect(() => {
+    if (isExpanded && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isExpanded]);
+  
+  const handleClose = () => {
+    onSearchChange('');
+    setIsExpanded(false);
+  };
+  
+  return (
+    <div className="relative" ref={searchRef}>
+      <div className="flex items-center">
+        {/* Search input - expands from right to left */}
+        <input
+          ref={inputRef}
+          type="text"
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search projects..."
+          className={`
+            font-mono text-sm text-zinc-300 bg-zinc-800 border border-zinc-700 rounded-l px-3 py-1
+            focus:outline-none focus:border-blue-500 transition-all duration-300 ease-in-out
+            ${isExpanded ? 'w-48 opacity-100' : 'w-0 opacity-0 px-0 border-0'}
+          `}
+          style={{ 
+            transitionProperty: 'width, opacity, padding, border-width'
+          }}
+        />
+        
+        {/* Close button (X icon) - only visible when expanded and has content */}
+        {isExpanded && searchQuery && (
+          <button
+            onClick={handleClose}
+            className="p-1 bg-zinc-800 border-y border-zinc-700 hover:bg-zinc-700 transition-colors"
+            aria-label="Clear search"
+          >
+            <X size={16} className="text-zinc-400" />
+          </button>
+        )}
+        
+        {/* Search icon button */}
+        <button
+          onClick={() => {
+            if (isExpanded && !searchQuery) {
+              setIsExpanded(false);
+            } else {
+              setIsExpanded(true);
+            }
+          }}
+          className={`p-1 hover:bg-zinc-700 transition-colors ${
+            isExpanded ? 'bg-zinc-800 border border-zinc-700 border-l-0 rounded-r' : 'rounded'
+          }`}
+          aria-label="Search"
+        >
+          <Search size={18} className="text-zinc-300" />
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // View button with 4-square grid icon
 function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onViewChange: (view: ViewMode) => void }) {
@@ -379,9 +466,17 @@ export function Projects() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
   const [viewMode, setViewMode] = useState<ViewMode>('small');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   
-  // Filter projects by selected category
-  const filteredProjects = PROJECTS_DATA.filter(p => p.category === selectedCategory);
+  // Filter projects by search query (across all categories) or by selected category
+  const filteredProjects = PROJECTS_DATA.filter(p => {
+    // If there's a search query, search across all categories
+    if (searchQuery !== '') {
+      return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    // Otherwise, filter by selected category only
+    return p.category === selectedCategory;
+  });
   
   const handleThumbnailClick = (project: Project) => {
     // Single click in gallery view - just select for preview
@@ -405,8 +500,9 @@ export function Projects() {
   return (
     <>
       <div className="w-full h-full flex flex-col">
-        {/* Top bar with view button - matches sidebar styling */}
-        <div className="bg-surface-primary/95 backdrop-blur-2xl px-4 py-1 z-10 flex justify-end items-center">
+        {/* Top bar with search and view buttons - matches sidebar styling */}
+        <div className="bg-surface-primary/95 backdrop-blur-2xl px-4 py-1 z-10 flex justify-end items-center gap-2">
+          <SearchButton searchQuery={searchQuery} onSearchChange={setSearchQuery} />
           <ViewButton currentView={viewMode} onViewChange={setViewMode} />
         </div>
                 
