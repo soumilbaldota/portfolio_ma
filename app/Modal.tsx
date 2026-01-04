@@ -52,7 +52,6 @@ function ModalHeader({
   onMouseDown,
   isDragging,
   isMaximized,
-  size = "medium",
   title,
 }: {
   onClose: () => void;
@@ -61,18 +60,11 @@ function ModalHeader({
   onMouseDown: (e: React.MouseEvent) => void;
   isDragging: boolean;
   isMaximized: boolean;
-  size?: "small" | "medium" | "large";
   title?: string;
 }) {
-  const sizeConfig = {
-    small: 'w-150',
-    medium: 'w-200',
-    large: 'w-250',
-  };
-  
   return (
     <div
-      className={`h-8 ${isMaximized ? 'w-full' : sizeConfig[size]} bg-surface-primary/95 rounded-t-sm flex items-center pl-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`h-8 ${isMaximized ? 'w-full' : ''} bg-surface-primary/95 rounded-t-sm flex items-center pl-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
       <div className="group flex">
@@ -111,13 +103,16 @@ export function Modal({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isAnimating, setIsAnimating] = useState(startMaximized);
+  const [isResizing, setIsResizing] = useState(false);
+  const [dimensions, setDimensions] = useState<{ width: number; height: number } | null>(null);
+  const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, mouseX: 0, mouseY: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
   
-  // Size configurations
+  // Size configurations (default pixel values)
   const sizeConfig = {
-    small: { width: 'w-150', height: 'h-80' },
-    medium: { width: 'w-200', height: 'h-100' },
-    large: { width: 'w-250', height: 'h-125' },
+    small: { width: 600, height: 320 },
+    medium: { width: 800, height: 400 },
+    large: { width: 1000, height: 500 },
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -144,6 +139,33 @@ export function Modal({
     }
   };
 
+  const handleResizeMouseDown = (e: React.MouseEvent) => {
+    // Prevent resizing when maximized
+    if (isMaximized) return;
+    
+    e.stopPropagation(); // Prevent triggering drag
+    
+    if (modalRef.current) {
+      const rect = modalRef.current.getBoundingClientRect();
+      
+      // Initialize dimensions if not set
+      if (dimensions === null) {
+        setDimensions({
+          width: rect.width,
+          height: rect.height,
+        });
+      }
+      
+      setResizeStart({
+        width: dimensions?.width || rect.width,
+        height: dimensions?.height || rect.height,
+        mouseX: e.clientX,
+        mouseY: e.clientY,
+      });
+      setIsResizing(true);
+    }
+  };
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && modalRef.current && position !== null && !isMaximized) {
@@ -155,6 +177,20 @@ export function Modal({
         const deltaX = newX - position.x;
         const deltaY = newY - position.y;
         modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+      }
+      
+      if (isResizing && modalRef.current && !isMaximized) {
+        // Calculate new dimensions based on mouse movement
+        const deltaX = e.clientX - resizeStart.mouseX;
+        const deltaY = e.clientY - resizeStart.mouseY;
+        
+        const newWidth = Math.max(300, resizeStart.width + deltaX); // Min width 300px
+        const newHeight = Math.max(200, resizeStart.height + deltaY); // Min height 200px
+        
+        setDimensions({
+          width: newWidth,
+          height: newHeight,
+        });
       }
     };
 
@@ -172,9 +208,10 @@ export function Modal({
         });
       }
       setIsDragging(false);
+      setIsResizing(false);
     };
 
-    if (isDragging) {
+    if (isDragging || isResizing) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
 
@@ -183,7 +220,7 @@ export function Modal({
         document.removeEventListener('mouseup', handleMouseUp);
       };
     }
-  }, [isDragging, dragStart, position, isMaximized]);
+  }, [isDragging, isResizing, dragStart, position, isMaximized, resizeStart, dimensions]);
   
   // Handle expand animation for startMaximized
   useEffect(() => {
@@ -203,22 +240,25 @@ export function Modal({
 
   const handleMaximize = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Reset position when maximizing
+    // Reset position and dimensions when maximizing
     if (!isMaximized) {
       setPosition(null);
+      setDimensions(null);
     }
     onMaximize();
   };
 
-  const { width, height } = sizeConfig[size];
-  const transitionClass = isDragging ? 'transition-none' : 'transition-all duration-300';
+  const { width: defaultWidth, height: defaultHeight } = sizeConfig[size];
+  const transitionClass = (isDragging || isResizing) ? 'transition-none' : 'transition-all duration-300';
   const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${transitionClass} ${
     isMaximized || (startMaximized && !isAnimating)
       ? 'w-screen h-screen'
-      : isAnimating
-      ? 'w-40 h-30'
-      : `${width} ${height}`
+      : ''
   }`;
+  
+  // Calculate actual dimensions
+  const actualWidth = dimensions?.width || defaultWidth;
+  const actualHeight = dimensions?.height || defaultHeight;
 
   return createPortal(
     <div className='fixed inset-0 z-50 pointer-events-none' onClick={onClose}>
@@ -228,16 +268,24 @@ export function Modal({
 
         <div
           ref={modalRef}
-          className={`${modalClassName} pointer-events-auto`}
+          className={`${modalClassName} pointer-events-auto relative`}
           style={
-            !isMaximized && position !== null
+            isMaximized || (startMaximized && !isAnimating)
+              ? {
+                willChange: isDragging ? 'transform' : 'auto',
+              }
+              : !isMaximized && position !== null
               ? {
                 position: 'absolute',
                 left: `${position.x}px`,
                 top: `${position.y}px`,
+                width: `${actualWidth}px`,
+                height: `${actualHeight}px`,
                 willChange: isDragging ? 'transform' : 'auto',
               }
               : {
+                width: isAnimating ? '160px' : `${actualWidth}px`,
+                height: isAnimating ? '120px' : `${actualHeight}px`,
                 willChange: isDragging ? 'transform' : 'auto',
               }
           }
@@ -250,12 +298,27 @@ export function Modal({
             onMouseDown={handleMouseDown}
             isDragging={isDragging}
             isMaximized={isMaximized}
-            size={size}
             title={title}
           />
           <div className="h-[calc(100%-2rem)]" style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
             {children}
           </div>
+          
+          {/* Resize handle - only show when not maximized */}
+          {!isMaximized && (
+            <div
+              className="absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize group"
+              onMouseDown={handleResizeMouseDown}
+              style={{ touchAction: 'none' }}
+            >
+              {/* Visual indicator for resize handle */}
+              <div className="absolute bottom-0.5 right-0.5 w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity">
+                <svg viewBox="0 0 12 12" fill="none" className="w-full h-full">
+                  <path d="M11 1L1 11M11 5L5 11M11 9L9 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-zinc-600 dark:text-zinc-400" />
+                </svg>
+              </div>
+            </div>
+          )}
         </div>
 
       </div>
