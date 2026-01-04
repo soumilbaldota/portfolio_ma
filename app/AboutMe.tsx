@@ -4,49 +4,25 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 
-// About Me content
-const SHORT_ABOUT_ME = `# About Me (TLDR)
+const SHORT_ABOUT_ME = `# TLDR
 
-I am a computer science graduate student at Columbia University with a focus on systems, operating systems, and scalable infrastructure. I enjoy working close to the metal and understanding how kernels behave, how networks fail, and how systems can be made more efficient and reliable.
+I am a MSCS student at Columbia University with a focus on systems, operating systems, and scalable infrastructure. I enjoy working close to the metal and understanding how kernels behave, how networks fail, and how systems can be made more efficient and reliable.
+I have worked across research, industry, and open source environments, from SLAM systems on a Mars Rover team to scientific computing systems at CERN HSF @ Google Summer of Code.
+Currently, I am focused on deepening my systems expertise, building robust software, and improving through disciplined, consistent work.
 
-I have worked across research, industry, and open source environments, from SLAM systems on a Mars Rover team to distributed scientific computing at CERN.
+I am currently looking for Summer 2026 internships so please feel free to reachout !
+`;
 
-Currently, I am focused on deepening my systems expertise, building robust software, and improving through disciplined, consistent work.`;
-
-const FULL_ABOUT_ME = `# About Me (Full Story)
-
-## Early Interest in Computing
+const FULL_ABOUT_ME = `# My Story
 
 I have been drawn to computing since childhood, not just using technology but understanding how it works internally. Early on, I spent time dismantling and reassembling computer hardware and experimenting with operating systems, which led me toward systems level thinking.
+This curiosity shaped my academic path. I completed my undergraduate degree in computer science with a GPA of 9.56/10 and received the Dean's Scholarship for academic excellence. During this time, I gravitated toward coursework such as Operating Systems, Design and Analysis of Algorithms, and Digital Image Processing.
 
-This curiosity shaped my academic path. I completed my undergraduate degree in computer science with a GPA of 9.56 out of 10 and received the Dean's Scholarship for academic excellence. During this time, I gravitated toward coursework such as Operating Systems, Design and Analysis of Algorithms, and Digital Image Processing.
-
-## Applied Systems Research
-
-My interest in applied systems research grew through hands on projects. As part of the **Rudra Mars Rover Team**, I led the development of SLAM algorithms under real world constraints where reliability, performance, and rapid debugging were critical.
-
-During an international competition, I helped diagnose and resolve a motor overheating issue mid run, reinforcing how theory, systems intuition, and teamwork intersect under pressure. Our team placed fourth at the International Rover Design Challenge, and I later mentored new team members, passing on both technical and collaborative lessons.
-
-## Professional Experience
-
-I continued developing as a systems engineer through research and industry roles:
-
-- **Google Summer of Code 2022 at CERN**: I worked on a high performance code generation interface for scientific computing and gained exposure to distributed systems and software optimization at scale.
-
-- **Samsung Research**: I led a small team designing a multi modal machine learning model, learning how to balance research ambition with practical constraints.
-
-- **Maximl Labs**: I have been building resource leveling and optimization strategies that streamline enterprise operations and deliver measurable business impact.
+My interest in applied systems grew through hands on projects. As part of the Rudra Mars Rover Team, I led the development of SLAM algorithms under real world constraints where reliability, performance, and rapid debugging were critical.
 
 Along the way, my exploration of cybersecurity, including identifying vulnerabilities in ISP networks, has shaped how I think about robustness, efficiency, and system security.
 
-## Graduate Studies at Columbia
-
-I am currently pursuing a Master of Science in Computer Science at Columbia University. I have completed rigorous coursework including:
-
-- Operating Systems (widely regarded as one of the most demanding courses in Columbia Engineering)
-- Computer Networks
-- Natural Language Processing
-- Programming for Problem Solving
+I am currently pursuing a Master of Science in Computer Science at Columbia University. I have completed rigorous coursework including Operating Systems (widely regarded as one of the most demanding courses in Columbia Engineering), Computer Networks, Natural Language Processing, Programming for Problem Solving
 
 This semester challenged me both technically and personally. Living in New York has been demanding at times, but it has also been deeply formative. I finished the semester with a 3.5 GPA and a much deeper understanding of the Linux kernel and low level system behavior.
 
@@ -54,9 +30,10 @@ This semester challenged me both technically and personally. Living in New York 
 
 At this stage, my goals are straightforward and demanding:
 
-1. Strengthen my fundamentals in systems, competitive programming, and system design
-2. Contribute meaningful research or open source work
-3. Build software that is efficient, secure, and reliable
+1. Strengthen my fundamentals in systems, competitive programming, and system design 🧠
+2. Contribute meaningful research or open source work 🧠
+3. Build software that is efficient, secure, and reliable 🧠
+4. Get Fitter 💪
 
 I believe in steady progress through consistent effort. There is always more to understand in computing systems, and I am motivated by the work that remains to be done.`;
 
@@ -93,7 +70,7 @@ interface SidebarProps {
 function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: SidebarProps) {
   return (
     <div className={`bg-[#1e1e1e]/80 backdrop-blur-xl h-full flex flex-col border-r border-black/20 transition-all duration-300 ${
-      isCollapsed ? 'w-12' : 'w-56'
+      isCollapsed ? 'w-12' : 'w-30'
     }`}>
       {/* Toggle button */}
       <div className="p-3 flex items-center justify-between border-b border-black/20">
@@ -113,7 +90,6 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
         </button>
       </div>
       
-      {/* Sidebar items */}
       {!isCollapsed && (
         <div className="p-3 flex flex-col gap-0.5">
           <SidebarItem
@@ -158,7 +134,7 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
 
 export function AboutMe() {
   const [selectedTab, setSelectedTab] = useState<'tldr' | 'full'>('tldr');
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   
   const content = selectedTab === 'tldr' ? SHORT_ABOUT_ME : FULL_ABOUT_ME;
   
