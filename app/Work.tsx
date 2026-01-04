@@ -4,6 +4,7 @@ import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { useAccentColor } from './AccentColorContext';
 
 interface WorkExperience {
   id: string;
@@ -78,6 +79,7 @@ interface TimelineItemProps {
 
 function TimelineItem({ experience, isLast }: TimelineItemProps) {
   const [expandedRole, setExpandedRole] = useState<number | null>(null);
+  const { accentColor, accentColorBorder } = useAccentColor();
 
   const toggleRole = (index: number) => {
     setExpandedRole(expandedRole === index ? null : index);
@@ -87,12 +89,20 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
     <div className="relative flex gap-6 pb-8">
       {/* Timeline line */}
       {!isLast && (
-        <div className="absolute left-12 top-24 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-blue-700" />
+        <div 
+          className="absolute left-12 top-24 bottom-0 w-0.5 bg-gradient-to-b" 
+          style={{ 
+            backgroundImage: `linear-gradient(to bottom, ${accentColor}, ${accentColor}dd)` 
+          }}
+        />
       )}
       
       {/* Logo */}
       <div className="flex-shrink-0 z-10">
-        <div className="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-hidden">
+        <div 
+          className="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg ring-2 flex items-center justify-center overflow-hidden"
+          style={{ ringColor: accentColorBorder }}
+        >
           <Image
             src={experience.logo}
             alt={`${experience.company} logo`}
@@ -119,7 +129,12 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
             >
               <button
                 onClick={() => toggleRole(index)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-zinc-700/30 transition-colors"
+                className="w-full px-4 py-3 flex items-center justify-between transition-colors"
+                style={{
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <div className="flex-1 text-left">
                   <h4 className="font-semibold text-zinc-200">{role.title}</h4>
@@ -127,9 +142,9 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
                 </div>
                 <div className="flex-shrink-0 ml-4">
                   {expandedRole === index ? (
-                    <ChevronDown className="w-5 h-5 text-blue-400" />
+                    <ChevronDown className="w-5 h-5" style={{ color: accentColor }} />
                   ) : (
-                    <ChevronRight className="w-5 h-5 text-blue-400" />
+                    <ChevronRight className="w-5 h-5" style={{ color: accentColor }} />
                   )}
                 </div>
               </button>

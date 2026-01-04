@@ -3,6 +3,7 @@ import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ChevronRight, ChevronDown } from 'lucide-react';
+import { useAccentColor } from './AccentColorContext';
 
 const SHORT_ABOUT_ME = `# TLDR
 
@@ -44,13 +45,19 @@ interface SidebarItemProps {
 }
 
 function SidebarItem({ title, isActive, onClick }: SidebarItemProps) {
+  const { accentColor, accentColorLight } = useAccentColor();
   return (
     <div
-      className={`px-3 py-1.5 rounded-md flex items-center cursor-pointer transition-colors ${
-        isActive 
-          ? 'bg-zinc-700/60' 
-          : 'hover:bg-zinc-700/40'
-      }`}
+      className="px-3 py-1.5 rounded-md flex items-center cursor-pointer transition-colors"
+      style={{
+        backgroundColor: isActive ? accentColorLight : 'transparent'
+      }}
+      onMouseEnter={(e) => {
+        if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+      }}
+      onMouseLeave={(e) => {
+        if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
+      }}
       onClick={onClick}
     >
       <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-zinc-300'}`}>
@@ -68,6 +75,7 @@ interface SidebarProps {
 }
 
 function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: SidebarProps) {
+  const { accentColorLight } = useAccentColor();
   return (
     <div className={`bg-[#1e1e1e]/80 backdrop-blur-xl h-full flex flex-col border-r border-black/20 transition-all duration-300 ${
       isCollapsed ? 'w-12' : 'w-30'
@@ -79,7 +87,12 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
         )}
         <button
           onClick={onToggleCollapse}
-          className="p-1 hover:bg-zinc-700/40 rounded transition-colors ml-auto"
+          className="p-1 rounded transition-colors ml-auto"
+          style={{
+            backgroundColor: 'transparent'
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? (
@@ -110,18 +123,32 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
         <div className="flex flex-col items-center gap-2 p-2">
           <button
             onClick={() => onSelectTab('tldr')}
-            className={`w-8 h-8 rounded flex items-center justify-center transition-colors ${
-              selectedTab === 'tldr' ? 'bg-zinc-700/60' : 'hover:bg-zinc-700/40'
-            }`}
+            className="w-8 h-8 rounded flex items-center justify-center transition-colors"
+            style={{
+              backgroundColor: selectedTab === 'tldr' ? accentColorLight : 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              if (selectedTab !== 'tldr') e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              if (selectedTab !== 'tldr') e.currentTarget.style.backgroundColor = 'transparent';
+            }}
             title="TLDR"
           >
             <span className="text-xs text-zinc-300">T</span>
           </button>
           <button
             onClick={() => onSelectTab('full')}
-            className={`w-8 h-8 rounded flex items-center justify-center transition-colors ${
-              selectedTab === 'full' ? 'bg-zinc-700/60' : 'hover:bg-zinc-700/40'
-            }`}
+            className="w-8 h-8 rounded flex items-center justify-center transition-colors"
+            style={{
+              backgroundColor: selectedTab === 'full' ? accentColorLight : 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              if (selectedTab !== 'full') e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              if (selectedTab !== 'full') e.currentTarget.style.backgroundColor = 'transparent';
+            }}
             title="Full Story"
           >
             <span className="text-xs text-zinc-300">F</span>
@@ -135,6 +162,7 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
 export function AboutMe() {
   const [selectedTab, setSelectedTab] = useState<'tldr' | 'full'>('tldr');
   const [isCollapsed, setIsCollapsed] = useState(true);
+  const { accentColor, accentColorLight, accentColorBorder } = useAccentColor();
   
   const content = selectedTab === 'tldr' ? SHORT_ABOUT_ME : FULL_ABOUT_ME;
   
@@ -181,16 +209,28 @@ export function AboutMe() {
                 <em className="italic text-zinc-300" {...props} />
               ),
               code: ({ ...props }) => (
-                <code className="bg-zinc-800 text-blue-400 px-1.5 py-0.5 rounded text-sm font-mono" {...props} />
+                <code 
+                  className="px-1.5 py-0.5 rounded text-sm font-mono" 
+                  style={{ backgroundColor: '#27272a', color: accentColor }}
+                  {...props} 
+                />
               ),
               pre: ({ ...props }) => (
                 <pre className="bg-zinc-800 text-zinc-300 p-4 rounded-lg overflow-x-auto mb-4" {...props} />
               ),
               blockquote: ({ ...props }) => (
-                <blockquote className="border-l-4 border-blue-500 pl-4 italic text-zinc-400 my-4" {...props} />
+                <blockquote 
+                  className="pl-4 italic text-zinc-400 my-4 border-l-4" 
+                  style={{ borderColor: accentColor }}
+                  {...props} 
+                />
               ),
               a: ({ ...props }) => (
-                <a className="text-blue-400 hover:text-blue-300 underline" {...props} />
+                <a 
+                  className="underline hover:opacity-80" 
+                  style={{ color: accentColor }}
+                  {...props} 
+                />
               ),
             }}
           >

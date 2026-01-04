@@ -1,5 +1,6 @@
 import { CalendarDays, Linkedin, Mail, MessageCircle, Phone, type LucideIcon } from 'lucide-react';
 import Image from 'next/image';
+import { useAccentColor } from './AccentColorContext';
 
 type ContactMethod = {
     label: string;
@@ -33,9 +34,17 @@ function ProfileAvatar({ className }: { className?: string }) {
 }
 
 function SidebarProfile() {
+    const { accentColor } = useAccentColor();
     return (
         <div className="bg-surface-primary/20 backdrop-blur-2xl flex justify-center">
-            <div className="h-15 w-12/12 bg-surface-primary/80 rounded-sm flex items-center hover:bg-accent-primary">
+            <div 
+                className="h-15 w-12/12 bg-surface-primary/80 rounded-sm flex items-center transition-colors"
+                style={{
+                    '--hover-bg': accentColor
+                } as React.CSSProperties}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = accentColor}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+            >
                 <ProfileAvatar />
                 <div className="font-mono">Soumil Baldota</div>
             </div>
@@ -53,12 +62,17 @@ function HeaderProfile() {
 }
 
 function ContactAction({ Icon, label, link }: ContactMethod) {
+    const { accentColor } = useAccentColor();
     return (
         <div className="flex flex-col items-center justify-center m-2.5">
             <div className="w-full flex justify-center cursor-pointer">
-                <div className="w-10 h-10 rounded-full m-2 bg-accent-primary flex items-center justify-center" onClick={()=>{
-                    if (link) window.open(link, '_blank');
-                }}>
+                <div 
+                    className="w-10 h-10 rounded-full m-2 flex items-center justify-center" 
+                    style={{ backgroundColor: accentColor }}
+                    onClick={()=>{
+                        if (link) window.open(link, '_blank');
+                    }}
+                >
                     <Icon className="text-white" />
                 </div>
             </div>
