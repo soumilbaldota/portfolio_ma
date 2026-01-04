@@ -124,6 +124,7 @@ type Phase = "idle" | "ejecting" | "inserting";
 export function LogoDeck({ logos }: { logos: string[] }) {
   const [deck, setDeck] = useState(logos);
   const [phase, setPhase] = useState<Phase>("idle");
+  const { accentColor, accentColorBorder } = useAccentColor();
 
   const handleClick = () => {
     if (deck.length <= 1 || phase !== "idle") return;
@@ -187,9 +188,12 @@ export function LogoDeck({ logos }: { logos: string[] }) {
           >
             <div
               className={`w-full h-full rounded-full bg-white p-2 flex items-center justify-center ${isFirst
-                  ? "shadow-lg ring-2 ring-blue-500/40"
-                  : "shadow-md ring-2 ring-blue-500/20"
+                  ? "shadow-lg ring-2"
+                  : "shadow-md ring-2"
                 }`}
+              style={{
+                ringColor: isFirst ? accentColorBorder : `${accentColor}33`
+              }}
             >
               <Image
                 src={logo}
@@ -207,9 +211,10 @@ export function LogoDeck({ logos }: { logos: string[] }) {
 }
 
 
-function TimelineItem({ experience, isLast }: TimelineItemProps) {
+
+export function TimelineItem({ experience, isLast }: TimelineItemProps) {
   const [expandedRole, setExpandedRole] = useState<number | null>(null);
-  const { accentColor, accentColorBorder } = useAccentColor();
+  const { accentColor } = useAccentColor();
   
   const toggleRole = (index: number) => {
     setExpandedRole((prev) => (prev === index ? null : index));
@@ -219,7 +224,12 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
   return (
     <div className="relative flex gap-6 pb-8">
       {!isLast && (
-        <div className="absolute left-12 top-24 bottom-0 w-0.5 bg-linear-to-b from-blue-500 to-blue-700" />
+        <div 
+          className="absolute left-12 top-24 bottom-0 w-0.5" 
+          style={{ 
+            background: `linear-gradient(to bottom, ${accentColor}, ${accentColor}dd)` 
+          }}
+        />
       )}
       <div
         className={`relative w-24 h-24 ${experience.logos.length > 1 ? "cursor-pointer" : ""
@@ -249,7 +259,12 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
             >
               <button
                 onClick={() => toggleRole(index)}
-                className="w-full px-4 py-3 flex items-center justify-between hover:bg-zinc-700/30"
+                className="w-full px-4 py-3 flex items-center justify-between transition-colors"
+                style={{
+                  backgroundColor: 'transparent'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <div className="text-left">
                   <h4 className="font-semibold text-zinc-200">
@@ -304,7 +319,16 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
                         {role.techStack.map((tech) => (
                           <div
                             key={tech.name}
-                            className="flex items-center gap-2 bg-zinc-900/50 px-3 py-2 rounded-lg border border-zinc-700/40 hover:border-blue-500/50 transition-colors group"
+                            className="flex items-center gap-2 bg-zinc-900/50 px-3 py-2 rounded-lg border transition-colors group"
+                            style={{
+                              borderColor: '#3f3f46'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = accentColor;
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = '#3f3f46';
+                            }}
                             title={tech.name}
                           >
                             <Image
@@ -314,7 +338,18 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
                               height={20}
                               className="object-contain"
                             />
-                            <span className="text-xs text-zinc-300 group-hover:text-blue-400 transition-colors">{tech.name}</span>
+                            <span 
+                              className="text-xs transition-colors"
+                              style={{ color: '#d4d4d8' }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.color = accentColor;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.color = '#d4d4d8';
+                              }}
+                            >
+                              {tech.name}
+                            </span>
                           </div>
                         ))}
                       </div>
