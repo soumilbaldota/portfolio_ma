@@ -2,6 +2,7 @@
 import { Globe, Lock, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useAccentColor } from './AccentColorContext';
 
 // Extended Project type with more details
 export type ProjectDetails = {
@@ -23,13 +24,49 @@ function BrowserChrome({ projectName, url }: { projectName: string; url?: string
       {/* Browser toolbar */}
       <div className="flex items-center gap-2 px-3 py-2">
         {/* Navigation buttons */}
-        <button className="p-1 rounded hover:bg-zinc-700 disabled:opacity-30" disabled>
+        <button 
+          className="p-1 rounded disabled:opacity-30 transition-colors" 
+          disabled
+          style={{
+            backgroundColor: 'transparent'
+          }}
+          onMouseEnter={(e) => {
+            if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
           <ChevronLeft className="w-4 h-4 text-zinc-400" />
         </button>
-        <button className="p-1 rounded hover:bg-zinc-700 disabled:opacity-30" disabled>
+        <button 
+          className="p-1 rounded disabled:opacity-30 transition-colors" 
+          disabled
+          style={{
+            backgroundColor: 'transparent'
+          }}
+          onMouseEnter={(e) => {
+            if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
           <ChevronRight className="w-4 h-4 text-zinc-400" />
         </button>
-        <button className="p-1 rounded hover:bg-zinc-700 disabled:opacity-30" disabled>
+        <button 
+          className="p-1 rounded disabled:opacity-30 transition-colors" 
+          disabled
+          style={{
+            backgroundColor: 'transparent'
+          }}
+          onMouseEnter={(e) => {
+            if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
           <RefreshCw className="w-4 h-4 text-zinc-400" />
         </button>
         
@@ -49,6 +86,7 @@ function BrowserChrome({ projectName, url }: { projectName: string; url?: string
 
 // Project details sidebar
 function ProjectDetailsSidebar({ project }: { project: ProjectDetails }) {
+  const { accentColor, accentColorLight, accentColorBorder } = useAccentColor();
   return (
     <div className="w-full h-full overflow-auto bg-zinc-900 p-6">
       {/* Project Description */}
@@ -64,7 +102,12 @@ function ProjectDetailsSidebar({ project }: { project: ProjectDetails }) {
           {project.languages.map((lang) => (
             <span
               key={lang}
-              className="px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-mono rounded-full border border-blue-500/30"
+              className="px-3 py-1 text-xs font-mono rounded-full"
+              style={{
+                backgroundColor: accentColorLight,
+                color: accentColor,
+                border: `1px solid ${accentColorBorder}`
+              }}
             >
               {lang}
             </span>
@@ -90,14 +133,24 @@ function ProjectDetailsSidebar({ project }: { project: ProjectDetails }) {
                 code: (props) => {
                   const { inline, ...rest } = props as { inline?: boolean; [key: string]: unknown };
                   return inline ? (
-                    <code className="bg-zinc-900 text-blue-400 px-1 py-0.5 rounded text-xs font-mono" {...rest} />
+                    <code 
+                      className="px-1 py-0.5 rounded text-xs font-mono" 
+                      style={{ backgroundColor: '#18181b', color: accentColor }}
+                      {...rest} 
+                    />
                   ) : (
                     <code className="block bg-zinc-900 text-zinc-300 p-2 rounded text-xs font-mono overflow-x-auto" {...rest} />
                   );
                 },
                 pre: ({...props}) => <pre className="bg-zinc-900 rounded p-2 mb-2 overflow-x-auto" {...props} />,
-                a: ({...props}) => <a className="text-blue-400 hover:text-blue-300 underline" {...props} />,
-                blockquote: ({...props}) => <blockquote className="border-l-2 border-zinc-600 pl-3 italic text-zinc-400 my-2" {...props} />,
+                a: ({...props}) => (
+                  <a 
+                    className="underline hover:opacity-80" 
+                    style={{ color: accentColor }}
+                    {...props} 
+                  />
+                ),
+                blockquote: ({...props}) => <blockquote className="pl-3 italic text-zinc-400 my-2 border-l-2" style={{ borderColor: accentColor }} {...props} />,
               }}
             >
               {project.readme}
@@ -113,7 +166,13 @@ function ProjectDetailsSidebar({ project }: { project: ProjectDetails }) {
             href={project.githubUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-sm font-mono rounded border border-zinc-600 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-mono rounded border transition-colors"
+            style={{
+              backgroundColor: '#27272a',
+              borderColor: '#52525b'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.2)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#27272a'}
           >
             <Globe className="w-4 h-4" />
             View on GitHub

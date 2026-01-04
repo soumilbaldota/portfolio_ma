@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, Search, X, Grid3x3 } from 'lucide-react';
 import { Modal } from './Modal';
 import { ProjectBrowser, type ProjectDetails } from './ProjectBrowser';
+import { useAccentColor } from './AccentColorContext';
 
 // Project data structure
 type Project = {
@@ -578,7 +579,12 @@ function SearchButton({ searchQuery, onSearchChange }: {
         {isExpanded && searchQuery && (
           <button
             onClick={handleClose}
-            className="p-1 bg-zinc-800 border-y border-zinc-700 hover:bg-zinc-700 transition-colors"
+            className="p-1 bg-zinc-800 border-y border-zinc-700 transition-colors"
+            style={{
+              backgroundColor: 'transparent'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(39, 39, 42, 1)'}
             aria-label="Clear search"
           >
             <X size={16} className="text-zinc-400" />
@@ -594,9 +600,18 @@ function SearchButton({ searchQuery, onSearchChange }: {
               setIsExpanded(true);
             }
           }}
-          className={`p-1 hover:bg-zinc-700 transition-colors ${
+          className={`p-1 transition-colors ${
             isExpanded ? 'bg-zinc-800 border border-zinc-700 border-l-0 rounded-r' : 'rounded'
           }`}
+          style={{
+            backgroundColor: isExpanded ? 'rgba(39, 39, 42, 1)' : 'transparent'
+          }}
+          onMouseEnter={(e) => {
+            if (!isExpanded) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+          }}
+          onMouseLeave={(e) => {
+            if (!isExpanded) e.currentTarget.style.backgroundColor = 'transparent';
+          }}
           aria-label="Search"
         >
           <Search size={18} className="text-zinc-300" />
@@ -610,6 +625,7 @@ function SearchButton({ searchQuery, onSearchChange }: {
 function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onViewChange: (view: ViewMode) => void }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { accentColor } = useAccentColor();
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -634,7 +650,12 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="p-1 hover:bg-zinc-700 rounded transition-colors"
+        className="p-1 rounded transition-colors"
+        style={{
+          backgroundColor: 'transparent'
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)'}
+        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
         aria-label="Change view"
       >
         {/* 4-square grid icon */}
@@ -655,9 +676,21 @@ function ViewButton({ currentView, onViewChange }: { currentView: ViewMode; onVi
                 onViewChange(option.value);
                 setIsOpen(false);
               }}
-              className={`w-full text-left px-4 py-2 text-sm font-mono hover:bg-zinc-700 transition-colors ${
-                currentView === option.value ? 'bg-blue-500 text-white' : 'text-zinc-300'
-              }`}
+              className="w-full text-left px-4 py-2 text-sm font-mono transition-colors"
+              style={{
+                backgroundColor: currentView === option.value ? accentColor : 'transparent',
+                color: currentView === option.value ? 'white' : '#d4d4d8'
+              }}
+              onMouseEnter={(e) => {
+                if (currentView !== option.value) {
+                  e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (currentView !== option.value) {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                }
+              }}
             >
               {option.label}
             </button>
@@ -722,6 +755,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   selectedCategory: string; 
   onSelectCategory: (category: string) => void;
 }) {
+  const { accentColor, accentColorLight } = useAccentColor();
   const categories = [
     { name: 'All', icon: Grid3x3 },
     { name: 'Robotics', icon: Bot },
@@ -739,17 +773,23 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
         return (
           <div
             key={name}
-            className={`px-2 py-1.25 rounded-md flex items-center cursor-default transition-colors group ${
-              isActive 
-                ? 'bg-zinc-700/60' 
-                : 'hover:bg-zinc-700/40'
-            }`}
+            className="px-2 py-1.25 rounded-md flex items-center cursor-default transition-colors group"
+            style={{
+              backgroundColor: isActive ? accentColorLight : 'transparent'
+            }}
+            onMouseEnter={(e) => {
+              if (!isActive) e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive) e.currentTarget.style.backgroundColor = 'transparent';
+            }}
             onClick={() => onSelectCategory(name)}
           >
             <Icon 
               size={18} 
               strokeWidth={1.5}
-              className={`mr-3 ${isActive ? 'text-blue-500' : 'text-blue-500/90'}`} 
+              style={{ color: accentColor }}
+              className="mr-3"
             /> 
             <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-zinc-300'}`}>
               {name}
@@ -769,6 +809,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   viewMode: ViewMode;
   selectedProject: Project | null;
 }) {
+  const { accentColor, accentColorLight, accentColorBorder } = useAccentColor();
   if (viewMode === 'gallery') {
     return (
       <div className="flex h-full overflow-hidden">
@@ -778,9 +819,21 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
             {projects.map((project) => (
               <div
                 key={project.id}
-                className={`cursor-pointer group p-3 rounded transition-colors ${
-                  selectedProject?.id === project.id ? 'bg-blue-500/20 border border-blue-500' : 'hover:bg-zinc-700/30'
-                }`}
+                className="cursor-pointer group p-3 rounded transition-colors"
+                style={{
+                  backgroundColor: selectedProject?.id === project.id ? accentColorLight : 'transparent',
+                  border: selectedProject?.id === project.id ? `1px solid ${accentColor}` : '1px solid transparent'
+                }}
+                onMouseEnter={(e) => {
+                  if (selectedProject?.id !== project.id) {
+                    e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedProject?.id !== project.id) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                  }
+                }}
                 onClick={() => onThumbnailClick(project)}
                 onDoubleClick={() => onThumbnailDoubleClick(project)}
               >
@@ -804,7 +857,12 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                       {project.languages.slice(0, 3).map((lang) => (
                         <span
                           key={lang}
-                          className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-mono rounded border border-blue-500/30"
+                          className="px-2 py-0.5 text-[10px] font-mono rounded"
+                          style={{
+                            backgroundColor: accentColorLight,
+                            color: accentColor,
+                            border: `1px solid ${accentColorBorder}`
+                          }}
                         >
                           {lang}
                         </span>
