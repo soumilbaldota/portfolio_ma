@@ -87,6 +87,7 @@ export default function Home() {
           onMinimize={minimizeModal} 
           onMaximize={maximizeModal}
           isMaximized={isMaximized}
+          title={activeModal ? activeModal.charAt(0).toUpperCase() + activeModal.slice(1) : undefined}
         >
           {modalContent}
         </Modal>

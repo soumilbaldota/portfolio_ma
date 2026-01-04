@@ -87,12 +87,14 @@ function ProjectDetailsSidebar({ project }: { project: ProjectDetails }) {
                 ul: ({...props}) => <ul className="text-sm text-zinc-300 mb-2 ml-4 list-disc space-y-1" {...props} />,
                 ol: ({...props}) => <ol className="text-sm text-zinc-300 mb-2 ml-4 list-decimal space-y-1" {...props} />,
                 li: ({...props}) => <li className="text-sm text-zinc-300" {...props} />,
-                code: ({inline, ...props}: {inline?: boolean; [key: string]: unknown}) => 
-                  inline ? (
-                    <code className="bg-zinc-900 text-blue-400 px-1 py-0.5 rounded text-xs font-mono" {...props} />
+                code: (props) => {
+                  const { inline, ...rest } = props as { inline?: boolean; [key: string]: unknown };
+                  return inline ? (
+                    <code className="bg-zinc-900 text-blue-400 px-1 py-0.5 rounded text-xs font-mono" {...rest} />
                   ) : (
-                    <code className="block bg-zinc-900 text-zinc-300 p-2 rounded text-xs font-mono overflow-x-auto" {...props} />
-                  ),
+                    <code className="block bg-zinc-900 text-zinc-300 p-2 rounded text-xs font-mono overflow-x-auto" {...rest} />
+                  );
+                },
                 pre: ({...props}) => <pre className="bg-zinc-900 rounded p-2 mb-2 overflow-x-auto" {...props} />,
                 a: ({...props}) => <a className="text-blue-400 hover:text-blue-300 underline" {...props} />,
                 blockquote: ({...props}) => <blockquote className="border-l-2 border-zinc-600 pl-3 italic text-zinc-400 my-2" {...props} />,

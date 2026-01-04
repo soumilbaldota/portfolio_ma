@@ -723,6 +723,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   onSelectCategory: (category: string) => void;
 }) {
   const categories = [
+    { name: 'All', icon: Globe },
     { name: 'Robotics', icon: Bot },
     { name: 'ML', icon: BrainCircuit },
     { name: 'FullStack', icon: Globe },
@@ -822,9 +823,9 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
         </div>
         
         {/* Right side - preview pane */}
-        <div className="w-1/2 border-l border-zinc-700 bg-zinc-900/50 flex items-center justify-center p-8">
+        <div className="w-1/2 border-l border-zinc-700 bg-zinc-900/50 flex flex-col items-center justify-start p-8 overflow-auto">
           {selectedProject ? (
-            <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-center">
               <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden bg-zinc-800 border border-zinc-700">
                 <Image
                   src={selectedProject.thumbnail}
@@ -844,7 +845,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
               </div>
             </div>
           ) : (
-            <div className="text-zinc-500 font-mono text-sm">Select a project to preview</div>
+            <div className="text-zinc-500 font-mono text-sm flex-1 flex items-center justify-center">Select a project to preview</div>
           )}
         </div>
       </div>
@@ -876,16 +877,22 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
 export function Projects() {
   const [browserOpen, setBrowserOpen] = useState(false);
   const [selectedProjectForBrowser, setSelectedProjectForBrowser] = useState<Project | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [viewMode, setViewMode] = useState<ViewMode>('small');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isBrowserMaximized, setIsBrowserMaximized] = useState(true);
+  const [isBrowserMinimized, setIsBrowserMinimized] = useState(false);
   
   // Filter projects by search query (across all categories) or by selected category
   const filteredProjects = PROJECTS_DATA.filter(p => {
     // If there's a search query, search across all categories
     if (searchQuery !== '') {
       return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    // If "All" is selected, show all projects
+    if (selectedCategory === 'All') {
+      return true;
     }
     // Otherwise, filter by selected category only
     return p.category === selectedCategory;
@@ -935,17 +942,20 @@ export function Projects() {
       </div>
       
       {/* Project Browser Modal */}
-      {browserOpen && selectedProjectForBrowser && (
+      {browserOpen && selectedProjectForBrowser && !isBrowserMinimized && (
         <Modal 
           onClose={() => {
             setBrowserOpen(false);
             setSelectedProjectForBrowser(null);
+            setIsBrowserMaximized(true);
+            setIsBrowserMinimized(false);
           }}
-          onMinimize={() => {}}
-          onMaximize={() => {}}
-          isMaximized={true}
+          onMinimize={() => setIsBrowserMinimized(true)}
+          onMaximize={() => setIsBrowserMaximized(!isBrowserMaximized)}
+          isMaximized={isBrowserMaximized}
           size="large"
           startMaximized={true}
+          title={selectedProjectForBrowser.name}
         >
           <ProjectBrowser project={selectedProjectForBrowser as ProjectDetails} />
         </Modal>

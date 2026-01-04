@@ -53,6 +53,7 @@ function ModalHeader({
   isDragging,
   isMaximized,
   size = "medium",
+  title,
 }: {
   onClose: () => void;
   onMinimize: (e: React.MouseEvent) => void;
@@ -61,6 +62,7 @@ function ModalHeader({
   isDragging: boolean;
   isMaximized: boolean;
   size?: "small" | "medium" | "large";
+  title?: string;
 }) {
   const sizeConfig = {
     small: 'w-150',
@@ -78,6 +80,11 @@ function ModalHeader({
         <TrafficLight color="bg-yellow-400" onClick={onMinimize} icon="minimize" />
         <TrafficLight color="bg-green-500" onClick={onMaximize} icon="maximize" />
       </div>
+      {title && (
+        <div className="flex-1 text-center text-sm font-medium text-zinc-700 dark:text-zinc-300 pr-16">
+          {title}
+        </div>
+      )}
     </div>
   );
 }
@@ -89,6 +96,7 @@ export function Modal({
   isMaximized,
   size = "medium",
   startMaximized = false,
+  title,
 }: {
   children: React.ReactNode;
   onClose: () => void;
@@ -97,6 +105,7 @@ export function Modal({
   isMaximized: boolean;
   size?: "small" | "medium" | "large";
   startMaximized?: boolean;
+  title?: string;
 }) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -137,15 +146,20 @@ export function Modal({
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && modalRef.current && position !== null && !isMaximized) {
-        // Calculate new position based on mouse position and drag offset
-        const newX = e.clientX - dragStart.x;
-        const newY = e.clientY - dragStart.y;
+      if (isDragging && modalRef.current && !isMaximized) {
+        // Use requestAnimationFrame for smooth performance
+        requestAnimationFrame(() => {
+          if (modalRef.current && position !== null) {
+            // Calculate new position based on mouse position and drag offset
+            const newX = e.clientX - dragStart.x;
+            const newY = e.clientY - dragStart.y;
 
-        // Use transform for smooth dragging without re-renders
-        const deltaX = newX - position.x;
-        const deltaY = newY - position.y;
-        modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            // Use transform for smooth dragging without re-renders
+            const deltaX = newX - position.x;
+            const deltaY = newY - position.y;
+            modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+          }
+        });
       }
     };
 
@@ -166,7 +180,7 @@ export function Modal({
     };
 
     if (isDragging) {
-      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mousemove', handleMouseMove, { passive: true });
       document.addEventListener('mouseup', handleMouseUp);
 
       return () => {
@@ -211,12 +225,12 @@ export function Modal({
   }`;
 
   return createPortal(
-    <div className='fixed inset-0 z-50' onClick={onClose}>
+    <div className='fixed inset-0 z-50 pointer-events-none' onClick={onClose}>
       <div className={!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}>
 
         <div
           ref={modalRef}
-          className={modalClassName}
+          className={`${modalClassName} pointer-events-auto`}
           style={
             !isMaximized && position !== null
               ? {
@@ -239,6 +253,7 @@ export function Modal({
             isDragging={isDragging}
             isMaximized={isMaximized}
             size={size}
+            title={title}
           />
           <div className="h-[calc(100%-2rem)]" style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
             {children}
