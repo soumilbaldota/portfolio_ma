@@ -1,5 +1,6 @@
-"use-client";
+"use client";
 import Image from 'next/image';
+import { useAccentColor } from './AccentColorContext';
 
 // export function FolderIcon({ scale = 1, name = ""}) {
 //   return (
@@ -36,11 +37,26 @@ export function FolderIconWithImage({
   onClick?: () => void;
   showMinimizedIndicator?: boolean;
 }) {
+  const { accentColor } = useAccentColor();
+  const accentSecondary = '#0ea5e9'; // sky-500
+  const accentTertiary = '#06b6d4'; // cyan-500
+  
   return (
-    <div className="hover:bg-surface-tertiary rounded-2xl cursor-pointer" onClick={onClick}>
+    <div 
+      className="rounded-2xl cursor-pointer transition-colors" 
+      style={{
+        backgroundColor: 'transparent'
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(212, 212, 216, 0.5)'}
+      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+      onClick={onClick}
+    >
       <div className="relative m-5 mt-8" style={{ transform: `scale(${scale})` }}>
         <div className="flex flex-col items-center">
-          <div className="bg-accent-secondary rounded-sm h-22 w-35 relative z-10 drop-shadow-2xl mb-2 flex justify-center items-center">
+          <div 
+            className="rounded-sm h-22 w-35 relative z-10 drop-shadow-2xl mb-2 flex justify-center items-center"
+            style={{ backgroundColor: accentSecondary }}
+          >
             {image && (
               <div className="rounded-full overflow-hidden w-15 h-15">
                 <Image
@@ -64,11 +80,26 @@ export function FolderIconWithImage({
           )}
         </div>
         {/* Decorative folder elements */}
-        <div className="absolute bg-accent-tertiary h-10 w-15 -top-3 z-0 rounded-sm" />
-        <div className="absolute bg-accent-tertiary h-10 w-15 -top-0.5 left-11 z-0 rounded-sm rotate-25" />
-        <div className="absolute bg-accent-tertiary h-10 w-35 -top-1 z-0 rounded-sm" />
-        <div className="absolute bg-accent-primary h-px w-35 top-20 z-12 drop-shadow-2xl" />
-        <div className="absolute bg-accent-primary h-px w-35 top-21 z-12 drop-shadow-2xl" />
+        <div 
+          className="absolute h-10 w-15 -top-3 z-0 rounded-sm" 
+          style={{ backgroundColor: accentTertiary }}
+        />
+        <div 
+          className="absolute h-10 w-15 -top-0.5 left-11 z-0 rounded-sm rotate-25" 
+          style={{ backgroundColor: accentTertiary }}
+        />
+        <div 
+          className="absolute h-10 w-35 -top-1 z-0 rounded-sm" 
+          style={{ backgroundColor: accentTertiary }}
+        />
+        <div 
+          className="absolute h-px w-35 top-20 z-12 drop-shadow-2xl" 
+          style={{ backgroundColor: accentColor }}
+        />
+        <div 
+          className="absolute h-px w-35 top-21 z-12 drop-shadow-2xl" 
+          style={{ backgroundColor: accentColor }}
+        />
       </div>
     </div>
   );
