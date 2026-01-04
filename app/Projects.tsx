@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
 import { Modal } from './Modal';
+import { ProjectBrowser, type ProjectDetails } from './ProjectBrowser';
 
 // Project data structure
 type Project = {
@@ -11,36 +12,508 @@ type Project = {
   category: string;
   thumbnail: string;
   videoUrl: string;
-  description?: string;
+  description: string;
+  readme: string;
+  languages: string[];
+  githubUrl?: string;
 };
 
 // Sample projects data with embedded YouTube videos (TODO: Replace with actual video URLs)
 const PROJECTS_DATA: Project[] = [
   // Robotics Projects
-  { id: '1', name: 'Autonomous Drone', category: 'Robotics', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '2', name: 'Robotic Arm', category: 'Robotics', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '3', name: 'Line Following Robot', category: 'Robotics', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { 
+    id: '1', 
+    name: 'Autonomous Drone', 
+    category: 'Robotics', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'An autonomous drone system capable of navigating complex environments using computer vision and sensor fusion.',
+    readme: `# Autonomous Drone Project
+
+## Overview
+This project implements a fully autonomous drone system using ROS (Robot Operating System) and computer vision techniques.
+
+## Features
+- Real-time object detection and tracking
+- Autonomous navigation and path planning
+- Obstacle avoidance using LIDAR sensors
+- GPS-based waypoint navigation
+- Remote monitoring and control interface
+
+## Hardware
+- DJI F450 Frame
+- Pixhawk Flight Controller
+- Raspberry Pi 4
+- Intel RealSense Camera
+- LIDAR Sensor
+
+## Software Stack
+- ROS Melodic
+- Python 3.8
+- OpenCV for computer vision
+- TensorFlow for object detection`,
+    languages: ['Python', 'C++', 'ROS', 'OpenCV', 'TensorFlow'],
+    githubUrl: 'https://github.com/example/autonomous-drone'
+  },
+  { 
+    id: '2', 
+    name: 'Robotic Arm', 
+    category: 'Robotics', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'A 6-DOF robotic arm with inverse kinematics for precise manipulation tasks.',
+    readme: `# Robotic Arm Control System
+
+## Description
+A sophisticated robotic arm control system with 6 degrees of freedom, designed for precise pick-and-place operations.
+
+## Capabilities
+- Inverse kinematics solver
+- Trajectory planning
+- Force feedback control
+- Vision-guided manipulation
+- ROS integration
+
+## Technical Specifications
+- 6 DOF (Degrees of Freedom)
+- Payload capacity: 2kg
+- Reach: 800mm
+- Repeatability: ±0.1mm`,
+    languages: ['Python', 'ROS', 'C++', 'Arduino'],
+    githubUrl: 'https://github.com/example/robotic-arm'
+  },
+  { 
+    id: '3', 
+    name: 'Line Following Robot', 
+    category: 'Robotics', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'A mobile robot that autonomously follows lines using IR sensors and PID control.',
+    readme: `# Line Following Robot
+
+## Project Overview
+An autonomous mobile robot that follows black lines on a white surface using infrared sensors and PID control algorithms.
+
+## Features
+- 5 IR sensor array for precise line detection
+- PID control for smooth path following
+- Adjustable speed control
+- Battery level monitoring
+- LCD display for real-time data
+
+## Implementation
+The robot uses a differential drive system with two DC motors controlled by an H-bridge driver. The sensor readings are processed using a weighted average algorithm to determine the line position.`,
+    languages: ['C++', 'Arduino', 'Embedded C'],
+    githubUrl: 'https://github.com/example/line-follower'
+  },
   
   // ML Projects
-  { id: '4', name: 'Image Recognition', category: 'ML', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '5', name: 'Natural Language Processing', category: 'ML', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '6', name: 'Recommendation System', category: 'ML', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { 
+    id: '4', 
+    name: 'Image Recognition', 
+    category: 'ML', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Deep learning model for multi-class image classification using convolutional neural networks.',
+    readme: `# Image Recognition System
+
+## Overview
+A state-of-the-art image recognition system built using deep convolutional neural networks.
+
+## Model Architecture
+- ResNet-50 backbone
+- Transfer learning from ImageNet
+- Custom classification head
+- Data augmentation pipeline
+
+## Performance
+- Accuracy: 94.5% on test set
+- Inference time: 25ms per image
+- Supports 100+ categories
+
+## Dataset
+Trained on a custom dataset of 50,000 images across various categories including animals, vehicles, and everyday objects.`,
+    languages: ['Python', 'TensorFlow', 'Keras', 'NumPy'],
+    githubUrl: 'https://github.com/example/image-recognition'
+  },
+  { 
+    id: '5', 
+    name: 'Natural Language Processing', 
+    category: 'ML', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'NLP pipeline for sentiment analysis and text classification using transformer models.',
+    readme: `# NLP Sentiment Analysis
+
+## Description
+An advanced NLP system for sentiment analysis using transformer-based models.
+
+## Features
+- Sentiment classification (positive/negative/neutral)
+- Named entity recognition
+- Topic modeling
+- Multi-language support
+
+## Model
+- BERT-based architecture
+- Fine-tuned on 100k customer reviews
+- Achieves 92% accuracy on test data
+
+## Use Cases
+- Customer feedback analysis
+- Social media monitoring
+- Product review analysis`,
+    languages: ['Python', 'PyTorch', 'Transformers', 'NLTK'],
+    githubUrl: 'https://github.com/example/nlp-sentiment'
+  },
+  { 
+    id: '6', 
+    name: 'Recommendation System', 
+    category: 'ML', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Collaborative filtering recommendation engine for personalized content suggestions.',
+    readme: `# Recommendation Engine
+
+## Overview
+A hybrid recommendation system combining collaborative filtering and content-based approaches.
+
+## Algorithms
+- Matrix factorization
+- Neural collaborative filtering
+- Content-based filtering
+- Hybrid ensemble approach
+
+## Performance Metrics
+- Precision@10: 0.78
+- Recall@10: 0.65
+- NDCG@10: 0.82
+
+## Implementation
+Built using TensorFlow and Scikit-learn, deployed on AWS with real-time inference capabilities.`,
+    languages: ['Python', 'TensorFlow', 'Scikit-learn', 'Pandas'],
+    githubUrl: 'https://github.com/example/recommendation-system'
+  },
   
   // FullStack Projects
-  { id: '7', name: 'E-commerce Platform', category: 'FullStack', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '8', name: 'Real-time Chat App', category: 'FullStack', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '9', name: 'Task Management System', category: 'FullStack', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '10', name: 'Social Media App', category: 'FullStack', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { 
+    id: '7', 
+    name: 'E-commerce Platform', 
+    category: 'FullStack', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Full-stack e-commerce platform with payment integration and inventory management.',
+    readme: `# E-commerce Platform
+
+## Features
+- Product catalog with search and filters
+- Shopping cart and checkout
+- Payment gateway integration (Stripe)
+- Order tracking system
+- Admin dashboard for inventory management
+- User authentication and authorization
+
+## Tech Stack
+- Frontend: Next.js, React, Tailwind CSS
+- Backend: Node.js, Express
+- Database: PostgreSQL
+- Payment: Stripe API
+- Hosting: Vercel + AWS
+
+## Architecture
+Microservices architecture with separate services for user management, product catalog, orders, and payments.`,
+    languages: ['TypeScript', 'Next.js', 'Node.js', 'PostgreSQL', 'Redis'],
+    githubUrl: 'https://github.com/example/ecommerce-platform'
+  },
+  { 
+    id: '8', 
+    name: 'Real-time Chat App', 
+    category: 'FullStack', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Real-time messaging application with WebSocket support and group chat functionality.',
+    readme: `# Real-time Chat Application
+
+## Features
+- One-on-one messaging
+- Group chat rooms
+- File sharing
+- Typing indicators
+- Read receipts
+- Message history
+- User presence status
+
+## Technology
+- WebSocket (Socket.io) for real-time communication
+- React frontend
+- Node.js backend
+- MongoDB for message storage
+- Redis for session management
+
+## Scalability
+Designed to handle 10,000+ concurrent connections using horizontal scaling and load balancing.`,
+    languages: ['JavaScript', 'React', 'Node.js', 'Socket.io', 'MongoDB'],
+    githubUrl: 'https://github.com/example/chat-app'
+  },
+  { 
+    id: '9', 
+    name: 'Task Management System', 
+    category: 'FullStack', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Collaborative task management platform with Kanban boards and team collaboration features.',
+    readme: `# Task Management System
+
+## Description
+A comprehensive task management platform inspired by Jira and Trello.
+
+## Key Features
+- Kanban board visualization
+- Sprint planning
+- Task assignment and tracking
+- Time tracking
+- Team collaboration
+- Customizable workflows
+- Analytics and reporting
+
+## Technical Details
+- Built with React and TypeScript
+- RESTful API with Node.js
+- PostgreSQL database
+- Real-time updates with WebSockets
+- Role-based access control`,
+    languages: ['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'GraphQL'],
+    githubUrl: 'https://github.com/example/task-manager'
+  },
+  { 
+    id: '10', 
+    name: 'Social Media App', 
+    category: 'FullStack', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Social networking platform with feed, stories, and real-time notifications.',
+    readme: `# Social Media Platform
+
+## Overview
+A modern social media platform with features similar to Instagram and Twitter.
+
+## Features
+- User profiles and authentication
+- Post creation (text, images, videos)
+- News feed with algorithmic sorting
+- Stories (24-hour ephemeral content)
+- Like, comment, and share functionality
+- Real-time notifications
+- Direct messaging
+- Hashtags and mentions
+
+## Infrastructure
+- Frontend: Next.js with TypeScript
+- Backend: Node.js with Express
+- Database: MongoDB for posts, PostgreSQL for users
+- File storage: AWS S3
+- CDN: CloudFront
+- Search: Elasticsearch`,
+    languages: ['TypeScript', 'Next.js', 'Node.js', 'MongoDB', 'AWS'],
+    githubUrl: 'https://github.com/example/social-media'
+  },
   
   // Kernel Hacking Projects
-  { id: '11', name: 'Custom File System', category: 'Kernel Hacking', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '12', name: 'Device Driver Development', category: 'Kernel Hacking', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '13', name: 'Memory Management', category: 'Kernel Hacking', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { 
+    id: '11', 
+    name: 'Custom File System', 
+    category: 'Kernel Hacking', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Custom file system implementation for Linux kernel with journaling support.',
+    readme: `# Custom File System Module
+
+## Description
+A custom file system implementation for the Linux kernel, featuring journaling and advanced caching mechanisms.
+
+## Features
+- Block-based storage
+- Journaling for crash recovery
+- Extended attributes support
+- Directory indexing
+- B-tree based organization
+- Support for large files (>2TB)
+
+## Implementation
+Written in C for the Linux kernel. Implements VFS (Virtual File System) interface with custom inode and block management.
+
+## Performance
+- 30% faster sequential read performance
+- 15% improvement in random write operations
+- Reduced fragmentation through smart allocation`,
+    languages: ['C', 'Linux Kernel', 'Assembly'],
+    githubUrl: 'https://github.com/example/custom-fs'
+  },
+  { 
+    id: '12', 
+    name: 'Device Driver Development', 
+    category: 'Kernel Hacking', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Linux device drivers for custom hardware peripherals with DMA support.',
+    readme: `# Linux Device Driver
+
+## Overview
+A collection of Linux device drivers for custom hardware peripherals.
+
+## Drivers Included
+- Character device driver for sensor data
+- Block device driver for storage controller
+- Network device driver for custom NIC
+- USB device driver for proprietary hardware
+
+## Features
+- DMA (Direct Memory Access) support
+- Interrupt handling
+- Power management
+- Hotplug support
+- Sysfs integration
+
+## Development Environment
+- Linux kernel 5.15
+- Built and tested on x86_64 and ARM platforms
+- Follows Linux kernel coding standards`,
+    languages: ['C', 'Linux Kernel', 'Assembly', 'Bash'],
+    githubUrl: 'https://github.com/example/device-drivers'
+  },
+  { 
+    id: '13', 
+    name: 'Memory Management', 
+    category: 'Kernel Hacking', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Custom memory allocator with improved performance for specific workloads.',
+    readme: `# Custom Memory Allocator
+
+## Description
+A custom memory management system optimized for high-performance computing workloads.
+
+## Features
+- Slab allocator implementation
+- Memory pooling
+- NUMA-aware allocation
+- Transparent huge pages support
+- Memory defragmentation
+- Low-latency allocation for real-time systems
+
+## Performance Benefits
+- 40% reduction in allocation latency
+- Better cache utilization
+- Reduced memory fragmentation
+- Lower overhead compared to standard allocators
+
+## Use Cases
+Optimized for scientific computing, real-time systems, and high-frequency trading applications.`,
+    languages: ['C', 'Linux Kernel', 'Assembly'],
+    githubUrl: 'https://github.com/example/memory-manager'
+  },
   
   // DB Projects
-  { id: '14', name: 'Database Optimizer', category: 'DB', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '15', name: 'Query Engine', category: 'DB', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
-  { id: '16', name: 'Distributed Database', category: 'DB', thumbnail: '/projects.png', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { 
+    id: '14', 
+    name: 'Database Optimizer', 
+    category: 'DB', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Query optimizer for PostgreSQL with cost-based optimization and plan caching.',
+    readme: `# Database Query Optimizer
+
+## Overview
+An advanced query optimizer extension for PostgreSQL that improves query execution performance.
+
+## Features
+- Cost-based query optimization
+- Query plan caching
+- Index recommendation engine
+- Statistics collection and analysis
+- Parallel query execution
+- Adaptive query processing
+
+## Optimization Techniques
+- Join reordering
+- Predicate pushdown
+- Materialized view matching
+- Partition pruning
+- Index selection
+
+## Performance Impact
+- 50% reduction in query execution time on average
+- 70% improvement for complex joins
+- Automatic index suggestions reduce manual tuning`,
+    languages: ['C', 'SQL', 'PostgreSQL', 'Python'],
+    githubUrl: 'https://github.com/example/db-optimizer'
+  },
+  { 
+    id: '15', 
+    name: 'Query Engine', 
+    category: 'DB', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Custom SQL query engine with vectorized execution and columnar storage.',
+    readme: `# High-Performance Query Engine
+
+## Description
+A from-scratch implementation of a SQL query engine with modern optimization techniques.
+
+## Architecture
+- Columnar storage format
+- Vectorized execution engine
+- LLVM-based JIT compilation
+- Multi-threaded query execution
+- Memory-efficient operators
+
+## Features
+- Full SQL support (SELECT, JOIN, GROUP BY, etc.)
+- ACID transactions
+- Query caching
+- Adaptive execution
+- Cost-based optimization
+
+## Performance
+Benchmarked against PostgreSQL and MySQL, showing 3-5x improvement on analytical workloads.`,
+    languages: ['C++', 'SQL', 'LLVM', 'Python'],
+    githubUrl: 'https://github.com/example/query-engine'
+  },
+  { 
+    id: '16', 
+    name: 'Distributed Database', 
+    category: 'DB', 
+    thumbnail: '/projects.png', 
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+    description: 'Distributed database system with consensus protocol and automatic sharding.',
+    readme: `# Distributed Database System
+
+## Overview
+A distributed database system designed for high availability and horizontal scalability.
+
+## Key Features
+- Raft consensus protocol for replication
+- Automatic sharding and rebalancing
+- Multi-datacenter support
+- Strong consistency guarantees
+- Distributed transactions
+- Fault tolerance
+
+## Architecture
+- Master-slave replication
+- Hash-based sharding
+- Distributed query execution
+- Write-ahead logging
+- Snapshot isolation
+
+## Scalability
+- Tested with 100+ nodes
+- Handles 100,000+ TPS
+- Sub-millisecond latency for point queries
+- Linear scalability for most workloads`,
+    languages: ['Go', 'Protocol Buffers', 'gRPC', 'SQL'],
+    githubUrl: 'https://github.com/example/distributed-db'
+  },
 ];
 
 // View mode types
@@ -244,84 +717,6 @@ function VideoThumbnail({ project, onClick, onDoubleClick, size = 'small' }: {
   );
 }
 
-// Video carousel content for modal
-function VideoCarousel({ projects, initialIndex, selectedCategory }: {
-  projects: Project[];
-  initialIndex: number;
-  selectedCategory: string;
-}) {
-  // Filter projects by category
-  const filteredProjects = projects.filter(p => p.category === selectedCategory);
-  
-  // Ensure currentIndex is within bounds
-  const [currentIndex, setCurrentIndex] = useState(() => 
-    Math.min(initialIndex, Math.max(0, filteredProjects.length - 1))
-  );
-  
-  // Update currentIndex when category changes to ensure it's within bounds
-  useEffect(() => {
-    if (currentIndex >= filteredProjects.length) {
-      setCurrentIndex(Math.max(0, filteredProjects.length - 1));
-    }
-  }, [filteredProjects.length, currentIndex]);
-  
-  const currentProject = filteredProjects[currentIndex];
-  
-  // Guard against empty filtered projects
-  if (!currentProject) {
-    return <div className="w-full h-full flex items-center justify-center bg-black text-white">No projects in this category</div>;
-  }
-  
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : filteredProjects.length - 1));
-  };
-  
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev < filteredProjects.length - 1 ? prev + 1 : 0));
-  };
-  
-  return (
-    <div className="w-full h-full flex bg-black">
-      {/* Video carousel - no sidebar */}
-      <div className="flex-1 relative">
-        {/* Video */}
-        <iframe
-          key={currentProject.id}
-          src={currentProject.videoUrl}
-          className="w-full h-full"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
-        
-        {/* Previous Button - Left side */}
-        <button
-          onClick={handlePrevious}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
-          aria-label="Previous video"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        
-        {/* Next Button - Right side */}
-        <button
-          onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm flex items-center justify-center text-white transition-all z-10"
-          aria-label="Next video"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-        
-        {/* Project info overlay - Bottom center */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm px-4 py-2 rounded-full z-10">
-          <div className="text-xs font-mono text-white text-center">
-            {currentProject.name} • {currentIndex + 1} of {filteredProjects.length}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 // Sidebar with category navigation
 function Sidebar({ selectedCategory, onSelectCategory }: { 
   selectedCategory: string; 
@@ -461,8 +856,8 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
 
 // Main Projects component
 export function Projects() {
-  const [carouselOpen, setCarouselOpen] = useState(false);
-  const [carouselStartIndex, setCarouselStartIndex] = useState(0);
+  const [browserOpen, setBrowserOpen] = useState(false);
+  const [selectedProjectForBrowser, setSelectedProjectForBrowser] = useState<Project | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
   const [viewMode, setViewMode] = useState<ViewMode>('small');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -489,12 +884,9 @@ export function Projects() {
   };
   
   const handleThumbnailDoubleClick = (project: Project) => {
-    // Double click opens carousel modal
-    const categoryProjects = PROJECTS_DATA.filter(p => p.category === project.category);
-    const index = categoryProjects.findIndex(p => p.id === project.id);
-    setCarouselStartIndex(index);
-    setSelectedCategory(project.category);
-    setCarouselOpen(true);
+    // Double click opens browser modal with project details
+    setSelectedProjectForBrowser(project);
+    setBrowserOpen(true);
   };
   
   return (
@@ -524,19 +916,18 @@ export function Projects() {
         </div>
       </div>
       
-      {/* Video Carousel Modal */}
-      {carouselOpen && (
+      {/* Project Browser Modal */}
+      {browserOpen && selectedProjectForBrowser && (
         <Modal 
-          onClose={() => setCarouselOpen(false)}
+          onClose={() => {
+            setBrowserOpen(false);
+            setSelectedProjectForBrowser(null);
+          }}
           onMinimize={() => {}}
           onMaximize={() => {}}
           isMaximized={false}
         >
-          <VideoCarousel
-            projects={PROJECTS_DATA}
-            initialIndex={carouselStartIndex}
-            selectedCategory={selectedCategory}
-          />
+          <ProjectBrowser project={selectedProjectForBrowser as ProjectDetails} />
         </Modal>
       )}
     </>
