@@ -5,6 +5,7 @@ import { Modal } from "./Modal";
 import { Contacts } from './Contact';
 import { Projects } from './Projects';
 import { AboutMe } from './AboutMe';
+import { Work } from './Work';
 
 export default function Home() {
   const [modalContent, setModalContent] = useState<React.ReactNode | null>(null);
@@ -28,7 +29,7 @@ export default function Home() {
         setModalContent(<div className='rounded-sm w-full h-full'><AboutMe /></div>);
         break;
       case "work":
-        setModalContent(<div className='rounded-sm w-full h-full'>Work Content Here</div>);
+        setModalContent(<div className='rounded-sm w-full h-full'><Work /></div>);
         break;
       case "projects":
         setModalContent(<div className='rounded-sm w-full h-full'><Projects /></div>);
