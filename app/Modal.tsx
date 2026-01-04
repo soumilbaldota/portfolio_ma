@@ -73,7 +73,7 @@ function ModalHeader({
         <TrafficLight color="bg-green-500" onClick={onMaximize} icon="maximize" />
       </div>
       {title && (
-        <div className="flex-1 text-center text-sm font-medium text-zinc-700 dark:text-zinc-300 pr-16">
+        <div className="flex-1 text-center text-sm font-medium text-text-secondary pr-16">
           {title}
         </div>
       )}
@@ -337,7 +337,7 @@ export function Modal({
               {/* Visual indicator for resize handle */}
               <div className="absolute bottom-0.5 right-0.5 w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity">
                 <svg viewBox="0 0 12 12" fill="none" className="w-full h-full">
-                  <path d="M11 1L1 11M11 5L5 11M11 9L9 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-zinc-600 dark:text-zinc-400" />
+                  <path d="M11 1L1 11M11 5L5 11M11 9L9 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="text-text-muted" />
                 </svg>
               </div>
             </div>

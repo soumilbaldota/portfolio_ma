@@ -13,6 +13,12 @@
   --divider-color: #d4d4d8;
   --hover-overlay: rgba(0, 0, 0, 0.05);
   --traffic-light-bg: rgba(255, 255, 255, 0.3);
+  
+  /* Text colors for light mode */
+  --text-primary: #171717;
+  --text-secondary: #3f3f46;
+  --text-muted: #71717a;
+  --text-emphasis: #09090b;
 }
 
 @theme inline {
@@ -26,6 +32,10 @@
   --color-accent-tertiary: var(--accent-tertiary);
   --color-border: var(--border-color);
   --color-divider: var(--divider-color);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-text-emphasis: var(--text-emphasis);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -44,6 +54,12 @@
     --divider-color: #3f3f46;
     --hover-overlay: rgba(59, 130, 246, 0.5);
     --traffic-light-bg: rgba(255, 255, 255, 0.1);
+    
+    /* Text colors for dark mode */
+    --text-primary: #ededed;
+    --text-secondary: #d4d4d8;
+    --text-muted: #a1a1aa;
+    --text-emphasis: #fafafa;
   }
 }
 
