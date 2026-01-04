@@ -78,9 +78,16 @@ interface TimelineItemProps {
 
 function TimelineItem({ experience, isLast }: TimelineItemProps) {
   const [expandedRole, setExpandedRole] = useState<number | null>(null);
+  const [activeLogoIndex, setActiveLogoIndex] = useState<number>(0);
 
   const toggleRole = (index: number) => {
     setExpandedRole(expandedRole === index ? null : index);
+  };
+
+  const handleLogoClick = () => {
+    if (experience.logos.length > 1) {
+      setActiveLogoIndex((prev) => (prev + 1) % experience.logos.length);
+    }
   };
 
   return (
@@ -92,23 +99,42 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
       
       {/* Logo */}
       <div className="flex-shrink-0 z-10">
-        <div className="w-24 h-24 rounded-full bg-white p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-hidden">
-          <div className="flex items-center justify-center gap-1">
-            {experience.logos.map((logo, index) => (
-              <React.Fragment key={logo}>
-                {index > 0 && (
-                  <span className="text-blue-400 font-bold text-xs mx-1">+</span>
-                )}
+        <div 
+          className={`w-24 h-24 rounded-full bg-white p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-visible relative ${experience.logos.length > 1 ? 'cursor-pointer' : ''}`}
+          onClick={handleLogoClick}
+        >
+          {experience.logos.length === 1 ? (
+            <Image
+              src={experience.logos[0]}
+              alt={`${experience.company} logo`}
+              width={80}
+              height={80}
+              className="object-contain"
+            />
+          ) : (
+            <>
+              {/* Background logo (slightly peeking) */}
+              <div className="absolute inset-0 rounded-full bg-white p-2 flex items-center justify-center transform translate-x-2 translate-y-2 opacity-40 scale-90">
                 <Image
-                  src={logo}
-                  alt={`${experience.company} logo ${index + 1}`}
-                  width={experience.logos.length > 1 ? 32 : 80}
-                  height={experience.logos.length > 1 ? 32 : 80}
+                  src={experience.logos[(activeLogoIndex + 1) % experience.logos.length]}
+                  alt={`${experience.company} logo ${(activeLogoIndex + 1) % experience.logos.length + 1}`}
+                  width={80}
+                  height={80}
                   className="object-contain"
                 />
-              </React.Fragment>
-            ))}
-          </div>
+              </div>
+              {/* Foreground logo (active) */}
+              <div className="relative z-10 w-full h-full flex items-center justify-center">
+                <Image
+                  src={experience.logos[activeLogoIndex]}
+                  alt={`${experience.company} logo ${activeLogoIndex + 1}`}
+                  width={80}
+                  height={80}
+                  className="object-contain"
+                />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
