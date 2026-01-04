@@ -755,6 +755,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   selectedCategory: string; 
   onSelectCategory: (category: string) => void;
 }) {
+  const { accentColor, accentColorLight } = useAccentColor();
   const categories = [
     { name: 'All', icon: Grid3x3 },
     { name: 'Robotics', icon: Bot },

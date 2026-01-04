@@ -45,7 +45,7 @@ interface SidebarItemProps {
 }
 
 function SidebarItem({ title, isActive, onClick }: SidebarItemProps) {
-  const { accentColor, accentColorLight } = useAccentColor();
+  const { accentColorLight } = useAccentColor();
   return (
     <div
       className="px-3 py-1.5 rounded-md flex items-center cursor-pointer transition-colors"
@@ -162,7 +162,7 @@ function Sidebar({ selectedTab, onSelectTab, isCollapsed, onToggleCollapse }: Si
 export function AboutMe() {
   const [selectedTab, setSelectedTab] = useState<'tldr' | 'full'>('tldr');
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const { accentColor, accentColorLight, accentColorBorder } = useAccentColor();
+  const { accentColor } = useAccentColor();
   
   const content = selectedTab === 'tldr' ? SHORT_ABOUT_ME : FULL_ABOUT_ME;
   
