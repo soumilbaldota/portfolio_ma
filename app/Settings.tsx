@@ -33,7 +33,7 @@ function SettingsSidebar({ selectedCategory, onSelectCategory }: {
               style={{ color: accentColor }}
               className="mr-3"
             /> 
-            <span className={`text-[13px] font-sans ${isActive ? 'text-white' : 'text-text-primary'}`}>
+            <span className={`text-[13px] font-sans ${isActive ? 'text-text-emphasis' : 'text-text-primary'}`}>
               {name}
             </span>
           </div>

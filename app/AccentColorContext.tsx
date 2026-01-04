@@ -49,7 +49,12 @@ export function AccentColorProvider({ children }: { children: ReactNode }) {
       } else {
         // Check system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setThemeState(prefersDark ? 'dark' : 'light');
+        const initialTheme = prefersDark ? 'dark' : 'light';
+        setThemeState(initialTheme);
+        // Apply dark-mode class immediately if system prefers dark
+        if (prefersDark) {
+          document.documentElement.classList.add('dark-mode');
+        }
       }
       
       if (savedColor) {
