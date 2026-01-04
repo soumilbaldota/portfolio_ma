@@ -108,11 +108,11 @@ export function Modal({
   const [resizeStart, setResizeStart] = useState({ width: 0, height: 0, mouseX: 0, mouseY: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
   
-  // Size configurations (default pixel values)
+  // Size configurations (viewport percentage based)
   const sizeConfig = {
-    small: { width: 600, height: 320 },
-    medium: { width: 800, height: 400 },
-    large: { width: 1000, height: 500 },
+    small: { width: window.innerWidth * 0.5, height: window.innerHeight * 0.5 },
+    medium: { width: window.innerWidth * 0.7, height: window.innerHeight * 0.7 },
+    large: { width: window.innerWidth * 0.9, height: window.innerHeight * 0.9 },
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
