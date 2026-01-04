@@ -173,7 +173,7 @@ export function AboutMe() {
       
       {/* Main content area - Markdown rendering */}
       <div className="flex-1 overflow-auto bg-surface-primary/90 p-8">
-        <div className="max-w-3xl mx-auto prose prose-invert prose-zinc max-w-none">
+        <div className="max-w-3xl mx-auto">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
