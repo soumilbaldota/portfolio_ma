@@ -222,7 +222,7 @@ export function Modal({
   return createPortal(
     <div className='fixed inset-0 z-50 pointer-events-none' onClick={onClose}>
       <div 
-        className={!isMaximized && position === null ? 'flex justify-center items-center h-full pointer-events-none' : 'pointer-events-none'}
+        className={`pointer-events-none ${!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}`}
       >
 
         <div
