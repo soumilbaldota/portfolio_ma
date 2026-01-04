@@ -92,7 +92,7 @@ function TimelineItem({ experience, isLast }: TimelineItemProps) {
       
       {/* Logo */}
       <div className="flex-shrink-0 z-10">
-        <div className="w-24 h-24 rounded-full bg-white dark:bg-zinc-800 p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-hidden">
+        <div className="w-24 h-24 rounded-full bg-white p-2 shadow-lg ring-2 ring-blue-500/30 flex items-center justify-center overflow-hidden">
           <div className="flex items-center justify-center gap-1">
             {experience.logos.map((logo, index) => (
               <React.Fragment key={logo}>
