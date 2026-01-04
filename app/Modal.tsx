@@ -148,17 +148,21 @@ export function Modal({
     if (modalRef.current) {
       const rect = modalRef.current.getBoundingClientRect();
       
+      // Use current dimensions or rect for resize start
+      const currentWidth = dimensions?.width || rect.width;
+      const currentHeight = dimensions?.height || rect.height;
+      
       // Initialize dimensions if not set
       if (dimensions === null) {
         setDimensions({
-          width: rect.width,
-          height: rect.height,
+          width: currentWidth,
+          height: currentHeight,
         });
       }
       
       setResizeStart({
-        width: dimensions?.width || rect.width,
-        height: dimensions?.height || rect.height,
+        width: currentWidth,
+        height: currentHeight,
         mouseX: e.clientX,
         mouseY: e.clientY,
       });
@@ -272,7 +276,7 @@ export function Modal({
           style={
             isMaximized || (startMaximized && !isAnimating)
               ? {
-                willChange: isDragging ? 'transform' : 'auto',
+                willChange: (isDragging || isResizing) ? 'transform' : 'auto',
               }
               : !isMaximized && position !== null
               ? {
@@ -281,12 +285,12 @@ export function Modal({
                 top: `${position.y}px`,
                 width: `${actualWidth}px`,
                 height: `${actualHeight}px`,
-                willChange: isDragging ? 'transform' : 'auto',
+                willChange: (isDragging || isResizing) ? 'transform' : 'auto',
               }
               : {
                 width: isAnimating ? '160px' : `${actualWidth}px`,
                 height: isAnimating ? '120px' : `${actualHeight}px`,
-                willChange: isDragging ? 'transform' : 'auto',
+                willChange: (isDragging || isResizing) ? 'transform' : 'auto',
               }
           }
           onClick={(e) => e.stopPropagation()}
