@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, Search, X } from 'lucide-react';
 import { Modal } from './Modal';
 import { ProjectBrowser, type ProjectDetails } from './ProjectBrowser';
 
@@ -777,19 +777,19 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
             {projects.map((project) => (
               <div
                 key={project.id}
-                className={`cursor-pointer group p-2 rounded transition-colors ${
+                className={`cursor-pointer group p-3 rounded transition-colors ${
                   selectedProject?.id === project.id ? 'bg-blue-500/20 border border-blue-500' : 'hover:bg-zinc-700/30'
                 }`}
                 onClick={() => onThumbnailClick(project)}
                 onDoubleClick={() => onThumbnailDoubleClick(project)}
               >
-                <div className="flex items-center gap-3">
-                  <div className="relative w-24 h-16 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
+                <div className="flex items-start gap-4">
+                  <div className="relative w-28 h-20 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
                     <Image
                       src={project.thumbnail}
                       alt={project.name}
-                      width={96}
-                      height={72}
+                      width={112}
+                      height={80}
                       className="w-full h-full object-cover opacity-60"
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">
@@ -797,8 +797,23 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-mono text-zinc-300 truncate">{project.name}</div>
-                    <div className="text-xs font-mono text-zinc-500">{project.category}</div>
+                    <div className="text-sm font-mono font-semibold text-zinc-200 mb-1">{project.name}</div>
+                    <div className="text-xs font-mono text-zinc-400 mb-2 line-clamp-2">{project.description}</div>
+                    <div className="flex flex-wrap gap-1">
+                      {project.languages.slice(0, 3).map((lang) => (
+                        <span
+                          key={lang}
+                          className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-mono rounded border border-blue-500/30"
+                        >
+                          {lang}
+                        </span>
+                      ))}
+                      {project.languages.length > 3 && (
+                        <span className="px-2 py-0.5 bg-zinc-700/50 text-zinc-400 text-[10px] font-mono rounded">
+                          +{project.languages.length - 3}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -837,7 +852,10 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   // Grid view for small/medium/big icons
-  const iconSize = (viewMode === 'gallery' ? 'small' : viewMode) as 'small' | 'medium' | 'big';
+  let iconSize: 'small' | 'medium' | 'big' = 'small';
+  if (viewMode === 'small' || viewMode === 'medium' || viewMode === 'big') {
+    iconSize = viewMode;
+  }
   
   return (
     <div className="flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
@@ -925,7 +943,9 @@ export function Projects() {
           }}
           onMinimize={() => {}}
           onMaximize={() => {}}
-          isMaximized={false}
+          isMaximized={true}
+          size="large"
+          startMaximized={true}
         >
           <ProjectBrowser project={selectedProjectForBrowser as ProjectDetails} />
         </Modal>
