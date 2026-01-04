@@ -146,20 +146,15 @@ export function Modal({
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging && modalRef.current && !isMaximized) {
-        // Use requestAnimationFrame for smooth performance
-        requestAnimationFrame(() => {
-          if (modalRef.current && position !== null) {
-            // Calculate new position based on mouse position and drag offset
-            const newX = e.clientX - dragStart.x;
-            const newY = e.clientY - dragStart.y;
+      if (isDragging && modalRef.current && position !== null && !isMaximized) {
+        // Calculate new position based on mouse position and drag offset
+        const newX = e.clientX - dragStart.x;
+        const newY = e.clientY - dragStart.y;
 
-            // Use transform for smooth dragging without re-renders
-            const deltaX = newX - position.x;
-            const deltaY = newY - position.y;
-            modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-          }
-        });
+        // Use transform for smooth dragging without re-renders
+        const deltaX = newX - position.x;
+        const deltaY = newY - position.y;
+        modalRef.current.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
       }
     };
 
@@ -226,7 +221,9 @@ export function Modal({
 
   return createPortal(
     <div className='fixed inset-0 z-50 pointer-events-none' onClick={onClose}>
-      <div className={!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}>
+      <div 
+        className={!isMaximized && position === null ? 'flex justify-center items-center h-full pointer-events-none' : 'pointer-events-none'}
+      >
 
         <div
           ref={modalRef}
