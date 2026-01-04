@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, ChevronLeft, ChevronRight, Search, X } from 'lucide-react';
+import { Play, Bot, BrainCircuit, Globe, Bird, Cylinder, Search, X, Grid3x3 } from 'lucide-react';
 import { Modal } from './Modal';
 import { ProjectBrowser, type ProjectDetails } from './ProjectBrowser';
 
@@ -723,6 +723,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   onSelectCategory: (category: string) => void;
 }) {
   const categories = [
+    { name: 'All', icon: Grid3x3 },
     { name: 'Robotics', icon: Bot },
     { name: 'ML', icon: BrainCircuit },
     { name: 'FullStack', icon: Globe },
@@ -731,7 +732,7 @@ function Sidebar({ selectedCategory, onSelectCategory }: {
   ];
   
   return (
-    <div className=" bg-[#1e1e1e]/80 backdrop-blur-xl h-screen p-3 flex flex-col gap-0.5 border-r border-black/20">
+    <div className="bg-[#1e1e1e]/80 backdrop-blur-xl h-full p-3 flex flex-col gap-0.5 border-r border-black/20">
       <div className="px-2 pb-2 text-[11px] font-bold text-zinc-500 uppercase tracking-wider">Favorites</div>
       {categories.map(({ name, icon: Icon }) => {
         const isActive = selectedCategory === name;
@@ -770,26 +771,26 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
 }) {
   if (viewMode === 'gallery') {
     return (
-      <div className="flex h-full">
+      <div className="flex h-full overflow-hidden">
         {/* Left side - thumbnails list */}
         <div className="flex-1 overflow-auto p-4 bg-zinc-800/10">
           <div className="flex flex-col gap-4">
             {projects.map((project) => (
               <div
                 key={project.id}
-                className={`cursor-pointer group p-2 rounded transition-colors ${
+                className={`cursor-pointer group p-3 rounded transition-colors ${
                   selectedProject?.id === project.id ? 'bg-blue-500/20 border border-blue-500' : 'hover:bg-zinc-700/30'
                 }`}
                 onClick={() => onThumbnailClick(project)}
                 onDoubleClick={() => onThumbnailDoubleClick(project)}
               >
-                <div className="flex items-center gap-3">
-                  <div className="relative w-24 h-16 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
+                <div className="flex items-start gap-4">
+                  <div className="relative w-28 h-20 rounded overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0">
                     <Image
                       src={project.thumbnail}
                       alt={project.name}
-                      width={96}
-                      height={72}
+                      width={112}
+                      height={80}
                       className="w-full h-full object-cover opacity-60"
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30">
@@ -797,8 +798,23 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-mono text-zinc-300 truncate">{project.name}</div>
-                    <div className="text-xs font-mono text-zinc-500">{project.category}</div>
+                    <div className="text-sm font-mono font-semibold text-zinc-200 mb-1">{project.name}</div>
+                    <div className="text-xs font-mono text-zinc-400 mb-2 line-clamp-2">{project.description}</div>
+                    <div className="flex flex-wrap gap-1">
+                      {project.languages.slice(0, 3).map((lang) => (
+                        <span
+                          key={lang}
+                          className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-mono rounded border border-blue-500/30"
+                        >
+                          {lang}
+                        </span>
+                      ))}
+                      {project.languages.length > 3 && (
+                        <span className="px-2 py-0.5 bg-zinc-700/50 text-zinc-400 text-[10px] font-mono rounded">
+                          +{project.languages.length - 3}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -807,9 +823,9 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
         </div>
         
         {/* Right side - preview pane */}
-        <div className="w-1/2 border-l border-zinc-700 bg-zinc-900/50 flex items-center justify-center p-8">
+        <div className="w-1/2 border-l border-zinc-700 bg-zinc-900/50 flex flex-col items-center justify-start p-8 overflow-auto">
           {selectedProject ? (
-            <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="w-full flex flex-col items-center">
               <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden bg-zinc-800 border border-zinc-700">
                 <Image
                   src={selectedProject.thumbnail}
@@ -829,7 +845,7 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
               </div>
             </div>
           ) : (
-            <div className="text-zinc-500 font-mono text-sm">Select a project to preview</div>
+            <div className="text-zinc-500 font-mono text-sm flex-1 flex items-center justify-center">Select a project to preview</div>
           )}
         </div>
       </div>
@@ -837,10 +853,13 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
   }
   
   // Grid view for small/medium/big icons
-  const iconSize = (viewMode === 'gallery' ? 'small' : viewMode) as 'small' | 'medium' | 'big';
+  let iconSize: 'small' | 'medium' | 'big' = 'small';
+  if (viewMode === 'small' || viewMode === 'medium' || viewMode === 'big') {
+    iconSize = viewMode;
+  }
   
   return (
-    <div className="flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
+    <div className="h-full flex flex-wrap overflow-auto gap-4 p-4 items-start content-start bg-zinc-800/10">
       {projects.map((project) => (
         <VideoThumbnail
           key={project.id}
@@ -858,16 +877,22 @@ function FileArea({ projects, onThumbnailClick, onThumbnailDoubleClick, viewMode
 export function Projects() {
   const [browserOpen, setBrowserOpen] = useState(false);
   const [selectedProjectForBrowser, setSelectedProjectForBrowser] = useState<Project | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Robotics');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [viewMode, setViewMode] = useState<ViewMode>('small');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isBrowserMaximized, setIsBrowserMaximized] = useState(true);
+  const [isBrowserMinimized, setIsBrowserMinimized] = useState(false);
   
   // Filter projects by search query (across all categories) or by selected category
   const filteredProjects = PROJECTS_DATA.filter(p => {
     // If there's a search query, search across all categories
     if (searchQuery !== '') {
       return p.name.toLowerCase().includes(searchQuery.toLowerCase());
+    }
+    // If "All" is selected, show all projects
+    if (selectedCategory === 'All') {
+      return true;
     }
     // Otherwise, filter by selected category only
     return p.category === selectedCategory;
@@ -898,7 +923,7 @@ export function Projects() {
           <ViewButton currentView={viewMode} onViewChange={setViewMode} />
         </div>
                 
-        <div className="grid grid-cols-[1fr_5fr] flex-1 w-full overflow-hidden">
+        <div className="grid grid-cols-[1fr_5fr] flex-1 w-full h-full overflow-hidden">
           <Sidebar 
             selectedCategory={selectedCategory}
             onSelectCategory={(category) => {
@@ -917,15 +942,20 @@ export function Projects() {
       </div>
       
       {/* Project Browser Modal */}
-      {browserOpen && selectedProjectForBrowser && (
+      {browserOpen && selectedProjectForBrowser && !isBrowserMinimized && (
         <Modal 
           onClose={() => {
             setBrowserOpen(false);
             setSelectedProjectForBrowser(null);
+            setIsBrowserMaximized(true);
+            setIsBrowserMinimized(false);
           }}
-          onMinimize={() => {}}
-          onMaximize={() => {}}
-          isMaximized={false}
+          onMinimize={() => setIsBrowserMinimized(true)}
+          onMaximize={() => setIsBrowserMaximized(!isBrowserMaximized)}
+          isMaximized={isBrowserMaximized}
+          size="large"
+          startMaximized={true}
+          title={selectedProjectForBrowser.name}
         >
           <ProjectBrowser project={selectedProjectForBrowser as ProjectDetails} />
         </Modal>

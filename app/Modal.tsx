@@ -52,6 +52,8 @@ function ModalHeader({
   onMouseDown,
   isDragging,
   isMaximized,
+  size = "medium",
+  title,
 }: {
   onClose: () => void;
   onMinimize: (e: React.MouseEvent) => void;
@@ -59,10 +61,18 @@ function ModalHeader({
   onMouseDown: (e: React.MouseEvent) => void;
   isDragging: boolean;
   isMaximized: boolean;
+  size?: "small" | "medium" | "large";
+  title?: string;
 }) {
+  const sizeConfig = {
+    small: 'w-150',
+    medium: 'w-200',
+    large: 'w-250',
+  };
+  
   return (
     <div
-      className={`h-8 ${isMaximized ? 'w-full' : `w-200`} bg-surface-primary/95 rounded-t-sm flex items-center pl-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+      className={`h-8 ${isMaximized ? 'w-full' : sizeConfig[size]} bg-surface-primary/95 rounded-t-sm flex items-center pl-2 ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
     >
       <div className="group flex">
@@ -70,6 +80,11 @@ function ModalHeader({
         <TrafficLight color="bg-yellow-400" onClick={onMinimize} icon="minimize" />
         <TrafficLight color="bg-green-500" onClick={onMaximize} icon="maximize" />
       </div>
+      {title && (
+        <div className="flex-1 text-center text-sm font-medium text-zinc-700 dark:text-zinc-300 pr-16">
+          {title}
+        </div>
+      )}
     </div>
   );
 }
@@ -79,17 +94,31 @@ export function Modal({
   onMinimize,
   onMaximize,
   isMaximized,
+  size = "medium",
+  startMaximized = false,
+  title,
 }: {
   children: React.ReactNode;
   onClose: () => void;
   onMinimize: () => void;
   onMaximize: () => void;
   isMaximized: boolean;
+  size?: "small" | "medium" | "large";
+  startMaximized?: boolean;
+  title?: string;
 }) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [isAnimating, setIsAnimating] = useState(startMaximized);
   const modalRef = useRef<HTMLDivElement>(null);
+  
+  // Size configurations
+  const sizeConfig = {
+    small: { width: 'w-150', height: 'h-80' },
+    medium: { width: 'w-200', height: 'h-100' },
+    large: { width: 'w-250', height: 'h-125' },
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     // Prevent dragging when maximized
@@ -155,13 +184,17 @@ export function Modal({
       };
     }
   }, [isDragging, dragStart, position, isMaximized]);
-
-  // Reset position when maximizing
+  
+  // Handle expand animation for startMaximized
   useEffect(() => {
-    if (isMaximized) {
-      setPosition(null);
+    if (startMaximized) {
+      // Start animation after a short delay
+      const timer = setTimeout(() => {
+        setIsAnimating(false);
+      }, 300);
+      return () => clearTimeout(timer);
     }
-  }, [isMaximized]);
+  }, [startMaximized]);
 
   const handleMinimize = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -170,19 +203,32 @@ export function Modal({
 
   const handleMaximize = (e: React.MouseEvent) => {
     e.stopPropagation();
+    // Reset position when maximizing
+    if (!isMaximized) {
+      setPosition(null);
+    }
     onMaximize();
   };
 
-  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${isMaximized ? 'w-screen h-screen' : `w-200 h-100`
-    }`;
+  const { width, height } = sizeConfig[size];
+  const transitionClass = isDragging ? 'transition-none' : 'transition-all duration-300';
+  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${transitionClass} ${
+    isMaximized || (startMaximized && !isAnimating)
+      ? 'w-screen h-screen'
+      : isAnimating
+      ? 'w-40 h-30'
+      : `${width} ${height}`
+  }`;
 
   return createPortal(
-    <div className='fixed inset-0 z-50' onClick={onClose}>
-      <div className={!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}>
+    <div className='fixed inset-0 z-50 pointer-events-none' onClick={onClose}>
+      <div 
+        className={`pointer-events-none ${!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}`}
+      >
 
         <div
           ref={modalRef}
-          className={modalClassName}
+          className={`${modalClassName} pointer-events-auto`}
           style={
             !isMaximized && position !== null
               ? {
@@ -204,6 +250,8 @@ export function Modal({
             onMouseDown={handleMouseDown}
             isDragging={isDragging}
             isMaximized={isMaximized}
+            size={size}
+            title={title}
           />
           <div className="h-[calc(100%-2rem)]" style={{ pointerEvents: isDragging ? 'none' : 'auto' }}>
             {children}

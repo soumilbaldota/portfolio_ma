@@ -1,5 +1,7 @@
 "use client";
 import { Globe, Lock, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 // Extended Project type with more details
 export type ProjectDetails = {
@@ -75,9 +77,31 @@ function ProjectDetailsSidebar({ project }: { project: ProjectDetails }) {
         <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-3">README</h3>
         <div className="bg-zinc-800/50 rounded-lg p-4 border border-zinc-700">
           <div className="prose prose-invert prose-sm max-w-none">
-            <div className="text-sm text-zinc-300 whitespace-pre-wrap leading-relaxed">
+            <ReactMarkdown 
+              remarkPlugins={[remarkGfm]}
+              components={{
+                h1: ({...props}) => <h1 className="text-xl font-bold text-white mb-3 mt-4 first:mt-0" {...props} />,
+                h2: ({...props}) => <h2 className="text-lg font-bold text-white mb-2 mt-3" {...props} />,
+                h3: ({...props}) => <h3 className="text-base font-semibold text-zinc-200 mb-2 mt-2" {...props} />,
+                p: ({...props}) => <p className="text-sm text-zinc-300 mb-2 leading-relaxed" {...props} />,
+                ul: ({...props}) => <ul className="text-sm text-zinc-300 mb-2 ml-4 list-disc space-y-1" {...props} />,
+                ol: ({...props}) => <ol className="text-sm text-zinc-300 mb-2 ml-4 list-decimal space-y-1" {...props} />,
+                li: ({...props}) => <li className="text-sm text-zinc-300" {...props} />,
+                code: (props) => {
+                  const { inline, ...rest } = props as { inline?: boolean; [key: string]: unknown };
+                  return inline ? (
+                    <code className="bg-zinc-900 text-blue-400 px-1 py-0.5 rounded text-xs font-mono" {...rest} />
+                  ) : (
+                    <code className="block bg-zinc-900 text-zinc-300 p-2 rounded text-xs font-mono overflow-x-auto" {...rest} />
+                  );
+                },
+                pre: ({...props}) => <pre className="bg-zinc-900 rounded p-2 mb-2 overflow-x-auto" {...props} />,
+                a: ({...props}) => <a className="text-blue-400 hover:text-blue-300 underline" {...props} />,
+                blockquote: ({...props}) => <blockquote className="border-l-2 border-zinc-600 pl-3 italic text-zinc-400 my-2" {...props} />,
+              }}
+            >
               {project.readme}
-            </div>
+            </ReactMarkdown>
           </div>
         </div>
       </div>
