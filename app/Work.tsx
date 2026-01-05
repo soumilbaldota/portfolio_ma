@@ -192,7 +192,7 @@ export function LogoDeck({ logos }: { logos: string[] }) {
                   : "shadow-md ring-2"
                 }`}
               style={{
-                ringColor: isFirst ? accentColorBorder : `${accentColor}33`
+                color: isFirst ? accentColorBorder : `${accentColor}33`
               }}
             >
               <Image
