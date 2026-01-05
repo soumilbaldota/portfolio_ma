@@ -62,9 +62,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Apply system preference for dark mode when no explicit preference is stored */
+/* Apply system preference for dark mode only when no explicit dark-mode class is present */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.dark-mode):not(.light-mode) {
     --background: #0a0a0a;
     --foreground: #ededed;
     --surface-primary: #27272a;
