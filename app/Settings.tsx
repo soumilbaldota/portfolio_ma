@@ -67,14 +67,14 @@ function AppearanceSettings() {
             {/* Light Mode Button */}
             <button
               onClick={() => setTheme('light')}
-              className="flex-1 flex flex-col items-center gap-3 p-4 rounded-lg border transition-all"
+              className="flex-1 flex flex-col items-center gap-2 p-3 rounded-lg border transition-all"
               style={{
                 borderColor: theme === 'light' ? accentColor : 'var(--border-color)',
                 backgroundColor: theme === 'light' ? accentColorLight : 'var(--surface-primary)',
               }}
             >
               <Sun 
-                size={32} 
+                size={24} 
                 style={{ color: theme === 'light' ? accentColor : 'var(--text-muted)' }}
               />
               <span className="text-sm font-medium text-text-primary">Light</span>
@@ -83,14 +83,14 @@ function AppearanceSettings() {
             {/* Dark Mode Button */}
             <button
               onClick={() => setTheme('dark')}
-              className="flex-1 flex flex-col items-center gap-3 p-4 rounded-lg border transition-all"
+              className="flex-1 flex flex-col items-center gap-2 p-3 rounded-lg border transition-all"
               style={{
                 borderColor: theme === 'dark' ? accentColor : 'var(--border-color)',
                 backgroundColor: theme === 'dark' ? accentColorLight : 'var(--surface-primary)',
               }}
             >
               <Moon 
-                size={32} 
+                size={24} 
                 style={{ color: theme === 'dark' ? accentColor : 'var(--text-muted)' }}
               />
               <span className="text-sm font-medium text-text-primary">Dark</span>
@@ -108,14 +108,14 @@ function AppearanceSettings() {
               <button
                 key={option.name}
                 onClick={() => setAccentColorName(option.name)}
-                className="flex items-center justify-center p-3 rounded-lg border transition-all hover:bg-surface-tertiary"
+                className="flex items-center justify-center p-2 rounded-lg border transition-all hover:bg-surface-tertiary"
                 style={{
                   borderColor: accentColorName === option.name ? accentColor : 'var(--border-color)',
                 }}
                 aria-label={option.label}
               >
                 <div
-                  className="w-12 h-12 rounded-full"
+                  className="w-8 h-8 rounded-full"
                   style={{ backgroundColor: option.color }}
                 />
               </button>

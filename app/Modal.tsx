@@ -273,20 +273,16 @@ export function Modal({
 
   const { width: defaultWidth, height: defaultHeight } = sizeConfig[size];
   const transitionClass = (isDragging || isResizing) ? 'transition-none' : 'transition-all duration-300';
-  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${transitionClass} ${
-    isMaximized || (startMaximized && !isAnimating)
-      ? 'w-screen h-screen'
-      : ''
-  }`;
+  const modalClassName = `m-0 p-0 rounded-sm backdrop-blur-2xl bg-surface-primary/30 ${transitionClass}`;
   
   // Calculate actual dimensions
   const actualWidth = dimensions?.width || defaultWidth;
   const actualHeight = dimensions?.height || defaultHeight;
 
   return createPortal(
-    <div className='fixed inset-0 z-50 pointer-events-none' onClick={onClose}>
+    <div className='fixed inset-0 z-50 pointer-events-auto' onClick={onClose}>
       <div 
-        className={`pointer-events-none ${!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''}`}
+        className={`pointer-events-none ${!isMaximized && position === null ? 'flex justify-center items-center h-full' : ''} ${isMaximized ? 'flex justify-center items-center h-full' : ''}`}
       >
 
         <div
@@ -295,6 +291,8 @@ export function Modal({
           style={
             isMaximized || (startMaximized && !isAnimating)
               ? {
+                width: '90vw',
+                height: '90vh',
                 willChange: (isDragging || isResizing) ? 'transform' : 'auto',
               }
               : !isMaximized && position !== null

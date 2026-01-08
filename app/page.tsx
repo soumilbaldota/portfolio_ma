@@ -98,12 +98,32 @@ export default function Home() {
       </button>
 
       <div className="min-w-250 rounded-xl flex flex-wrap items-center justify-center gap-4 overflow-auto backdrop-blur-lg bg-surface-primary/80 p-4">
-        <FolderIconWithImage
-          name="About Me"
-          image="/soumil.png"
+        <div 
+          className="rounded-2xl cursor-pointer transition-colors bg-transparent hover:bg-surface-secondary/80"
           onClick={() => openPortal("about")}
-          showMinimizedIndicator={activeModal === "about" && isMinimized}
-        />
+        >
+          <div className="relative m-5 mt-8 px-3.5">
+            <div className="flex flex-col items-center">
+              <div className="w-22 h-22 rounded-2xl overflow-hidden mb-2 shadow-lg flex items-center justify-center">
+                <Image
+                  src="/soumil.png"
+                  alt="About Me"
+                  width={88}
+                  height={88}
+                  className="object-contain"
+                />
+              </div>
+              <div className="text-xl font-mono text-center">About Me</div>
+              {activeModal === "about" && isMinimized && (
+                <div 
+                  className="w-2 h-2 rounded-full bg-yellow-500 mt-1" 
+                  role="status"
+                  aria-label="Window is minimized"
+                />
+              )}
+            </div>
+          </div>
+        </div>
         <WorkBubbles
           onClick={() => openPortal("work")}
           showMinimizedIndicator={activeModal === "work" && isMinimized}
@@ -114,12 +134,32 @@ export default function Home() {
           onClick={() => openPortal("projects")}
           showMinimizedIndicator={activeModal === "projects" && isMinimized}
         />
-        <FolderIconWithImage
-          name="Contact Me"
-          image="/contact.png"
+        <div 
+          className="rounded-2xl cursor-pointer transition-colors bg-transparent hover:bg-surface-secondary/80"
           onClick={() => openPortal("contact")}
-          showMinimizedIndicator={activeModal === "contact" && isMinimized}
-        />
+        >
+          <div className="relative m-5 mt-8 px-3.5">
+            <div className="flex flex-col items-center">
+              <div className="w-22 h-22 rounded-2xl overflow-hidden mb-2 shadow-lg flex items-center justify-center">
+                <Image
+                  src="/contact.png"
+                  alt="Contact Me"
+                  width={88}
+                  height={88}
+                  className="object-contain"
+                />
+              </div>
+              <div className="text-xl font-mono text-center">Contact Me</div>
+              {activeModal === "contact" && isMinimized && (
+                <div 
+                  className="w-2 h-2 rounded-full bg-yellow-500 mt-1" 
+                  role="status"
+                  aria-label="Window is minimized"
+                />
+              )}
+            </div>
+          </div>
+        </div>
         <div 
           className="rounded-2xl cursor-pointer transition-colors bg-transparent hover:bg-surface-secondary/80"
           onClick={() => openPortal("flappybird")}
