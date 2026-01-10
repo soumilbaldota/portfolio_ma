@@ -7,17 +7,17 @@ export function FlappyBirdGame() {
   const [bestScore, setBestScore] = useState(0);
   const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'gameOver'
   const gameStateRef = useRef('start');
-  const birdRef = useRef(null);
-  const pipesRef = useRef([]);
-  const frameCountRef = useRef(0);
-  const animationRef = useRef(null);
+  const birdRef: any = useRef(null);
+  const pipesRef: any = useRef([]);
+  const frameCountRef: any = useRef(0);
+  const animationRef: any = useRef(null);
   const [canvasDimensions, setCanvasDimensions] = useState({ width: 600, height: 300 });
 
   // Update canvas dimensions based on container size
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
-        const container = containerRef.current;
+        const container: any = containerRef.current;
         const width = container.clientWidth;
         const height = container.clientHeight;
         setCanvasDimensions({ width, height });
@@ -33,7 +33,7 @@ export function FlappyBirdGame() {
   const canvasHeight = canvasDimensions.height;
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas: any = canvasRef.current!;
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
@@ -52,7 +52,7 @@ export function FlappyBirdGame() {
     const pipeSpeed = 2;
 
     function drawBird() {
-      const bird = birdRef.current;
+      const bird: any = birdRef.current!;
       ctx.fillStyle = '#FFD700';
       ctx.beginPath();
       ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
@@ -72,7 +72,7 @@ export function FlappyBirdGame() {
       ctx.fill();
     }
 
-    function drawPipe(pipe) {
+    function drawPipe(pipe: any) {
       ctx.fillStyle = '#4CAF50';
       ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
       ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height - pipe.top - pipeGap);
@@ -135,7 +135,7 @@ export function FlappyBirdGame() {
       }
     }
 
-    function checkCollision(pipe) {
+    function checkCollision(pipe: any) {
       const bird = birdRef.current;
       if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
         if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.top + pipeGap) {
@@ -199,7 +199,7 @@ export function FlappyBirdGame() {
     if (gameState === 'start') {
       setGameState('playing');
       gameStateRef.current = 'playing';
-      const canvas = canvasRef.current;
+      const canvas:any = canvasRef.current;
       const ctx = canvas.getContext('2d');
 
       const pipeWidth = 60;
@@ -227,7 +227,7 @@ export function FlappyBirdGame() {
         ctx.fill();
       }
 
-      function drawPipe(pipe) {
+      function drawPipe(pipe: any) {
         ctx.fillStyle = '#4CAF50';
         ctx.fillRect(pipe.x, 0, pipeWidth, pipe.top);
         ctx.fillRect(pipe.x, pipe.top + pipeGap, pipeWidth, canvas.height - pipe.top - pipeGap);
@@ -290,7 +290,7 @@ export function FlappyBirdGame() {
         }
       }
 
-      function checkCollision(pipe) {
+      function checkCollision(pipe: any) {
         const bird = birdRef.current;
         if (bird.x + bird.radius > pipe.x && bird.x - bird.radius < pipe.x + pipeWidth) {
           if (bird.y - bird.radius < pipe.top || bird.y + bird.radius > pipe.top + pipeGap) {
@@ -365,7 +365,7 @@ export function FlappyBirdGame() {
   };
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: any) => {
       if (e.code === 'Space') {
         e.preventDefault();
         if (gameState === 'gameOver') {

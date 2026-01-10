@@ -56,18 +56,18 @@ export function DinoGame() {
 
     function drawDino() {
       const dino = dinoRef.current;
-      ctx.fillStyle = '#535353';
-      ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+      ctx!.fillStyle = '#535353';
+      ctx!.fillRect(dino.x, dino.y, dino.width, dino.height);
       
       // Eye
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(dino.x + 30, dino.y + 5, 5, 5);
+      ctx!.fillStyle = '#fff';
+      ctx!.fillRect(dino.x + 30, dino.y + 5, 5, 5);
     }
 
     function drawObstacle(obstacle: any) {
-      ctx.fillStyle = '#535353';
+      ctx!.fillStyle = '#535353';
       if (obstacle.type === 'cactus') {
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx!.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
       }
     }
 
@@ -127,16 +127,16 @@ export function DinoGame() {
     }
 
     function drawBackground() {
-      ctx.fillStyle = '#f7f7f7';
-      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+      ctx!.fillStyle = '#f7f7f7';
+      ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
 
       // Ground
-      ctx.strokeStyle = '#535353';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(0, groundY);
-      ctx.lineTo(canvasWidth, groundY);
-      ctx.stroke();
+      ctx!.strokeStyle = '#535353';
+      ctx!.lineWidth = 2;
+      ctx!.beginPath();
+      ctx!.moveTo(0, groundY);
+      ctx!.lineTo(canvasWidth, groundY);
+      ctx!.stroke();
     }
 
     function gameLoop() {
@@ -196,17 +196,17 @@ export function DinoGame() {
 
       function drawDino() {
         const dino = dinoRef.current;
-        ctx.fillStyle = '#535353';
-        ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+        ctx!.fillStyle = '#535353';
+        ctx!.fillRect(dino.x, dino.y, dino.width, dino.height);
         
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(dino.x + 30, dino.y + 5, 5, 5);
+        ctx!.fillStyle = '#fff';
+        ctx!.fillRect(dino.x + 30, dino.y + 5, 5, 5);
       }
 
       function drawObstacle(obstacle: any) {
-        ctx.fillStyle = '#535353';
+        ctx!.fillStyle = '#535353';
         if (obstacle.type === 'cactus') {
-          ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+          ctx!.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
         }
       }
 
@@ -266,15 +266,15 @@ export function DinoGame() {
       }
 
       function drawBackground() {
-        ctx.fillStyle = '#f7f7f7';
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        ctx!.fillStyle = '#f7f7f7';
+        ctx!.fillRect(0, 0, canvasWidth, canvasHeight);
 
-        ctx.strokeStyle = '#535353';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(0, groundY);
-        ctx.lineTo(canvasWidth, groundY);
-        ctx.stroke();
+        ctx!.strokeStyle = '#535353';
+        ctx!.lineWidth = 2;
+        ctx!.beginPath();
+        ctx!.moveTo(0, groundY);
+        ctx!.lineTo(canvasWidth, groundY);
+        ctx!.stroke();
       }
 
       function endGame() {
