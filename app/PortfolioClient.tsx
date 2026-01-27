@@ -175,6 +175,7 @@ export function PortfolioClient() {
                   width={64}
                   height={64}
                   className="object-contain"
+                  loading="lazy"
                 />
               </div>
               <div className="text-xl font-mono text-center">Flappy Bird</div>
@@ -201,6 +202,7 @@ export function PortfolioClient() {
                   width={64}
                   height={64}
                   className="object-contain"
+                  loading="lazy"
                 />
               </div>
               <div className="text-xl font-mono text-center">Dino Game</div>
