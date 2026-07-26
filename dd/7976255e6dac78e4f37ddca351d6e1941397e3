@@ -1,0 +1,151 @@
+app/story/sections/Closing.tsx
+  s_5b0293f27e39ef::t_35f814665c4263 1-56
+package-lock.json
+  s_5b0293f27e39ef::t_4181407c9fd6df 11,20,284-289,1035-1310
+package.json
+  s_5b0293f27e39ef::t_ac273309df6728 12,21
+public/logos/cloudflare.svg
+  s_5b0293f27e39ef::t_18314f6ed45df7 1
+public/logos/samsung.svg
+  s_5b0293f27e39ef::t_3f6a7f6d14f4c4 1-99
+public/logos/srm.svg
+  s_5b0293f27e39ef::t_830d0e9aae9178 1
+public/logos/tech/apachespark.svg
+  s_5b0293f27e39ef::t_2d9075654da3b5 1
+public/logos/tech/argo.svg
+  s_5b0293f27e39ef::t_a0ce2f0f3b3a2c 1
+public/logos/tech/arm.svg
+  s_5b0293f27e39ef::t_e0f991b2d18e06 1
+public/logos/tech/azure.svg
+  s_5b0293f27e39ef::t_3c4286a7dc30fe 1
+public/logos/tech/bazel.svg
+  s_5b0293f27e39ef::t_2a6bf086aa63c9 1
+public/logos/tech/c.svg
+  s_5b0293f27e39ef::t_220ba71c94cfd7 1
+public/logos/tech/cplusplus.svg
+  s_5b0293f27e39ef::t_0c464813b2c88b 1-6
+public/logos/tech/datadog.svg
+  s_5b0293f27e39ef::t_5cb4f98c1f5678 1
+public/logos/tech/docker.svg
+  s_5b0293f27e39ef::t_c2cbb3917e52c6 1
+public/logos/tech/ebpf.svg
+  s_5b0293f27e39ef::t_1af56833bd5186 1
+public/logos/tech/fastapi.svg
+  s_5b0293f27e39ef::t_d76e5be82f3752 1
+public/logos/tech/gitlab.svg
+  s_5b0293f27e39ef::t_0d6c93fe5210c2 1
+public/logos/tech/gnubash.svg
+  s_5b0293f27e39ef::t_7b9e5a7a3ffda3 1
+public/logos/tech/grafana.svg
+  s_5b0293f27e39ef::t_cb2683500edc94 1
+public/logos/tech/helm.svg
+  s_5b0293f27e39ef::t_58469e4fca23b3 1
+public/logos/tech/huggingface.svg
+  s_5b0293f27e39ef::t_22b95d6d1e29ff 1
+public/logos/tech/julia.svg
+  s_5b0293f27e39ef::t_cc886de475d5f7 1
+public/logos/tech/kata.svg
+  s_5b0293f27e39ef::t_9cf4d36cebb45f 1-13
+public/logos/tech/kubernetes.svg
+  s_5b0293f27e39ef::t_ae1e3cddfa62db 1
+public/logos/tech/linux.svg
+  s_5b0293f27e39ef::t_53ee7a7bac4e89 1
+public/logos/tech/nestjs.svg
+  s_5b0293f27e39ef::t_279850ea6d9d20 1
+public/logos/tech/nodedotjs.svg
+  s_5b0293f27e39ef::t_a5b6955a2b524d 1
+public/logos/tech/nvidia.svg
+  s_5b0293f27e39ef::t_05ef8dccc9fc0d 1
+public/logos/tech/postgresql.svg
+  s_5b0293f27e39ef::t_e45dfc05b66a38 1
+public/logos/tech/prometheus.svg
+  s_5b0293f27e39ef::t_eb41b8cded4a10 1
+public/logos/tech/python.svg
+  s_5b0293f27e39ef::t_249d8db1189da5 1
+public/logos/tech/pytorch.svg
+  s_5b0293f27e39ef::t_c21c4b0468e468 1
+public/logos/tech/qemu.svg
+  s_5b0293f27e39ef::t_fa6c2335f54fbc 1
+public/logos/tech/redis.svg
+  s_5b0293f27e39ef::t_6984b7bb2c47cf 1
+public/logos/tech/rust.svg
+  s_5b0293f27e39ef::t_793f12370b80e0 1
+public/logos/tech/salt.svg
+  s_5b0293f27e39ef::t_44250405d93e2b 1
+public/logos/tech/terraform.svg
+  s_5b0293f27e39ef::t_b615625c498f67 1
+scripts/cernstrip.ts
+  s_5b0293f27e39ef::t_8202e102660a24 1-9
+scripts/filmstrip.ts
+  s_5b0293f27e39ef::t_a7e67273f26f45 1-22
+scripts/showcase.ts
+  s_5b0293f27e39ef::t_3486082eb5fc95 1-36
+app/content/library.ts
+  s_5b0293f27e39ef::t_46b9e2b367e3bd 1-492
+app/globals.css
+  s_5b0293f27e39ef::t_5f875421b3aa27 3-7,9-53,58-172,174-205,208-389,391-627
+app/layout.tsx
+  s_5b0293f27e39ef::t_667effd82d1dd8 2,4-18,21-29,34,36-44
+app/page.tsx
+  s_5b0293f27e39ef::t_e2cbc6926dc7e7 1,4
+app/pixel-preview/page.tsx
+  s_5b0293f27e39ef::t_a91a390438dfca 1-58
+app/pixel/PixelSprite.tsx
+  s_5b0293f27e39ef::t_5a472e0a6f281c 1-116
+app/pixel/paint.ts
+  s_5b0293f27e39ef::t_b808d5fca89fb4 1-47
+app/pixel/sprites/index.ts
+  s_5b0293f27e39ef::t_c4ac6ce90e6d73 1-490
+app/pixel/types.ts
+  s_5b0293f27e39ef::t_5eaeeb9a5a0990 1-19
+app/pixel/util.ts
+  s_5b0293f27e39ef::t_1e0eccfe21b67c 1-37
+app/story/Story.tsx
+  s_5b0293f27e39ef::t_fd74bac7583a86 1-110
+app/story/ThemeToggle.tsx
+  s_5b0293f27e39ef::t_0045fecf63d619 1-31
+app/story/lib.tsx
+  s_5b0293f27e39ef::t_6ea694d38c0560 1-339
+app/story/sections/Academics.tsx
+  s_5b0293f27e39ef::t_20af7bc5b34358 1-156
+app/story/sections/Cern.tsx
+  s_5b0293f27e39ef::t_b183b2103b0b6f 1-151
+app/story/sections/Cloudflare.tsx
+  s_5b0293f27e39ef::t_dccd75101deb1d 1-175
+app/story/sections/Hero.tsx
+  s_5b0293f27e39ef::t_0a2b6f7620b9a9 1-101
+app/story/sections/Maximl.tsx
+  s_5b0293f27e39ef::t_8d16b37dfff006 1-164
+app/story/sections/Rover.tsx
+  s_5b0293f27e39ef::t_bd069026dea579 1-165
+app/story/sections/Samsung.tsx
+  s_5b0293f27e39ef::t_d492bac39427dc 1-162
+app/story/sections/Superfork.tsx
+  s_5b0293f27e39ef::t_6ae966f24a5f7f 1-165
+app/story/sections/Undergrad.tsx
+  s_5b0293f27e39ef::t_85183e38378126 1-120
+app/story/tech.tsx
+  s_5b0293f27e39ef::t_f8d3f50731f83f 1-98
+scripts/render-sprites.ts
+  s_5b0293f27e39ef::t_2dbb4f541b8a25 1-96
+scripts/shoot.mjs
+  s_5b0293f27e39ef::t_889fd43a2bfe0c 1-95
+tsconfig.json
+  s_5b0293f27e39ef::t_af309107c17da1 33
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "dd7976255e6dac78e4f37ddca351d6e1941397e3",
+  "prompts": {},
+  "sessions": {
+    "s_5b0293f27e39ef": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7c3d6f68-b7c8-4473-8bfc-10a347fbee7b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "soumilbaldota <soumil@cloudflare.com>"
+    }
+  }
+}
