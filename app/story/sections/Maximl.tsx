@@ -141,7 +141,7 @@ export function Maximl() {
           Keeping the plant <span className="accented">running.</span>
         </>
       }
-      lede="Backend and infrastructure for industrial-plant SaaS: a BullMQ job-processing library adopted across 90% of services, Postgres row-level multi-tenancy, and latency work that took p99 from 450ms to 150ms."
+      lede="Backend and infrastructure for an industrial-plant SaaS — a BullMQ job-processing library running 1M+ jobs a week at 99.9% success, plus multi-tenancy and the latency work underneath it."
       visual={<AnimatedCanvas draw={draw} />}
     >
       <div className="metric-row" style={{ marginTop: "1.4rem" }}>

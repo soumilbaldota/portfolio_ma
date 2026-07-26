@@ -411,9 +411,9 @@ export const chapterExtras: Record<string, ChapterExtra> = {
     mono: "R",
     monoColor: "#e0653b",
     highlights: [
-      "Led SLAM for autonomous navigation on rough terrain",
+      "Autonomous navigation + localization on rough terrain",
       "Real-time perception under sensor noise + tight compute",
-      "Where hard-real-world systems work got its hooks in me",
+      "Built for reliability where flaky code isn't an option",
     ],
   },
   cern: {
@@ -427,17 +427,15 @@ export const chapterExtras: Record<string, ChapterExtra> = {
   samsung: {
     logo: "/logos/samsung.svg",
     highlights: [
-      "Document classifier: LSTM / RNN / BERT / RoBERTa in PyTorch",
-      "95% accuracy on a 120k+ sample dataset",
-      "Real-time, on-device mobile inference",
+      "LSTM / RNN / BERT / RoBERTa classifier in PyTorch",
+      "Trained on scraped + BERT-augmented text across domains",
     ],
   },
   maximl: {
     logo: "/logos/maximl.png",
     highlights: [
-      "BullMQ job library across 90% of services, 1M+ jobs/wk at 99.9%",
-      "Postgres row-level multi-tenancy; zero cross-tenant leaks",
-      "Query + index tuning: p99 450ms → 150ms, 3× faster",
+      "Postgres row-level multi-tenancy — zero cross-tenant data leaks",
+      "Query + index tuning: p99 API latency 450ms → 150ms",
       "GitLab CI/CD + ArgoCD; test coverage 40% → 90%",
     ],
   },
@@ -454,7 +452,7 @@ export const chapterExtras: Record<string, ChapterExtra> = {
   cloudflare: {
     logo: "/logos/cloudflare.svg",
     highlights: [
-      "eBPF datapath on the packet hot path, ~50 ns/packet, lock-free",
+      "Hot-path eBPF program with lock-free per-CPU counters",
       "Merged to production; rolling toward all Cloudflare traffic",
       "Split privileged/unprivileged design, shared wire-contract crate",
       "Migrated build to hermetic Bazel + remote cache, CI 8m → <1m",

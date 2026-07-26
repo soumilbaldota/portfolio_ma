@@ -142,7 +142,7 @@ export function Cern() {
           Simulating collisions, <span className="accented">in code.</span>
         </>
       }
-      lede="At CERN's HEP Software Foundation I built a code-generation bridge from AidaSoft/podio to Julia for physics data pipelines, and benchmarked Julia against C++ for performance parity."
+      lede="A Google Summer of Code project with CERN's HEP Software Foundation, bringing Julia into high-energy-physics data pipelines under maintainer mentorship."
       visual={<AnimatedCanvas draw={draw} />}
     >
       <TechRow items={stacks.cern} />

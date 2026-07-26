@@ -86,7 +86,7 @@ export function Superfork() {
           Forking a running <span className="accented">container.</span>
         </>
       }
-      lede="Research on fast container forking inside a custom Linux kernel and Kata Containers: a multi-threaded fork syscall that replicates memory and file descriptors via copy-on-write, measured with custom eBPF hooks. Now extending it to ARM CCA confidential-compute Realms."
+      lede="Software Systems Lab research on making container forking fast — cloning a running container's state cheaply inside a custom Linux kernel and Kata Containers."
       visual={<AnimatedCanvas draw={draw} />}
     >
       <TechRow items={stacks.columbia} />

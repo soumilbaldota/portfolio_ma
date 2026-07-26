@@ -145,7 +145,7 @@ export function Cloudflare() {
           Every packet, <span className="accented">accounted for.</span>
         </>
       }
-      lede="Per-cgroup network accounting for Cloudflare's edge: an eBPF datapath in the kernel hot path attributing bytes and packets across all 256 L4 protocols into lock-free per-CPU counters, merged to production and rolling out toward the path of all Cloudflare traffic."
+      lede="Per-cgroup network accounting for Cloudflare's edge — an eBPF datapath in the kernel that attributes every byte and packet to the service that caused it."
       visual={<AnimatedCanvas draw={draw} />}
     >
       <div className="metric-row" style={{ marginTop: "1.4rem" }}>

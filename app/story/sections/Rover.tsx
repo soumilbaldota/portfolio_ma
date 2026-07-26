@@ -156,7 +156,7 @@ export function Rover() {
           Teaching a rover <span className="accented">to see.</span>
         </>
       }
-      lede="I led SLAM development for a competition Mars rover: perception and localization on rough terrain, where sensor noise is constant and flaky code isn't an option. This is where systems work got its hooks in me."
+      lede="Leading SLAM for a competition Mars rover — the hard-real-world engineering that first pulled me toward systems work."
       visual={<AnimatedCanvas draw={draw} />}
     >
       <TechRow items={stacks.rover} />

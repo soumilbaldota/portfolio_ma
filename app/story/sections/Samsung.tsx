@@ -131,7 +131,7 @@ export function Samsung() {
           Intelligence, <span className="accented">on the device.</span>
         </>
       }
-      lede="Multi-modal document classification for mobile: LSTM, RNN, BERT and RoBERTa in PyTorch over a 120k+ sample dataset, hitting 95% accuracy with real-time, on-device inference."
+      lede="Multi-modal document classification for low-powered mobile devices — real-time inference on-device, no server round-trip."
       visual={<AnimatedCanvas draw={draw} />}
     >
       <div className="metric-row" style={{ marginTop: "1.4rem" }}>
