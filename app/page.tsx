@@ -1,5 +1,5 @@
-import { PortfolioClient } from './PortfolioClient';
+import { Story } from "./story/Story";
 
 export default function Home() {
-  return <PortfolioClient />;
+  return <Story />;
 }
