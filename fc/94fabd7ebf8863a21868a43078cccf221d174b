@@ -1,0 +1,31 @@
+app/content/library.ts
+  s_ff20bfa4f105b4::t_39fbba19f74b89 414,416,430-431,437-438,455
+app/story/sections/Cern.tsx
+  s_ff20bfa4f105b4::t_f96b8b5c430931 145
+app/story/sections/Cloudflare.tsx
+  s_ff20bfa4f105b4::t_f8ee6b5fdd293c 148
+app/story/sections/Maximl.tsx
+  s_ff20bfa4f105b4::t_a32fbd3e5c86fb 144
+app/story/sections/Rover.tsx
+  s_ff20bfa4f105b4::t_678dc012221185 159
+app/story/sections/Samsung.tsx
+  s_ff20bfa4f105b4::t_e9e94b2e173aae 134
+app/story/sections/Superfork.tsx
+  s_ff20bfa4f105b4::t_de0010f8468dbb 89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "fc94fabd7ebf8863a21868a43078cccf221d174b",
+  "prompts": {},
+  "sessions": {
+    "s_ff20bfa4f105b4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7ee5530c-f8f9-47ad-8e01-662109f7ab6d",
+        "model": "unknown"
+      },
+      "human_author": "soumilbaldota <soumil@cloudflare.com>"
+    }
+  }
+}
